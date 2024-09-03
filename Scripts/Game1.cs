@@ -2,11 +2,12 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Monogame_Cross_Platform.Scripts.ContentManagers;
-using Monogame_Cross_Platform.Scripts.Entities.Player;
+using Monogame_Cross_Platform.Scripts.GameObjects.Tiles;
 using System;
 using Monogame_Cross_Platform.Scripts.GameObjects.Entities;
 using Monogame_Cross_Platform.Scripts.GameObjects.Entities.Enemy;
 using System.Collections.Generic;
+using Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player;
 
 namespace Monogame_Cross_Platform.Scripts
 {
@@ -25,8 +26,9 @@ namespace Monogame_Cross_Platform.Scripts
         SpriteFont font; //Temp font
         public static string debugText = "test";
 
-        Player player = new Player(100, 100, new Vector2(10, 10), true, 0); //Put this in a better spot inside of an initialize level function within update or smth
-        Enemy testEnemy = new Enemy(100, 5, 100, new Vector2(10, 10), true, 3); //same with this one
+         Player player = new Player(100, 100, new Vector2(100, 100),new Rectangle(0,0,25,25), 0); //Put this in a better spot inside of an initialize level function within update or smth
+         //Enemy testEnemy = new Enemy(100, 5, 100, new Vector2(10, 10), 3); //same with this one
+         List<Entity> currentEntities; //temp
 
         public Game1()
         {
@@ -37,6 +39,7 @@ namespace Monogame_Cross_Platform.Scripts
             _graphics.PreferredBackBufferHeight = Settings.resolutionHeight;
             _graphics.IsFullScreen = true;
 
+            currentEntities = new List<Entity>() { player }; //TEMP THIS SHOULD BE HANDLED ELSEWHERE
         }
 
         protected override void Initialize()
@@ -44,6 +47,9 @@ namespace Monogame_Cross_Platform.Scripts
             // TODO: Add your initialization logic here
             contentLoader = new ContentLoader(this);
             settings = new Settings();
+
+            TileMap.tileMap[4, 5] = new Tile(2, true, 0, 0); // MAKES A TESTING TILE
+            TileMap.tileMap[5, 5] = new Tile(2, true, 0, 0); // MAKES A TESTING TILE
             base.Initialize();
             
         }
@@ -66,13 +72,14 @@ namespace Monogame_Cross_Platform.Scripts
             gameTime = _gameTime;
             // TODO: Add your update logic here
 
-            List<Entity> currentEntities = new List<Entity>() { player }; //temp
-            UpdateThings.UpdateEntities(currentEntities);
+             //temp
+            UpdateThings.UpdateEntities(currentEntities, player);
             camera.Follow(player);
             settings.UpdateZoom();
+            player.Update(player);
 
 
-            debugText = GameObjects.Tiles.TileMap.PosToTileMapPos(player.position).ToString();
+            debugText = GameObjects.Tiles.TileMap.PosToAbsTileMapPos(player.position).ToString();
 
             base.Update(gameTime);
         }
@@ -84,21 +91,17 @@ namespace Monogame_Cross_Platform.Scripts
             GraphicsDevice.Clear(Color.AliceBlue);
             drawEntities.BeginBuffer(camera);
 
-            if (testEnemy.isFlipped == false)
-                drawEntities.AddToDrawBuffer(testEnemy, SpriteEffects.None);
-            else
-                drawEntities.AddToDrawBuffer(testEnemy, SpriteEffects.FlipHorizontally);
-
-            if (player.isFlipped == false)
-                drawEntities.AddToDrawBuffer(player, SpriteEffects.None);
-            else
-                drawEntities.AddToDrawBuffer(player, SpriteEffects.FlipHorizontally);
-            int i = 0;
-            foreach ((Texture2D texture, Rectangle rectangle) in ContentLoader.texturesLoaded)
+            //Draws Tiles onto map rendering only the area visible to player
+            for (int x = (int)(player.position.X - _graphics.PreferredBackBufferWidth) / 32; x < (player.position.X + _graphics.PreferredBackBufferWidth) / 32; x++)
             {
-                drawEntities.AddToDrawBuffer(new Vector2(0 + (i * 32), 0), texture, rectangle);
-                i++;
+                for (int y = (int)(player.position.Y - _graphics.PreferredBackBufferHeight) / 32; y < (player.position.Y + _graphics.PreferredBackBufferHeight) / 32; y++)
+                {
+                    if (x>0 && y>0 && x<4095 && y<4095)
+                    drawEntities.AddToDrawBuffer(TileMap.tileMap[x, y], x, y);
+                }
             }
+            //Draws entities active in the currentEntities list
+            drawEntities.AddToDrawBuffer(currentEntities);
 
             drawEntities.DrawBuffer();
             GraphicsDevice.SetRenderTarget(null);

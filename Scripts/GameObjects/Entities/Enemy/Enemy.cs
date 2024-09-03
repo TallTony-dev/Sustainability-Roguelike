@@ -9,12 +9,10 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Enemy
     internal class Enemy : Entities.Entity
     {
         int health;
-        int attackRange;
 
-        public Enemy(int health, int attackRange, float entitySpeed, Vector2 startingPos, bool canDash, ushort textureIndex) : base(entitySpeed, startingPos, canDash, textureIndex, EntityMovement.AIType.enemy)
+        public Enemy(int health, int attackRange, float entitySpeed, Vector2 startingPos, Rectangle hitBox, ushort textureIndex) : base(entitySpeed, startingPos, textureIndex, hitBox, EntityMovement.AIType.enemy)
         {
             this.health = health;
-            this.attackRange = attackRange;
         }
     }
 }

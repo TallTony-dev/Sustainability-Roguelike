@@ -3,7 +3,8 @@ using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Monogame_Cross_Platform.Scripts;
+using Monogame_Cross_Platform.Scripts.GameObjects.Tiles;
+using System.Collections.Generic;
 
 namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
 {
@@ -14,11 +15,9 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         bool isInitialized = false;
         internal Vector2 ValidateMovement(Entity entity, Vector2 entityNewPos)
         {
-            (Texture2D entityTexture, Rectangle rectangle) = ContentManagers.ContentLoader.texturesLoaded[entity.textureIndex]; //Maybe unnessacary but just wait and see
-            
-            (float tileMapX, float tileMapY) = GameObjects.Tiles.TileMap.PosToTileMapPos(entityNewPos);
-            float maxVal = 4095f;
-            float minVal = 0f;
+            (float tileMapX, float tileMapY) = TileMap.PosToTileMapPos(entityNewPos);
+            float maxVal = 4094f;
+            float minVal = 1f;
             if (tileMapX >= maxVal)
                 entityNewPos.X = maxVal * 32;
             if (tileMapX <= minVal)
@@ -27,6 +26,32 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                 entityNewPos.Y = maxVal * 32;
             if (tileMapY <= minVal)
                 entityNewPos.Y = minVal * 32;
+
+            (int absTileX, int absTileY) = TileMap.PosToAbsTileMapPos(entityNewPos);
+
+            //Checks if entity is moving into a new tile's hitbox and then if it has a hitbox, sets them back where they were
+            Rectangle entityBounds = entity.hitboxManager.hitBox;
+
+
+            if (TileMap.tileMap[absTileX + 1, absTileY].isBarrier && entityBounds.Intersects(TileMap.GetTileBounds(absTileX + 1, absTileY)))
+            {
+                entityNewPos.X = absTileX * 32;
+            }
+
+            if (TileMap.tileMap[absTileX - 1, absTileY].isBarrier && entityBounds.Intersects(TileMap.GetTileBounds(absTileX - 1, absTileY)))
+            {
+                entityNewPos.X = absTileX * 32;
+            }
+
+            if (TileMap.tileMap[absTileX, absTileY + 1].isBarrier && entityBounds.Intersects(TileMap.GetTileBounds(absTileX, absTileY + 1)))
+            {
+                entityNewPos.Y = absTileY * 32;
+            }
+
+            if (TileMap.tileMap[absTileX, absTileY - 1].isBarrier && entityBounds.Intersects(TileMap.GetTileBounds(absTileX, absTileY - 1)))
+            {
+                entityNewPos.Y = absTileY * 32;
+            }
             return entityNewPos;
         }
 
@@ -39,28 +64,34 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         public void EnableMovement() { isInitialized = true; }
         public void DisableMovement() { isInitialized = false; }
 
-        public Vector2 GetPathfindingMovement(int attackRange, Vector2 currentPos, float speed)
+        /// <summary>
+        /// Pathfinds to a player
+        /// </summary>
+        public Vector2 GetPathfindingMovement(int attackRange, Vector2 currentPos, float speed, AIType aiType, Player.Player playerToPathFindTo)
         {
-            (int x, int y) = GetPointToTravel(attackRange, currentPos);
-            return new Vector2(x, y);
+            var pointsToTravelThrough = GetTileMapPointsToTravel(attackRange, currentPos, aiType, playerToPathFindTo);
+            return new Vector2(0, 0);
+            //return new Vector2(pointsToTravelThrough[0]);   
         }
-        private (int, int) GetPointToTravel(int attackRange, Vector2 currentPos)
+
+        private List<(int, int)> GetTileMapPointsToTravel(int attackRange, Vector2 currentPos, AIType aiType, Player.Player player)
         {
             Vector2 tileMapPos = Tiles.TileMap.PosToTileMapPos(currentPos);
+            List<(short, short, short, short, short, bool)> tilesChecked = new List<(short, short, short, short, short, bool)>(); //previous y, previous x, checked y, checked x, weight, isbarrier
+            List<(short, short, short, short, short)> edgeTilesChecked = new List<(short, short, short, short, short)>(); //previous y, previous x, checked y, checked x, weight
+            //if (aiType == AIType.enemy)
+            //{
+            //    if (Vector2.Distance(currentPos, player.position) > attackRange && TileMap.PosToTileMapPos(currentPos)) //checks if not in range
+            //    {
+            //        tilesChecked.Add(currentPos.X)
+            //    }
+            //}
 
-            if (aiType == AIType.enemy)
-            {
-                
-            }
             if (aiType == AIType.npc)
             {
 
             }
-            if (aiType == AIType.none)
-            {
-
-            }
-            return (0, 0);
+            return new List<(int, int)> { (0, 0) };
         }
         public enum AIType { none, enemy, npc }
     } 

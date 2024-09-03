@@ -2,9 +2,10 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Monogame_Cross_Platform.Scripts.Entities.Player;
 using Monogame_Cross_Platform.Scripts.GameObjects.Entities;
 
-namespace Monogame_Cross_Platform.Scripts.Entities.Player
+namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
 {
     /// <summary>
     /// Contains everything pertaining to the player itself, but not drawing or anything, derived from Entity.
@@ -14,12 +15,12 @@ namespace Monogame_Cross_Platform.Scripts.Entities.Player
         public int health;
         HandlePlayerInputs inputHandler = new HandlePlayerInputs();
 
-         public Player(int health, float entitySpeed, Vector2 startingPos, bool canDash, ushort textureIndex) : base(entitySpeed, startingPos, canDash, textureIndex,EntityMovement.AIType.none)
+         public Player(int health, float entitySpeed, Vector2 startingPos, Rectangle hitBox, ushort textureIndex) : base(entitySpeed, startingPos, textureIndex, hitBox, EntityMovement.AIType.none)
         {
             this.health = health;
         }
 
-        public override void Move()
+        public override void Move(Player player)
         {
             Vector2 playerNewPos = inputHandler.GetPlayerMovement(position, Game1.gameTime, entitySpeed);
 

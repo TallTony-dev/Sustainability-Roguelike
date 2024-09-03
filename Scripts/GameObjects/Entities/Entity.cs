@@ -14,27 +14,29 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
     {
         public float entitySpeed { get; set; }
         public Vector2 position { get; internal set; }
-        internal bool canDash { get; }
         internal bool isFlipped { get; set; }
 
         internal EntityMovement entityMovement;
         internal HitboxManager hitboxManager;
         internal Weapons.Weapon weapon;
-        public Entity(float entitySpeed, Vector2 startingPos, bool canDash, ushort textureIndex, EntityMovement.AIType aiType) : base(textureIndex)
+        internal EntityMovement.AIType aiType;
+        
+        public Entity(float entitySpeed, Vector2 startingPos, ushort textureIndex, Rectangle hitBox, EntityMovement.AIType aiType) : base(textureIndex)
         {
             this.entitySpeed = entitySpeed;
-            this.position = startingPos;
-            this.canDash = canDash;
+            position = startingPos;
             entityMovement = new EntityMovement(aiType, this);
-            hitboxManager = new HitboxManager();
+            hitboxManager = new HitboxManager(hitBox);
+            this.aiType = aiType;
         }
-        public void Update()
+        public void Update(Player.Player player)
         {
-            Move();
+            Move(player);
+            hitboxManager.hitBox = new Rectangle ((int)position.X - 16,(int)position.Y - 16,hitboxManager.hitBox.Width, hitboxManager.hitBox.Height); //INTEGERS HERE MIGHT CAUSE WACKYNESS
         }
-        public virtual void Move()
+        public virtual void Move(Player.Player player)
         {
-            Vector2 entityNewPos = entityMovement.GetPathfindingMovement(weapon.attackRange, position, entitySpeed);
+            Vector2 entityNewPos = entityMovement.GetPathfindingMovement(weapon.attackRange, position, entitySpeed, aiType ,player);
 
             entityNewPos = entityMovement.ValidateMovement(this, entityNewPos);
 

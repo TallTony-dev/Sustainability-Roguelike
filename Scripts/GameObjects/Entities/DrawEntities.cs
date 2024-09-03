@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 using Monogame_Cross_Platform.Scripts.ContentManagers;
 using Monogame_Cross_Platform.Scripts.GameObjects.Entities;
 
@@ -38,6 +38,21 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         {
             (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTexture(entity.textureIndex);
             spriteBatch.Draw(texture, entity.position, rectangle, Color.White, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, spriteEffect, 0f);
+        }
+        public void AddToDrawBuffer(Tiles.Tile tile, int tileMapX, int tileMapY)
+        {
+            (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTexture(tile.textureIndex);
+            spriteBatch.Draw(texture, new Vector2(tileMapX * 32, tileMapY * 32), rectangle, Color.White, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0f);
+        }
+        public void AddToDrawBuffer(List<Entity> entityList)
+        {
+            foreach (Entity entity in entityList)
+            {
+                if (entity.isFlipped == false)
+                    AddToDrawBuffer(entity, SpriteEffects.None);
+                else
+                    AddToDrawBuffer(entity, SpriteEffects.FlipHorizontally);
+            }
         }
 
         public void DrawBuffer() => spriteBatch.End(); //Draws what is in the buffer
