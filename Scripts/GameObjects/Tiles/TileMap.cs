@@ -37,12 +37,24 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Tiles
         {
             return new Vector2(x * 32, y * 32);
         }
+
         /// <summary>
-        /// Does not check for if the tile has a barrier, only returns rectangle to check intersection
+        /// Checks if the entity hitbox collides with a tile hitbox, returns true if it collides
+        /// </summary>
+        public static bool IsCollision(Entities.Entity entity, int tileX, int tileY)
+        {
+                if (tileMap[tileX, tileY].isBarrier && entity.hitboxManager.hitBox.Intersects(GetTileBounds(tileX, tileY)))
+                {
+                    return true;
+                }
+            return false;
+        }
+        /// <summary>
+        /// Does not check for if the tile has a barrier, only returns rectangle boundary
         /// </summary>
         public static Rectangle GetTileBounds(int tileX, int tileY)
         {
-            return new Rectangle(tileX * 32, tileY * 32, 32, 32);
+            return new Rectangle(tileX * 32 - 16, tileY * 32 - 16, 32, 32);
         }
 
     }

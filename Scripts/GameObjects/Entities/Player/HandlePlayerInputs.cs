@@ -7,11 +7,6 @@ namespace Monogame_Cross_Platform.Scripts.Entities.Player
 {
     public class HandlePlayerInputs
     {
-
-
-
-
-
         /// <summary>
         /// Gets a Vector2 of the location the player should be in, it also gets the inputs required for this function.
         /// </summary>
@@ -25,22 +20,22 @@ namespace Monogame_Cross_Platform.Scripts.Entities.Player
             {
                 if (kstate.IsKeyDown(Keys.Up))
                 {
-                    playerPosition.Y -= updatedPlayerSpeed;
+                    playerPosition.Y -= updatedPlayerSpeed * 4;
                 }
 
                 if (kstate.IsKeyDown(Keys.Down))
                 {
-                    playerPosition.Y += updatedPlayerSpeed;
+                    playerPosition.Y += updatedPlayerSpeed * 4;
                 }
 
                 if (kstate.IsKeyDown(Keys.Left))
                 {
-                    playerPosition.X -= updatedPlayerSpeed;
+                    playerPosition.X -= updatedPlayerSpeed * 4;
                 }
 
                 if (kstate.IsKeyDown(Keys.Right))
                 {
-                    playerPosition.X += updatedPlayerSpeed;
+                    playerPosition.X += updatedPlayerSpeed * 4;
                 }
             }
 

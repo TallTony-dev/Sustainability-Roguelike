@@ -24,7 +24,9 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
         {
             Vector2 playerNewPos = inputHandler.GetPlayerMovement(position, Game1.gameTime, entitySpeed);
 
+            hitboxManager.UpdateHitbox(playerNewPos);
             playerNewPos = entityMovement.ValidateMovement(this, playerNewPos);
+            hitboxManager.UpdateHitbox(playerNewPos);
 
             if (playerNewPos.X > position.X)
                 isFlipped = true;

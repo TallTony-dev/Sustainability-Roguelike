@@ -12,7 +12,6 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
     {
         AIType aiType;
         float entitySpeed;
-        bool isInitialized = false;
         internal Vector2 ValidateMovement(Entity entity, Vector2 entityNewPos)
         {
             (float tileMapX, float tileMapY) = TileMap.PosToTileMapPos(entityNewPos);
@@ -28,32 +27,54 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                 entityNewPos.Y = minVal * 32;
 
             (int absTileX, int absTileY) = TileMap.PosToAbsTileMapPos(entityNewPos);
-
-            //Checks if entity is moving into a new tile's hitbox and then if it has a hitbox, sets them back where they were
-            Rectangle entityBounds = entity.hitboxManager.hitBox;
-
-
-            if (TileMap.tileMap[absTileX + 1, absTileY].isBarrier && entityBounds.Intersects(TileMap.GetTileBounds(absTileX + 1, absTileY)))
+            Rectangle entityHitBox = entity.hitboxManager.hitBox;
+            bool isXModified = false;
+            bool isYModified = false;
+            for (int x = -1; x < 2; x++)
             {
-                entityNewPos.X = absTileX * 32;
-            }
+                for (int y = -1; y < 2; y++)
+                {
+                    if (TileMap.IsCollision(entity, x+absTileX, y+absTileY))
+                    {
+                        Rectangle tileBounds = TileMap.GetTileBounds(absTileX + x, absTileY + y);
 
-            if (TileMap.tileMap[absTileX - 1, absTileY].isBarrier && entityBounds.Intersects(TileMap.GetTileBounds(absTileX - 1, absTileY)))
-            {
-                entityNewPos.X = absTileX * 32;
-            }
+                        if (x != 0 && !isXModified && entityHitBox.Bottom - 2 > tileBounds.Top && entityHitBox.Top + 2 < tileBounds.Bottom)
+                        {
+                            if (x < 0) // Checking left tile
+                            {
+                                entityNewPos.X = tileBounds.Right + entityHitBox.Width / 2;
+                                isXModified = true;
+                            }
+                            if (x > 0) // Checking right tile
+                            {
+                                entityNewPos.X = tileBounds.Left - entityHitBox.Width / 2;
+                                isXModified = true;
+                            }
+                        }
 
-            if (TileMap.tileMap[absTileX, absTileY + 1].isBarrier && entityBounds.Intersects(TileMap.GetTileBounds(absTileX, absTileY + 1)))
-            {
-                entityNewPos.Y = absTileY * 32;
+                        if (y != 0 && !isYModified && entityHitBox.Right - 2 > tileBounds.Left && entityHitBox.Left + 2 < tileBounds.Right)
+                        {
+                            //if right position is over the left tilebound or if the left position is under the right tilebound then run it
+                            if (y < 0) // Checking top tile
+                            {
+                                entityNewPos.Y = tileBounds.Bottom + entityHitBox.Height / 2;
+                                isYModified = true;
+                            }
+                            if (y > 0 ) // Checking bottom tile
+                            {
+                                entityNewPos.Y = tileBounds.Top - entityHitBox.Height / 2;
+                                isYModified = true;
+                            }
+                        }
+                    }
+                }
             }
-
-            if (TileMap.tileMap[absTileX, absTileY - 1].isBarrier && entityBounds.Intersects(TileMap.GetTileBounds(absTileX, absTileY - 1)))
-            {
-                entityNewPos.Y = absTileY * 32;
-            }
+            //entityNewPos.Round();
+            //Remove any decimals?
             return entityNewPos;
         }
+    
+
 
         public EntityMovement(AIType aiType, Entity entity)
         {
@@ -61,8 +82,6 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             this.entitySpeed = entity.entitySpeed;
         }
 
-        public void EnableMovement() { isInitialized = true; }
-        public void DisableMovement() { isInitialized = false; }
 
         /// <summary>
         /// Pathfinds to a player

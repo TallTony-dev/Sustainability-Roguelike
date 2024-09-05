@@ -31,14 +31,18 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         }
         public void Update(Player.Player player)
         {
+            
             Move(player);
-            hitboxManager.hitBox = new Rectangle ((int)position.X - 16,(int)position.Y - 16,hitboxManager.hitBox.Width, hitboxManager.hitBox.Height); //INTEGERS HERE MIGHT CAUSE WACKYNESS
         }
-        public virtual void Move(Player.Player player)
+        public virtual void Move(Player.Player playerToFollow)
         {
-            Vector2 entityNewPos = entityMovement.GetPathfindingMovement(weapon.attackRange, position, entitySpeed, aiType ,player);
+            Vector2 entityNewPos = entityMovement.GetPathfindingMovement(weapon.attackRange, position, entitySpeed, aiType , playerToFollow);
 
+            hitboxManager.hitBox = new Rectangle((int)Math.Round(entityNewPos.X) - 16, (int)Math.Round(entityNewPos.Y) - 16, hitboxManager.hitBox.Width, hitboxManager.hitBox.Height); //Integers here may be wacky
+
+            hitboxManager.UpdateHitbox(entityNewPos);
             entityNewPos = entityMovement.ValidateMovement(this, entityNewPos);
+            hitboxManager.UpdateHitbox(entityNewPos);
 
             if (entityNewPos.X > position.X)
                 isFlipped = true;

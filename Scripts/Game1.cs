@@ -26,9 +26,9 @@ namespace Monogame_Cross_Platform.Scripts
         SpriteFont font; //Temp font
         public static string debugText = "test";
 
-         Player player = new Player(100, 100, new Vector2(100, 100),new Rectangle(0,0,25,25), 0); //Put this in a better spot inside of an initialize level function within update or smth
+         Player player = new Player(100, 20, new Vector2(100, 100),new Rectangle(0,0,32,32), 0); //Put this in a better spot inside of an initialize level function within update or smth
          //Enemy testEnemy = new Enemy(100, 5, 100, new Vector2(10, 10), 3); //same with this one
-         List<Entity> currentEntities; //temp
+         List<Entity> currentEntities; //temp?
 
         public Game1()
         {
@@ -48,7 +48,7 @@ namespace Monogame_Cross_Platform.Scripts
             contentLoader = new ContentLoader(this);
             settings = new Settings();
 
-            TileMap.tileMap[4, 5] = new Tile(2, true, 0, 0); // MAKES A TESTING TILE
+            //TileMap.tileMap[4, 5] = new Tile(2, true, 0, 0); // MAKES A TESTING TILE
             TileMap.tileMap[5, 5] = new Tile(2, true, 0, 0); // MAKES A TESTING TILE
             base.Initialize();
             
@@ -72,14 +72,12 @@ namespace Monogame_Cross_Platform.Scripts
             gameTime = _gameTime;
             // TODO: Add your update logic here
 
-             //temp
             UpdateThings.UpdateEntities(currentEntities, player);
             camera.Follow(player);
             settings.UpdateZoom();
-            player.Update(player);
 
-
-            debugText = GameObjects.Tiles.TileMap.PosToAbsTileMapPos(player.position).ToString();
+            (int absTileX, int absTileY) = TileMap.PosToAbsTileMapPos(player.position); //temp
+            debugText = TileMap.PosToAbsTileMapPos(player.position).ToString() + player.position.ToString() + TileMap.GetTileBounds(absTileX + 1, absTileY).Left.ToString(); //debug text that displays values to test
 
             base.Update(gameTime);
         }
@@ -109,7 +107,7 @@ namespace Monogame_Cross_Platform.Scripts
             // Drawing the render target to the screen here
             drawEntities.BeginBuffer();
             drawEntities.spriteBatch.Draw(renderTarget, new Rectangle(0,0,Settings.resolutionWidth,Settings.resolutionHeight), Color.White);
-            drawEntities.spriteBatch.DrawString(font, debugText, new Vector2(100, 100), Color.DarkGreen);
+            drawEntities.spriteBatch.DrawString(font, debugText, new Vector2(100, 100), Color.DarkGreen); //draws debug text
             drawEntities.DrawBuffer();
 
             base.Draw(gameTime);

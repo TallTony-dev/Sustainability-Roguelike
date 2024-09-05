@@ -13,11 +13,12 @@ namespace Monogame_Cross_Platform.Scripts
     /// </summary>
     internal static class UpdateThings
     {
+
         public static void UpdateEntities(List<Entity> entityList, Player player)
         {
             foreach (Entity entity in entityList)
             {
-                entity.Move(player);
+                entity.Update(player);
             }
         }
     }
