@@ -13,7 +13,7 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
     /// </summary>
     internal class ContentLoader
     {
-        public static (Texture2D, Rectangle)[] texturesLoaded = new (Texture2D, Rectangle)[16]; //Change this array size to the max number of textures and allocate different ranges for different textures
+        public static (Texture2D, Rectangle)[] texturesLoaded = new (Texture2D, Rectangle)[32]; //Change this array size to the max number of textures and allocate different ranges for different textures
         ContentList contentList = new ContentList();
         Game game;
         ContentManager alwaysLoadedcontentManager;

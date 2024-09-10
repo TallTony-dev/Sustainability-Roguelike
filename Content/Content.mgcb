@@ -55,3 +55,7 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Graphics/spelunky_shop.png
+
+#begin RoomData.txt
+/copy:RoomData.txt
+

@@ -15,7 +15,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         internal Vector2 ValidateMovement(Entity entity, Vector2 entityNewPos)
         {
             (float tileMapX, float tileMapY) = TileMap.PosToTileMapPos(entityNewPos);
-            float maxVal = 4094f;
+            float maxVal = 510f;
             float minVal = 1f;
             if (tileMapX >= maxVal)
                 entityNewPos.X = maxVal * 32;
@@ -27,7 +27,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                 entityNewPos.Y = minVal * 32;
 
             (int absTileX, int absTileY) = TileMap.PosToAbsTileMapPos(entityNewPos);
-            Rectangle entityHitBox = entity.hitboxManager.hitBox;
+            Hitboxes.Hitbox entityHitBox = entity.hitBox;
             bool isXModified = false;
             bool isYModified = false;
             for (int x = -1; x < 2; x++)
@@ -38,39 +38,38 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                     {
                         Rectangle tileBounds = TileMap.GetTileBounds(absTileX + x, absTileY + y);
 
-                        if (x != 0 && !isXModified && entityHitBox.Bottom - 2 > tileBounds.Top && entityHitBox.Top + 2 < tileBounds.Bottom)
+                        //If old entity left bound is
+                        if (x != 0 && !isXModified && entity.position.Y + entityHitBox.height / 2 > tileBounds.Top && entity.position.Y - entityHitBox.height / 2 < tileBounds.Bottom)
                         {
-                            if (x < 0) // Checking left tile
+                            //if new position is past hitbox, and if its old position wasn't past hitbox
+                            if (x < 0 && entityHitBox.left < tileBounds.Right && entity.position.X - entityHitBox.width / 2 >= tileBounds.Right) // Checking left tile
                             {
-                                entityNewPos.X = tileBounds.Right + entityHitBox.Width / 2;
+                                entityNewPos.X = tileBounds.Right + entityHitBox.width / 2;
                                 isXModified = true;
                             }
-                            if (x > 0) // Checking right tile
+                            if (x > 0 && entityHitBox.right > tileBounds.Left && entity.position.X + entityHitBox.width / 2 <= tileBounds.Left ) // Checking right tile
                             {
-                                entityNewPos.X = tileBounds.Left - entityHitBox.Width / 2;
+                                entityNewPos.X = tileBounds.Left - entityHitBox.width / 2;
                                 isXModified = true;
                             }
                         }
 
-                        if (y != 0 && !isYModified && entityHitBox.Right - 2 > tileBounds.Left && entityHitBox.Left + 2 < tileBounds.Right)
+                        if (y != 0 && !isYModified && entity.position.X + entityHitBox.width / 2 > tileBounds.Left && entity.position.X - entityHitBox.width / 2 < tileBounds.Right)
                         {
-                            //if right position is over the left tilebound or if the left position is under the right tilebound then run it
-                            if (y < 0) // Checking top tile
+                            if (y < 0 && entityHitBox.top < tileBounds.Bottom && entity.position.Y - entityHitBox.height / 2 >= tileBounds.Bottom) // Checking top tile
                             {
-                                entityNewPos.Y = tileBounds.Bottom + entityHitBox.Height / 2;
+                                entityNewPos.Y = tileBounds.Bottom + entityHitBox.height / 2;
                                 isYModified = true;
                             }
-                            if (y > 0 ) // Checking bottom tile
+                            if (y > 0 && entityHitBox.bottom > tileBounds.Top && entity.position.Y + entityHitBox.height / 2 <= tileBounds.Top) // Checking bottom tile
                             {
-                                entityNewPos.Y = tileBounds.Top - entityHitBox.Height / 2;
+                                entityNewPos.Y = tileBounds.Top - entityHitBox.height / 2;
                                 isYModified = true;
                             }
                         }
                     }
                 }
             }
-            //entityNewPos.Round();
-            //Remove any decimals?
             return entityNewPos;
         }
     

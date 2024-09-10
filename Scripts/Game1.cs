@@ -21,12 +21,14 @@ namespace Monogame_Cross_Platform.Scripts
         ContentManagers.Camera.Camera camera = new ContentManagers.Camera.Camera();
         Settings settings;
 
+        LevelEditor levelEditor;
+
         public static GameTime gameTime;
 
         SpriteFont font; //Temp font
         public static string debugText = "test";
 
-         Player player = new Player(100, 20, new Vector2(100, 100),new Rectangle(0,0,32,32), 0); //Put this in a better spot inside of an initialize level function within update or smth
+         Player player = new Player(100, 100, new Vector2(100, 100),new Hitboxes.Hitbox(0,0,30,30), 0); //Put this in a better spot inside of an initialize level function within update or smth
          //Enemy testEnemy = new Enemy(100, 5, 100, new Vector2(10, 10), 3); //same with this one
          List<Entity> currentEntities; //temp?
 
@@ -40,6 +42,7 @@ namespace Monogame_Cross_Platform.Scripts
             _graphics.IsFullScreen = true;
 
             currentEntities = new List<Entity>() { player }; //TEMP THIS SHOULD BE HANDLED ELSEWHERE
+            levelEditor = new LevelEditor();
         }
 
         protected override void Initialize()
@@ -47,11 +50,22 @@ namespace Monogame_Cross_Platform.Scripts
             // TODO: Add your initialization logic here
             contentLoader = new ContentLoader(this);
             settings = new Settings();
-
-            //TileMap.tileMap[4, 5] = new Tile(2, true, 0, 0); // MAKES A TESTING TILE
+            TileMap.tileMap[1, 1] = new Tile(2, true, 0, 0); // MAKES A TESTING TILE
+            TileMap.tileMap[4, 2] = new Tile(2, true, 0, 0); // MAKES A TESTING TILE
+            TileMap.tileMap[3, 2] = new Tile(2, true, 0, 0); // MAKES A TESTING TILE
+            TileMap.tileMap[4, 4] = new Tile(2, true, 0, 0); // MAKES A TESTING TILE
+            TileMap.tileMap[2, 4] = new Tile(2, true, 0, 0); // MAKES A TESTING TILE
+            TileMap.tileMap[2, 5] = new Tile(2, true, 0, 0); // MAKES A TESTING TILE
+            TileMap.tileMap[4, 5] = new Tile(2, true, 0, 0); // MAKES A TESTING TILE
             TileMap.tileMap[5, 5] = new Tile(2, true, 0, 0); // MAKES A TESTING TILE
+            TileMap.tileMap[6, 5] = new Tile(2, true, 0, 0); // MAKES A TESTING TILE
+
+            Level.LevelGenerator.GenerateLevel(1); //TEMP
+
             base.Initialize();
-            
+            settings.ApplySettings();
+            settings.InitializeSettings();
+
         }
 
         protected override void LoadContent() 
@@ -72,12 +86,12 @@ namespace Monogame_Cross_Platform.Scripts
             gameTime = _gameTime;
             // TODO: Add your update logic here
 
+            UpdateThings.UpdateLevel(levelEditor, player, currentEntities, gameTime);
             UpdateThings.UpdateEntities(currentEntities, player);
             camera.Follow(player);
             settings.UpdateZoom();
 
-            (int absTileX, int absTileY) = TileMap.PosToAbsTileMapPos(player.position); //temp
-            debugText = TileMap.PosToAbsTileMapPos(player.position).ToString() + player.position.ToString() + TileMap.GetTileBounds(absTileX + 1, absTileY).Left.ToString(); //debug text that displays values to test
+            debugText = TileMap.PosToAbsTileMapPos(player.position).ToString() + player.position.ToString() + (player.hitBox.left + 16).ToString(); //debug text that displays values to test
 
             base.Update(gameTime);
         }
@@ -94,7 +108,7 @@ namespace Monogame_Cross_Platform.Scripts
             {
                 for (int y = (int)(player.position.Y - _graphics.PreferredBackBufferHeight) / 32; y < (player.position.Y + _graphics.PreferredBackBufferHeight) / 32; y++)
                 {
-                    if (x>0 && y>0 && x<4095 && y<4095)
+                    if (x>=0 && y>=0 && x<=512 && y<=512)
                     drawEntities.AddToDrawBuffer(TileMap.tileMap[x, y], x, y);
                 }
             }

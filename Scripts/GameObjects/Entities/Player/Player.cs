@@ -14,25 +14,47 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
     {
         public int health;
         HandlePlayerInputs inputHandler = new HandlePlayerInputs();
+        public bool isInLevelEditorMode = false;
 
-         public Player(int health, float entitySpeed, Vector2 startingPos, Rectangle hitBox, ushort textureIndex) : base(entitySpeed, startingPos, textureIndex, hitBox, EntityMovement.AIType.none)
+         public Player(int health, float entitySpeed, Vector2 startingPos, Hitboxes.Hitbox hitBox, ushort textureIndex) : base(entitySpeed, startingPos, textureIndex, hitBox, EntityMovement.AIType.none)
         {
             this.health = health;
         }
 
-        public override void Move(Player player)
+        public override void Move(Player _)
         {
-            Vector2 playerNewPos = inputHandler.GetPlayerMovement(position, Game1.gameTime, entitySpeed);
+            if (!isInAbsMovementMode)
+            {
+                Vector2 playerNewPos = inputHandler.GetPlayerMovement(position, Game1.gameTime, entitySpeed);
 
-            hitboxManager.UpdateHitbox(playerNewPos);
-            playerNewPos = entityMovement.ValidateMovement(this, playerNewPos);
-            hitboxManager.UpdateHitbox(playerNewPos);
+                hitBox.UpdatePosition(playerNewPos.X, playerNewPos.Y);
+                playerNewPos = entityMovement.ValidateMovement(this, playerNewPos);
+                hitBox.UpdatePosition(playerNewPos.X, playerNewPos.Y);
 
-            if (playerNewPos.X > position.X)
-                isFlipped = true;
+                if (playerNewPos.X > position.X)
+                    isFlipped = true;
+                else
+                    isFlipped = false;
+                if (position != playerNewPos)
+                    isMoving = true;
+                else
+                    isMoving = false;
+                position = playerNewPos;
+            }
             else
-                isFlipped = false;
-            position = playerNewPos;
+            {
+                Vector2 playerNewPos = inputHandler.GetPlayerTurnBasedMovement(position, Game1.gameTime, entitySpeed, movesLeft, isMoving);
+
+                if (playerNewPos.X > position.X)
+                    isFlipped = true;
+                else
+                    isFlipped = false;
+                if (position != playerNewPos)
+                    isMoving = true;
+                else
+                    isMoving = false;
+                position = playerNewPos;
+            }
         }
     }
 }

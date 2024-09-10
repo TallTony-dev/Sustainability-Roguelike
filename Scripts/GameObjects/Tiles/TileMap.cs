@@ -7,20 +7,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Tiles
 {
     internal static class TileMap
     {
-        public static Tile[,] tileMap = new Tile[4096,4096];
-
-        /// <summary>
-        /// Takes a standard coordinate and checks if it is within a tile marked with passable or whatever you end up calling it, true if it is a valid spot
-        /// </summary>
-        //public static bool IsInValidTile(Rectangle entityBounds, Vector2 entityPosition)
-        //{
-        //   if (PosToTileMapPos(entityPosition))
-
-        //}
-        //public static bool IsInValidTile(int tileX, int tileY)
-        //{
-
-        //}
+        public static Tile[,] tileMap = new Tile[512,512];
 
         /// <summary>
         /// Takes a posiiton of an entity and converts it to a position on the tilemap, centers the position assuming 32x32 texture
@@ -43,10 +30,18 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Tiles
         /// </summary>
         public static bool IsCollision(Entities.Entity entity, int tileX, int tileY)
         {
-                if (tileMap[tileX, tileY].isBarrier && entity.hitboxManager.hitBox.Intersects(GetTileBounds(tileX, tileY)))
+                if (tileMap[tileX, tileY].isBarrier && entity.hitBox.Intersects(GetTileBounds(tileX, tileY)))
                 {
                     return true;
                 }
+            return false;
+        }
+        public static bool IsCollision(int tileX, int tileY)
+        {
+            if (tileX < 0 || tileX > 512 || tileY < 0 || tileY > 512 || tileMap[tileX, tileY].isBarrier)
+            {
+                return true;
+            }
             return false;
         }
         /// <summary>

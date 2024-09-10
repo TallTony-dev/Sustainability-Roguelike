@@ -14,7 +14,7 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
         private List<(string textureName, Rectangle sourceRect, ushort index)> CityTexturesToLoad = new List<(string, Rectangle, ushort)>();
 
         //Arrays of TileSets (4x4 grids of 32x32 textures)
-        private (string textureName, ushort startingIndex)[] AlwaysLoadedTileSets = { ("cobblestone", 0) };
+        private (string textureName, ushort startingIndex)[] AlwaysLoadedTileSets = { ("cobblestone", 0), ("cobblestone", 16) };
         private (string textureName, ushort startingIndex)[] HomeTexturesTileSets = { };
         private (string textureName, ushort startingIndex)[] CityTexturesTileSets = { };
 
@@ -43,11 +43,11 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
         {
             foreach ((string textureName, ushort startingIndex) in tileSetToLoad)
             {
-                for (ushort i = 0; i < 4; i++) //selects row
+                for (ushort y = 0; y < 4; y++) //selects row
                 {
-                    for (ushort j = 0; j < 4; j++) //selects column
+                    for (ushort x = 0; x < 4; x++) //selects column
                     {
-                        TileListToLoad.Add((textureName, new(j * 32, i * 32, 32, 32), (ushort)(startingIndex + (i * 4) + j)));
+                        TileListToLoad.Add((textureName, new(x * 32, y * 32, 32, 32), (ushort)(startingIndex + (y * 4) + x)));
                     }
                 }
             }

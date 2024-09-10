@@ -19,5 +19,12 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Tiles
             this.statusGiven = statusGiven;
             this.breakEffect = breakEffect;
         }
+        public Tile()
+        {
+            textureIndex = 0;
+            isBarrier = false;
+            statusGiven = 0;
+            breakEffect = 0;
+        }
     }
 }
