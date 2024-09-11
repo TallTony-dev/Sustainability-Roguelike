@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Monogame_Cross_Platform.Scripts.ContentManagers;
-using Monogame_Cross_Platform.Scripts.Entities;
+using Monogame_Cross_Platform.Scripts;
 
 namespace Monogame_Cross_Platform.Scripts.ContentManagers
 {

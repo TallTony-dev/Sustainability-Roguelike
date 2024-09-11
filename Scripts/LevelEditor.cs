@@ -13,10 +13,15 @@ namespace Monogame_Cross_Platform.Scripts
         public bool isInEditor = false;
         public bool isChangingTile;
         Tile tileToPlace = new Tile();
-        public void Update()
+        ushort selectedTextureIndex = 0;
+        bool selectedIsBarrier = false;
+        byte selectedStatusGiven = 0;
+        byte selectedBreakEffect = 0;
+
+        public void Update(Vector2 playerPosition)
         {
-var kstate = Keyboard.GetState();
-            (int, int) playerAbsPos = TileMap.PosToAbsTileMapPos(player.position);
+        var kstate = Keyboard.GetState();
+            (int, int) playerAbsPos = TileMap.PosToAbsTileMapPos(playerPosition);
             if (kstate.IsKeyDown(Keys.E))
             {
                 TileMap.tileMap[playerAbsPos.Item1, playerAbsPos.Item2] = tileToPlace;
@@ -27,21 +32,24 @@ var kstate = Keyboard.GetState();
             }
             if (isChangingTile)
             {
+                //TODO: Make this be using a menu with buttons
                 if (kstate.IsKeyDown(Keys.Z))
                 {
-                    tileToPlace.textureIndex = 
+                    //selectedTextureIndex =
                 }
                 if (kstate.IsKeyDown(Keys.X))
                 {
-                    tileToPlace.isBarrier = 
+                    //selectedIsBarrier =
                 }
                 if (kstate.IsKeyDown(Keys.C))
                 {
-                    tileToPlace.statusGiven = 
+                    //selectedStatusGiven = 
                 }
                 if (kstate.IsKeyDown(Keys.V))
                 {
-                    tileToPlace.breakEffect = 
+                    //selectedBreakEffect = 
+                }
+            }
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Monogame_Cross_Platform.Scripts.ContentManagers;
+﻿global using Microsoft.Xna.Framework;
+global using Microsoft.Xna.Framework.Graphics;
+global using Microsoft.Xna.Framework.Input;
+global using Monogame_Cross_Platform.Scripts.ContentManagers;
 using Monogame_Cross_Platform.Scripts.GameObjects.Tiles;
 using System;
 using Monogame_Cross_Platform.Scripts.GameObjects.Entities;
-using Monogame_Cross_Platform.Scripts.GameObjects.Entities.Enemy;
+using Monogame_Cross_Platform.Scripts.HUD;
 using System.Collections.Generic;
 using Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player;
 
@@ -16,9 +16,10 @@ namespace Monogame_Cross_Platform.Scripts
         public static GraphicsDeviceManager _graphics;
 
         ContentLoader contentLoader;
-        DrawEntities drawEntities;
+        DrawThings drawEntities;
         RenderTarget2D renderTarget;
         ContentManagers.Camera.Camera camera = new ContentManagers.Camera.Camera();
+        ContentManagers.Camera.Camera uiCamera = new ContentManagers.Camera.Camera();
         Settings settings;
 
         LevelEditor levelEditor;
@@ -31,6 +32,9 @@ namespace Monogame_Cross_Platform.Scripts
          Player player = new Player(100, 100, new Vector2(100, 100),new Hitboxes.Hitbox(0,0,30,30), 0); //Put this in a better spot inside of an initialize level function within update or smth
          //Enemy testEnemy = new Enemy(100, 5, 100, new Vector2(10, 10), 3); //same with this one
          List<Entity> currentEntities; //temp?
+         List<Menu> activeMenus;
+
+        int buttonIncrement = 1; //TEMP
 
         public Game1()
         {
@@ -42,6 +46,8 @@ namespace Monogame_Cross_Platform.Scripts
             _graphics.IsFullScreen = true;
 
             currentEntities = new List<Entity>() { player }; //TEMP THIS SHOULD BE HANDLED ELSEWHERE
+            activeMenus = new List<Menu>() { new Menu(new List<UiElement>() { new Button(1, new Rectangle(0,0,128,128), 0, 0)})}; //this too
+
             levelEditor = new LevelEditor();
         }
 
@@ -50,28 +56,19 @@ namespace Monogame_Cross_Platform.Scripts
             // TODO: Add your initialization logic here
             contentLoader = new ContentLoader(this);
             settings = new Settings();
-            TileMap.tileMap[1, 1] = new Tile(2, true, 0, 0); // MAKES A TESTING TILE
-            TileMap.tileMap[4, 2] = new Tile(2, true, 0, 0); // MAKES A TESTING TILE
-            TileMap.tileMap[3, 2] = new Tile(2, true, 0, 0); // MAKES A TESTING TILE
-            TileMap.tileMap[4, 4] = new Tile(2, true, 0, 0); // MAKES A TESTING TILE
-            TileMap.tileMap[2, 4] = new Tile(2, true, 0, 0); // MAKES A TESTING TILE
-            TileMap.tileMap[2, 5] = new Tile(2, true, 0, 0); // MAKES A TESTING TILE
-            TileMap.tileMap[4, 5] = new Tile(2, true, 0, 0); // MAKES A TESTING TILE
-            TileMap.tileMap[5, 5] = new Tile(2, true, 0, 0); // MAKES A TESTING TILE
-            TileMap.tileMap[6, 5] = new Tile(2, true, 0, 0); // MAKES A TESTING TILE
 
             Level.LevelGenerator.GenerateLevel(1); //TEMP
 
             base.Initialize();
             settings.ApplySettings();
             settings.InitializeSettings();
-
+            uiCamera.Scale(2);
         }
 
         protected override void LoadContent() 
         {
             // TODO: use this.Content to load your game content here
-            drawEntities = new DrawEntities();
+            drawEntities = new DrawThings();
             contentLoader.LoadTextures("AlwaysLoaded");
 
             renderTarget = new RenderTarget2D(GraphicsDevice, Settings.resolutionWidth, Settings.resolutionHeight);
@@ -86,12 +83,17 @@ namespace Monogame_Cross_Platform.Scripts
             gameTime = _gameTime;
             // TODO: Add your update logic here
 
-            UpdateThings.UpdateLevel(levelEditor, player, currentEntities, gameTime);
+            UpdateThings.UpdateLevel(levelEditor, player, currentEntities, activeMenus);
             UpdateThings.UpdateEntities(currentEntities, player);
             camera.Follow(player);
             settings.UpdateZoom();
 
-            debugText = TileMap.PosToAbsTileMapPos(player.position).ToString() + player.position.ToString() + (player.hitBox.left + 16).ToString(); //debug text that displays values to test
+            if (activeMenus[0].Update())
+            {
+                buttonIncrement++; //TODO: FIX BUTTONS
+            }
+            
+            debugText = buttonIncrement.ToString() + "test"; //debug text that displays values to test
 
             base.Update(gameTime);
         }
@@ -121,8 +123,12 @@ namespace Monogame_Cross_Platform.Scripts
             // Drawing the render target to the screen here
             drawEntities.BeginBuffer();
             drawEntities.spriteBatch.Draw(renderTarget, new Rectangle(0,0,Settings.resolutionWidth,Settings.resolutionHeight), Color.White);
-            drawEntities.spriteBatch.DrawString(font, debugText, new Vector2(100, 100), Color.DarkGreen); //draws debug text
+            drawEntities.spriteBatch.DrawString(font, debugText, new Vector2(400, 400), Color.Fuchsia); //draws debug text
             drawEntities.DrawBuffer();
+
+            drawEntities.BeginUiBuffer(uiCamera);
+            drawEntities.AddToUiBuffer(activeMenus); //draws menus
+            drawEntities.DrawUiBuffer();
 
             base.Draw(gameTime);
         }

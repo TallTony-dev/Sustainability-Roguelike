@@ -15,7 +15,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         internal Vector2 ValidateMovement(Entity entity, Vector2 entityNewPos)
         {
             (float tileMapX, float tileMapY) = TileMap.PosToTileMapPos(entityNewPos);
-            float maxVal = 510f;
+            float maxVal = 512f;
             float minVal = 1f;
             if (tileMapX >= maxVal)
                 entityNewPos.X = maxVal * 32;

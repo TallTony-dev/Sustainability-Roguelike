@@ -11,6 +11,10 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers.Camera
         float xToMove = 0;
         float yToMove = 0;
         bool isFirstPass = true;
+        public void Scale(float scale)
+        {
+            Transform = Matrix.CreateScale(scale);
+        }
         public void Follow(GameObjects.Entities.Entity target)
         {
             if (isFirstPass)

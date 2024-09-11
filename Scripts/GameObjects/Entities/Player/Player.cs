@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Monogame_Cross_Platform.Scripts.Entities.Player;
 using Monogame_Cross_Platform.Scripts.GameObjects.Entities;
 
 namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player

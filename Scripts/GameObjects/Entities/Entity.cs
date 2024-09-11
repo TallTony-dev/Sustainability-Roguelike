@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 using Monogame_Cross_Platform.Scripts.ContentManagers;
-using Monogame_Cross_Platform.Scripts.Entities;
+using Monogame_Cross_Platform.Scripts;
 using Monogame_Cross_Platform.Scripts.Hitboxes;
 
 namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
@@ -23,7 +23,8 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
 
         internal EntityMovement entityMovement;
         internal Hitbox hitBox;
-        internal Weapons.Weapon weapon;
+        internal Weapons.Weapon weapon1;
+        internal Weapons.Weapon weapon2;
         internal EntityMovement.AIType aiType;
         
         public Entity(float entitySpeed, Vector2 startingPos, ushort textureIndex, Hitbox hitBox, EntityMovement.AIType aiType) : base(textureIndex)
@@ -43,7 +44,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         {
             if (!isInAbsMovementMode)
             {
-                Vector2 entityNewPos = entityMovement.GetPathfindingMovement(weapon.attackRange, position, entitySpeed, aiType, playerToFollow);
+                Vector2 entityNewPos = entityMovement.GetPathfindingMovement(weapon1.attackRange, position, entitySpeed, aiType, playerToFollow);
 
                 hitBox.UpdatePosition(entityNewPos.X, entityNewPos.Y);
                 entityNewPos = entityMovement.ValidateMovement(this, entityNewPos);

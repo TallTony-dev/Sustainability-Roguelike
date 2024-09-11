@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Monogame_Cross_Platform.Scripts.GameObjects.Tiles;
 
-namespace Monogame_Cross_Platform.Scripts.Entities.Player
+namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
 {
     public class HandlePlayerInputs
     {

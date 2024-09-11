@@ -14,9 +14,9 @@ namespace Monogame_Cross_Platform.Scripts
     internal static class UpdateThings
     {
         static double timeSinceT;
-        public static async void UpdateLevel(LevelEditor levelEditor, Player player, List<Entity> entityList, GameTime gameTime)
+        public static void UpdateLevel(LevelEditor levelEditor, Player player, List<Entity> entityList, List<HUD.Menu> menuList)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.T) && (gameTime.TotalGameTime.TotalSeconds - timeSinceT) > 1)
+            if (Keyboard.GetState().IsKeyDown(Keys.T) && (Game1.gameTime.TotalGameTime.TotalSeconds - timeSinceT) > 1)
             {
                 if (!levelEditor.isInEditor)
                 {
@@ -37,13 +37,18 @@ namespace Monogame_Cross_Platform.Scripts
                     }
                     levelEditor.isInEditor = false;
                 }
-                timeSinceT = gameTime.TotalGameTime.TotalSeconds; 
+                timeSinceT = Game1.gameTime.TotalGameTime.TotalSeconds; 
             }
 
             if (levelEditor.isInEditor)
             {
-                levelEditor.Update();
+                levelEditor.Update(player.position);
             }
+
+            //foreach (HUD.Menu menu in menuList)
+            //{
+            //    menu.Update(); //WIP TODO
+            //} This shouldnt behere I dont think, maybe make the menu list static and only call when nessacary?
         }
         public static void UpdateEntities(List<Entity> entityList, Player player)
         {
