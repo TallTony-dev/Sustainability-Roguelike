@@ -34,12 +34,12 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         /// </summary>
         public void AddToDrawBuffer(Entity entity, SpriteEffects spriteEffect)
         {
-            (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTexture(entity.textureIndex);
+            (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(entity.textureIndex);
             spriteBatch.Draw(texture, entity.position, rectangle, Color.White, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, spriteEffect, 0f);
         }
         public void AddToDrawBuffer(Tiles.Tile tile, int tileMapX, int tileMapY)
         {
-            (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTexture(tile.textureIndex);
+            (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(tile.textureIndex);
             spriteBatch.Draw(texture, new Vector2(tileMapX * 32, tileMapY * 32), rectangle, Color.White, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0f);
         }
         public void AddToUiBuffer(List<HUD.Menu> menus)
@@ -52,7 +52,8 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                     {
                         if (element.isEnabled)
                         {
-                            uiSpriteBatch.Draw(ContentLoader.GetLoadedTexture(element.textureIndex).Item1, new Vector2(element.xOffset, element.yOffset), null, Color.White, 0f, new Vector2(0,0), Vector2.One, SpriteEffects.None, 0f);
+                            (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(element.textureIndex);
+                            uiSpriteBatch.Draw(texture, new Vector2(element.xOffset, element.yOffset), rectangle, Color.White, 0f, new Vector2(0,0), new Vector2(Settings.uiScaleX, Settings.uiScaleY), SpriteEffects.None, 0f);
                         }
                     }
                 }
@@ -69,7 +70,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             }
         }
 
-        public void BeginUiBuffer(ContentManagers.Camera.Camera camera) => uiSpriteBatch.Begin(SpriteSortMode.BackToFront, null, SamplerState.PointClamp, transformMatrix: camera.Transform);
+        public void BeginUiBuffer() => uiSpriteBatch.Begin(SpriteSortMode.BackToFront, null, SamplerState.PointClamp);
         public void DrawUiBuffer() => uiSpriteBatch.End();
         public void DrawBuffer() => spriteBatch.End(); //Draws what is in the buffer
         public void BeginBuffer(ContentManagers.Camera.Camera camera) => spriteBatch.Begin(SpriteSortMode.BackToFront,null,SamplerState.PointClamp,transformMatrix: camera.Transform); //Begins the buffer with a matrix transform

@@ -10,20 +10,25 @@ namespace Monogame_Cross_Platform.Scripts.HUD
 {
     internal class Button : UiElement
     {
-        public Button(ushort textureIndex, Rectangle hitBox, int xOffset, int yOffset) : base(textureIndex, xOffset, yOffset, hitBox)
+        public Button(ushort textureIndex, int xOffset, int yOffset, Rectangle hitBox) : base(textureIndex, xOffset, yOffset, hitBox)
         {
         }
 
         private double timeSincePressed;
-        public bool IsPressed()
+        public override bool IsPressed()
         {
-            MouseState mstate = Mouse.GetState();
-            if ((Game1.gameTime.TotalGameTime.TotalSeconds - timeSincePressed) > 1 && mstate.LeftButton == ButtonState.Pressed && mstate.Y < hitBox.Bottom && mstate.Y > hitBox.Top && mstate.X < hitBox.Right && mstate.X > hitBox.Left)
+            if (isEnabled)
             {
-                timeSincePressed = Game1.gameTime.TotalGameTime.TotalSeconds;
-                return true;
+                MouseState mstate = Mouse.GetState();
+                Game1.debugText = mstate.X.ToString() + mstate.Y.ToString();
+                if ((Game1.gameTime.TotalGameTime.TotalSeconds - timeSincePressed) > 1 && mstate.LeftButton == ButtonState.Pressed
+                    && mstate.Y < hitBox.bottom && mstate.Y > hitBox.top && mstate.X < hitBox.right && mstate.X > hitBox.left)
+                {
+                    timeSincePressed = Game1.gameTime.TotalGameTime.TotalSeconds;
+                    return true;
+                }
             }
-            else return false;
+            return false;
         }
        
     }

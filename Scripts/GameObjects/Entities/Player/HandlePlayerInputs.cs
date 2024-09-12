@@ -70,28 +70,29 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
         {
             (int,int) playerCurrentTile = TileMap.PosToAbsTileMapPos(playerPosition);
             float updatedPlayerSpeed = (float)(playerSpeed * gameTime.ElapsedGameTime.TotalSeconds);
+            
             if (!isMoving && movesLeft > 0)
             {
+                coordToTravelTo = playerPosition;
                 KeyboardState kstate = Keyboard.GetState();
                 JoystickState jstate = Joystick.GetState((int)PlayerIndex.One);
-                coordToTravelTo = playerPosition;
 
-                if ((kstate.IsKeyDown(Keys.W) || jstate.Buttons[(int)Buttons.DPadDown] == ButtonState.Pressed) && !TileMap.IsCollision(playerCurrentTile.Item1, playerCurrentTile.Item2 - 1))
+                if ((kstate.IsKeyDown(Keys.W) || jstate.Buttons[(int)Buttons.DPadDown] == ButtonState.Pressed) && !TileMap.IsCollisionAbs(playerCurrentTile.Item1, playerCurrentTile.Item2 - 1))
                 {
                     coordToTravelTo.Y = (playerCurrentTile.Item2 * 32) - 32;
                 }
 
-                else if ((kstate.IsKeyDown(Keys.S) || jstate.Buttons[(int)Buttons.DPadUp] == ButtonState.Pressed) && !TileMap.IsCollision(playerCurrentTile.Item1, playerCurrentTile.Item2 + 1))
+                else if ((kstate.IsKeyDown(Keys.S) || jstate.Buttons[(int)Buttons.DPadUp] == ButtonState.Pressed) && !TileMap.IsCollisionAbs(playerCurrentTile.Item1, playerCurrentTile.Item2 + 1))
                 {
                     coordToTravelTo.Y = (playerCurrentTile.Item2 * 32) + 32;
                 }
 
-                else if ((kstate.IsKeyDown(Keys.A) || jstate.Buttons[(int)Buttons.DPadLeft] == ButtonState.Pressed) && !TileMap.IsCollision(playerCurrentTile.Item1 - 1, playerCurrentTile.Item2))
+                else if ((kstate.IsKeyDown(Keys.A) || jstate.Buttons[(int)Buttons.DPadLeft] == ButtonState.Pressed) && !TileMap.IsCollisionAbs(playerCurrentTile.Item1 - 1, playerCurrentTile.Item2))
                 {
                     coordToTravelTo.X = (playerCurrentTile.Item1 * 32) - 32;
                 }
 
-                else if ((kstate.IsKeyDown(Keys.D) || jstate.Buttons[(int)Buttons.DPadRight] == ButtonState.Pressed) && !TileMap.IsCollision(playerCurrentTile.Item1 + 1, playerCurrentTile.Item2))
+                else if ((kstate.IsKeyDown(Keys.D) || jstate.Buttons[(int)Buttons.DPadRight] == ButtonState.Pressed) && !TileMap.IsCollisionAbs(playerCurrentTile.Item1 + 1, playerCurrentTile.Item2))
                 {
                     coordToTravelTo.X = (playerCurrentTile.Item1 * 32) + 32;
                 }

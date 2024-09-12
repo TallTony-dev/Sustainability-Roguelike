@@ -10,37 +10,37 @@ namespace Monogame_Cross_Platform.Scripts.HUD
 {
     internal class UiElement
     {
-        internal Vector2 position;
-        public Rectangle hitBox; //says where entity is centered for drawing origin
+        public Hitboxes.Hitbox hitBox; //says where entity is centered for drawing origin
         public ushort textureIndex { get; private set; }
-        public bool isEnabled { get; set; } = true; // will be false eventually
-        internal int xOffset;
-        internal int yOffset;
+        public bool isEnabled { get; set; } = false; // will be false eventually
+        internal float xOffset;
+        internal float yOffset;
 
 
         public UiElement(ushort textureIndex, int xOffset, int yOffset, Rectangle hitBox)
         {
             this.textureIndex = textureIndex;
-            this.xOffset = xOffset;
-            this.yOffset = yOffset;
-            this.hitBox = new Rectangle(hitBox.X, hitBox.Y, hitBox.Width * 2, hitBox.Height * 2);
+            this.xOffset = xOffset * Settings.uiScaleX;
+            this.yOffset = yOffset * Settings.uiScaleY;
+            this.hitBox = new Hitboxes.Hitbox(this.xOffset, this.yOffset, hitBox.Width * Settings.uiScaleX, hitBox.Height * Settings.uiScaleY);
         }
-        public virtual void Update()
+        public virtual bool IsPressed()
         {
-
+            throw new AggregateException(); //this is checking if a non button uielement is pressed
+            return false; //This isnt pressable
         }
         /// <summary>
         /// Run after graphics changes
         /// </summary>
-        public void UpdateHitbox()
+        public void Update()
         {
-            position.X = xOffset;
-            position.Y = yOffset;
-            hitBox = new Rectangle((int)Math.Round(position.X), (int)Math.Round(position.Y), hitBox.Width, hitBox.Height); //This rounding may cause issues but yeah shouldnt be too bad
+            hitBox = new Hitboxes.Hitbox(xOffset * Settings.uiScaleX, yOffset * Settings.uiScaleY, hitBox.width * Settings.uiScaleX, hitBox.height * Settings.uiScaleY); 
         }
         public void Enable()
         {
             isEnabled = true; 
         }
+
+        public enum ClampingType { top, bottom, right, left, topright, topleft, bottomright, bottomleft }
     }
 }

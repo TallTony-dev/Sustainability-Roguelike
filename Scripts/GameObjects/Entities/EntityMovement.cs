@@ -15,19 +15,19 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         internal Vector2 ValidateMovement(Entity entity, Vector2 entityNewPos)
         {
             (float tileMapX, float tileMapY) = TileMap.PosToTileMapPos(entityNewPos);
-            float maxVal = 512f;
-            float minVal = 1f;
+            float maxVal = 511f;
+            float minVal = 0f;
+            Hitboxes.Hitbox entityHitBox = entity.hitBox;
             if (tileMapX >= maxVal)
-                entityNewPos.X = maxVal * 32;
+                entityNewPos.X = maxVal * entityHitBox.width;
             if (tileMapX <= minVal)
-                entityNewPos.X = minVal * 32;
+                entityNewPos.X = minVal * entityHitBox.width;
             if (tileMapY >= maxVal)
-                entityNewPos.Y = maxVal * 32;
+                entityNewPos.Y = maxVal * entityHitBox.height;
             if (tileMapY <= minVal)
-                entityNewPos.Y = minVal * 32;
+                entityNewPos.Y = minVal * entityHitBox.height;
 
             (int absTileX, int absTileY) = TileMap.PosToAbsTileMapPos(entityNewPos);
-            Hitboxes.Hitbox entityHitBox = entity.hitBox;
             bool isXModified = false;
             bool isYModified = false;
             for (int x = -1; x < 2; x++)

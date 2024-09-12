@@ -10,13 +10,13 @@ namespace Monogame_Cross_Platform.Scripts.Hitboxes
         //Y and x position are the top corner of the hitbox
         public float xPos { get; set; }
         public float yPos { get; set; }
-        public int width { get; set; }
-        public int height { get; set; }
+        public float width { get; set; }
+        public float height { get; set; }
         public float left => xPos;
         public float right => xPos + width;
         public float top => yPos;
         public float bottom => yPos + height;
-        public Hitbox(float xPos, float yPos, int width, int height)
+        public Hitbox(float xPos, float yPos, float width, float height)
         {
             this.xPos = xPos;
             this.yPos = yPos;

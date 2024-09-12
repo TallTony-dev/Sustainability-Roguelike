@@ -4,23 +4,51 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Monogame_Cross_Platform.Scripts.ContentManagers
 {
-    internal class Settings
+    internal static class Settings
     {
+        public static bool isFullScreen = false;
         public static int resolutionWidth = 2560;
         public static int resolutionHeight = 1440;
+        public static float uiScaleX = 1f;
+        public static float uiScaleY = 1f;
         public static float zoomLevel = 2.3f;
-        MouseState mstate;
-        public void ApplySettings()
+
+        static MouseState mstate;
+
+        public static Menu settingsMenu = new Menu(Menu.MenuType.settings);
+
+        public static void Update()
         {
-            File.WriteAllText("Settings.txt", $"{resolutionHeight},{resolutionWidth}");
+            if (Keyboard.GetState().IsKeyDown(Keys.F1))
+                settingsMenu.EnableMenu();
+            if (Keyboard.GetState().IsKeyDown(Keys.F2))
+                settingsMenu.DisableMenu();
+
+            if (settingsMenu.IsButtonPressed(1))
+            {
+                isFullScreen = !isFullScreen;
+            }
+            if (settingsMenu.IsButtonPressed(0))
+            {
+                ApplySettings();
+            }
         }
-        public void InitializeSettings()
+        public static void ApplySettings()
+        {
+            File.WriteAllText("Settings.txt", $"{resolutionHeight},{resolutionWidth},{isFullScreen}");
+        }
+        public static void InitializeSettings()
         {
             string[] tokens = File.ReadAllText("Settings.txt").Split(",");
             resolutionHeight = Convert.ToInt32(tokens[0]);
             resolutionWidth = Convert.ToInt32(tokens[1]);
+            isFullScreen = Convert.ToBoolean(tokens[2]);
+
+            uiScaleX = 1 * ((float)resolutionWidth / 1920);
+            uiScaleY = 1 * ((float)resolutionHeight / 1080);
+
         }
-        public void UpdateZoom()
+        public static void UpdateZoom()
         {
             MouseState newMouseState = Mouse.GetState();
             int deltaScroll = newMouseState.ScrollWheelValue - mstate.ScrollWheelValue;
@@ -30,6 +58,5 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
                 zoomLevel -= 0.06f * (zoomLevel);
             mstate = newMouseState;
         }   
-        public Settings() { }
     }
 }

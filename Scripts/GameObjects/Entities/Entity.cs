@@ -37,7 +37,6 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         }
         public void Update(Player.Player player)
         {
-            
             Move(player);
         }
         public virtual void Move(Player.Player playerToFollow)

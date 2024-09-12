@@ -28,17 +28,25 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Tiles
         /// <summary>
         /// Checks if the entity hitbox collides with a tile hitbox, returns true if it collides
         /// </summary>
-        public static bool IsCollision(Entities.Entity entity, int tileX, int tileY)
+        public static bool IsCollision(Entity entity, int tileX, int tileY)
         {
-                if (tileMap[tileX, tileY].isBarrier && entity.hitBox.Intersects(GetTileBounds(tileX, tileY)))
-                {
-                    return true;
-                }
+            if (tileX < 0 || tileY < 0 || tileX > 511 || tileY > 511)
+            {
+                return true;
+            }
+            if (tileMap[tileX, tileY].isBarrier && entity.hitBox.Intersects(GetTileBounds(tileX, tileY)))
+            {
+                return true;
+            }
             return false;
         }
-        public static bool IsCollision(int tileX, int tileY)
+        public static bool IsCollisionAbs(int tileX, int tileY)
         {
-            if (tileX < 0 || tileX > 512 || tileY < 0 || tileY > 512 || tileMap[tileX, tileY].isBarrier)
+            if (tileX < 0 || tileY < 0 || tileX > 511 || tileY > 511)
+            {
+                return true;
+            }
+            if (tileMap[tileX, tileY].isBarrier)
             {
                 return true;
             }
