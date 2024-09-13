@@ -25,7 +25,7 @@ namespace Monogame_Cross_Platform.Scripts.HUD
             {
                 elements.Add(new Button(0, 0, 0, new Rectangle(0, 0, 32, 32)));
                 elements.Add(new Button(0, 64, 0, new Rectangle(0, 0, 32, 32)));
-                elements.Add(new Button(0, 96, 0, new Rectangle(0, 0, 32, 32)));
+                elements.Add(new Button(16, 96, 0, new Rectangle(0, 0, 32, 32)));
                 elements.Add(new Button(0, 256, 0, new Rectangle(0, 0, 32, 32)));
                 elements.Add(new Button(0, 288, 0, new Rectangle(0, 0, 32, 32)));
                 elements.Add(new Button(1, 1888, 0, new Rectangle(0, 0, 32, 32)));
@@ -37,6 +37,17 @@ namespace Monogame_Cross_Platform.Scripts.HUD
                 elements.Add(new Button(1, 0, 400, new Rectangle(0, 0, 32, 32)));
                 elements.Add(new Button(1, 0, 500, new Rectangle(0, 0, 32, 32)));
                 elements.Add(new Button(1, 0, 600, new Rectangle(0, 0, 32, 32)));
+            }
+            if (menuType == MenuType.miniMap)
+            {
+
+            }
+        }
+        public void UpdateElementsPositions()
+        {
+            foreach (UiElement element in elements)
+            {
+                element.UpdatePosition();
             }
         }
         public void AddElement(UiElement elementToAdd)
@@ -62,6 +73,7 @@ namespace Monogame_Cross_Platform.Scripts.HUD
             foreach (var element in elements)
             {
                 element.isEnabled = true;
+                element.UpdatePosition();
             }
         }
         public void DisableMenu()
@@ -70,10 +82,10 @@ namespace Monogame_Cross_Platform.Scripts.HUD
             Game1.activeMenus.Remove(this);
             foreach (var element in elements)
             {
-                element.Enable();
+                element.Disable();
             }
         }
 
-        public enum MenuType { pauseMenu, levelEditor, settings }
+        public enum MenuType { pauseMenu, levelEditor, settings, miniMap }
     }
 }

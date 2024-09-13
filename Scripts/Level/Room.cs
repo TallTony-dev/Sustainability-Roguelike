@@ -12,7 +12,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
     internal class Room
     {
         public Tile[,] tileArray;
-        int sqrtRoomLength;
+        public int sqrtTileArrayLength { get; private set; }
         public void SetTile(int x, int y, ushort startingTileTextureIndex, bool isBarrier, byte breakEffect, byte statusGiven)
         {
             tileArray[x,y].textureIndex = startingTileTextureIndex;
@@ -23,17 +23,17 @@ namespace Monogame_Cross_Platform.Scripts.Level
         public Room(ushort roomIndex)
         {
             tileArray = new Tile[32, 32];
-            sqrtRoomLength = (int)Math.Sqrt(tileArray.Length);
-            string roomData = File.ReadLines("Content/RoomData.txt").Skip(roomIndex).Take(1).First();
+            sqrtTileArrayLength = (int)Math.Sqrt(tileArray.Length);
+            string roomData = File.ReadLines("Content/RoomData.txt").Skip(roomIndex * 2).Take(1).First(); //this skips the number indicated in roomindex * 2 so that comments can be added between lines in roomdata.txt
             string[] tokens = roomData.Split(",");
-            for (int y = 0; y < sqrtRoomLength; y++)
+            for (int y = 0; y < sqrtTileArrayLength; y++)
             {
-                for (int x = 0; x < sqrtRoomLength; x++)
+                for (int x = 0; x < sqrtTileArrayLength; x++)
                 {
-                    tileArray[x, y].textureIndex = Convert.ToUInt16(tokens[(y * 4) + (x * sqrtRoomLength)]);
-                    tileArray[x, y].isBarrier = Convert.ToBoolean(tokens[1 +(y * 4) + (x * sqrtRoomLength)]);
-                    tileArray[x, y].statusGiven = Convert.ToByte(tokens[2 + (y * 4) + (x * sqrtRoomLength)]);
-                    tileArray[x, y].breakEffect = Convert.ToByte(tokens[3 + (y * 4) + (x * sqrtRoomLength)]);
+                    tileArray[x, y].textureIndex = Convert.ToUInt16(tokens[(x * 4) + (y * sqrtTileArrayLength * 4)]);
+                    tileArray[x, y].isBarrier = Convert.ToBoolean(tokens[1 + (x * 4) + (y * sqrtTileArrayLength * 4)]);
+                    tileArray[x, y].statusGiven = Convert.ToByte(tokens[2 + (x * 4) + (y * sqrtTileArrayLength * 4)]);
+                    tileArray[x, y].breakEffect = Convert.ToByte(tokens[3 + (x * 4) + (y * sqrtTileArrayLength * 4)]);
                 }
             }
         }
@@ -47,7 +47,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                     Tile tile = tileArray[x, y];
                     ushort tileIndex = (ushort)(tile.textureIndex - (tile.textureIndex % 16));
 
-                    if (x + 1 < sqrtRoomLength && tileArray[x + 1, y].textureIndex >= tileIndex && tileArray[x + 1, y].textureIndex < tileIndex + 16) //checking right
+                    if (x + 1 < sqrtTileArrayLength && tileArray[x + 1, y].textureIndex >= tileIndex && tileArray[x + 1, y].textureIndex < tileIndex + 16) //checking right
                     {
                         enumToPick += 1;
                     }
@@ -55,7 +55,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                     {
                         enumToPick += 2;
                     }
-                    if (y + 1 < sqrtRoomLength && tileArray[x, y + 1].textureIndex >= tileIndex && tileArray[x, y + 1].textureIndex < tileIndex + 16)//checking bottom
+                    if (y + 1 < sqrtTileArrayLength && tileArray[x, y + 1].textureIndex >= tileIndex && tileArray[x, y + 1].textureIndex < tileIndex + 16)//checking bottom
                     {
                         enumToPick += 4;
                     }

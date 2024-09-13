@@ -20,7 +20,8 @@ namespace Monogame_Cross_Platform.Scripts.Level
 
         Menu editorMenu = new Menu(Menu.MenuType.levelEditor);
 
-        static double timeSinceT;
+        double timeSinceT;
+        double timeSinceTilePlaced;
 
         internal void Update(Player player, List<Entity> entityList)
         {
@@ -33,6 +34,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                     foreach (Entity entity in entityList)
                     {
                         entity.isInAbsMovementMode = true;
+                        entity.ignoresCollisions = true;
                     }
                     isInEditor = true;
                     editorMenu.EnableMenu();
@@ -43,6 +45,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                     foreach (Entity entity in entityList)
                     {
                         entity.isInAbsMovementMode = false;
+                        entity.ignoresCollisions = false;
                     }
                     isInEditor = false;
                     editorMenu.DisableMenu();
@@ -52,12 +55,16 @@ namespace Monogame_Cross_Platform.Scripts.Level
             if (isInEditor)
             {
                 var kstate = Keyboard.GetState();
-                (int, int) playerAbsPos = TileMap.PosToAbsTileMapPos(player.position);
-                if (kstate.IsKeyDown(Keys.E))
+                if (kstate.IsKeyDown(Keys.E) && Game1.gameTime.TotalGameTime.TotalSeconds - timeSinceTilePlaced > 0.2)
                 {
                     LevelGenerator.ChangeTileAtPos(player.position, selectedTextureIndex, selectedIsBarrier, selectedBreakEffect, selectedStatusGiven);
+                    timeSinceTilePlaced = Game1.gameTime.TotalGameTime.TotalSeconds;
                 }
-                //TODO: Make this be using a menu with buttons
+                if (kstate.IsKeyDown(Keys.R) && Game1.gameTime.TotalGameTime.TotalSeconds - timeSinceTilePlaced > 0.2)
+                {
+                    LevelGenerator.Change3x3TilesAroundPos(player.position, selectedTextureIndex, selectedIsBarrier, selectedBreakEffect, selectedStatusGiven);
+                    timeSinceTilePlaced = Game1.gameTime.TotalGameTime.TotalSeconds;
+                }
                 if (editorMenu.IsButtonPressed(0))
                 {
                     LevelGenerator.UpdateTileMap();

@@ -32,6 +32,18 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/ball.png
 
+#begin Graphics/cobblestone wall testing.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/cobblestone wall testing.png
+
 #begin Graphics/cobblestone.png
 /importer:TextureImporter
 /processor:TextureProcessor

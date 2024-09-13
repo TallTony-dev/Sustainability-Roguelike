@@ -20,7 +20,6 @@ namespace Monogame_Cross_Platform.Scripts.HUD
             if (isEnabled)
             {
                 MouseState mstate = Mouse.GetState();
-                Game1.debugText = mstate.X.ToString() + mstate.Y.ToString();
                 if ((Game1.gameTime.TotalGameTime.TotalSeconds - timeSincePressed) > 1 && mstate.LeftButton == ButtonState.Pressed
                     && mstate.Y < hitBox.bottom && mstate.Y > hitBox.top && mstate.X < hitBox.right && mstate.X > hitBox.left)
                 {

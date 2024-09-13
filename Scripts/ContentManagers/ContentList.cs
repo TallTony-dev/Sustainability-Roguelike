@@ -14,7 +14,7 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
         private List<(string textureName, Rectangle sourceRect, ushort index)> CityTexturesToLoad = new List<(string, Rectangle, ushort)>() { };
 
         //Arrays of TileSets (4x4 grids of 32x32 textures)
-        private (string textureName, ushort startingIndex)[] AlwaysLoadedTileSets = { ("cobblestone", 0), ("cobblestone", 16) };
+        private (string textureName, ushort startingIndex)[] AlwaysLoadedTileSets = { ("cobblestone", 0), ("cobblestone wall testing", 16) };
         private (string textureName, ushort startingIndex)[] HomeTexturesTileSets = { };
         private (string textureName, ushort startingIndex)[] CityTexturesTileSets = { };
 

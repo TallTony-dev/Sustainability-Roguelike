@@ -15,7 +15,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
         HandlePlayerInputs inputHandler = new HandlePlayerInputs();
         public bool isInLevelEditorMode = false;
 
-         public Player(int health, float entitySpeed, Vector2 startingPos, Hitboxes.Hitbox hitBox, ushort textureIndex) : base(entitySpeed, startingPos, textureIndex, hitBox, EntityMovement.AIType.none)
+         public Player(int health, float entitySpeed, Vector2 startingTile, Hitboxes.Hitbox hitBox, ushort textureIndex) : base(entitySpeed, startingTile, textureIndex, hitBox, EntityMovement.AIType.none)
         {
             this.health = health;
         }
@@ -25,9 +25,11 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
             if (!isInAbsMovementMode)
             {
                 Vector2 playerNewPos = inputHandler.GetPlayerMovement(position, Game1.gameTime, entitySpeed);
-
-                hitBox.UpdatePosition(playerNewPos.X, playerNewPos.Y);
-                playerNewPos = entityMovement.ValidateMovement(this, playerNewPos);
+                if (!ignoresCollisions)
+                {
+                    hitBox.UpdatePosition(playerNewPos.X, playerNewPos.Y);
+                    playerNewPos = entityMovement.ValidateMovement(this, playerNewPos);
+                }
                 hitBox.UpdatePosition(playerNewPos.X, playerNewPos.Y);
 
                 if (playerNewPos.X > position.X)
@@ -42,7 +44,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
             }
             else
             {
-                Vector2 playerNewPos = inputHandler.GetPlayerTurnBasedMovement(position, Game1.gameTime, entitySpeed, movesLeft, isMoving);
+                Vector2 playerNewPos = inputHandler.GetPlayerTurnBasedMovement(position, Game1.gameTime, entitySpeed, movesLeft, isMoving, ignoresCollisions);
 
                 if (playerNewPos.X > position.X)
                     isFlipped = true;

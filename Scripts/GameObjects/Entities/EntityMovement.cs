@@ -27,7 +27,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             if (tileMapY <= minVal)
                 entityNewPos.Y = minVal * entityHitBox.height;
 
-            (int absTileX, int absTileY) = TileMap.PosToAbsTileMapPos(entityNewPos);
+            (int absTileX, int absTileY) = TileMap.PosToAbsTileMapPos(entity.position); //old psotiion
             bool isXModified = false;
             bool isYModified = false;
             for (int x = -1; x < 2; x++)
@@ -37,6 +37,9 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                     if (TileMap.IsCollision(entity, x+absTileX, y+absTileY))
                     {
                         Rectangle tileBounds = TileMap.GetTileBounds(absTileX + x, absTileY + y);
+
+                        //TODO: When entity is moving over half a tile in a frame it phases through wall
+                        //entity.hitbox is updated to new position already
 
                         //If old entity left bound is
                         if (x != 0 && !isXModified && entity.position.Y + entityHitBox.height / 2 > tileBounds.Top && entity.position.Y - entityHitBox.height / 2 < tileBounds.Bottom)

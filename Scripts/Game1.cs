@@ -19,7 +19,7 @@ namespace Monogame_Cross_Platform.Scripts
         ContentLoader contentLoader;
         DrawThings drawEntities;
         RenderTarget2D renderTarget;
-        ContentManagers.Camera.Camera camera = new ContentManagers.Camera.Camera();
+        internal static ContentManagers.Camera.Camera camera = new ContentManagers.Camera.Camera();
 
         LevelEditor levelEditor;
 
@@ -28,7 +28,7 @@ namespace Monogame_Cross_Platform.Scripts
         SpriteFont font; //Temp font
         public static string debugText = "test";
 
-         Player player = new Player(100, 100, new Vector2(100, 100),new Hitboxes.Hitbox(0,0,30,30), 0); //Put this in a better spot inside of an initialize level function within update or smth
+         Player player = new Player(100, 150, new Vector2(32 * 4 + 16, 32 * 4 + 16),new Hitboxes.Hitbox(0,0,30,30), 0); //Put this in a better spot inside of an initialize level function within update or smth
          //Enemy testEnemy = new Enemy(100, 5, 100, new Vector2(10, 10), 3); //same with this one
          internal static List<Entity> currentEntities; //temp?
          internal static List<Menu> activeMenus = new List<Menu>();
@@ -38,15 +38,6 @@ namespace Monogame_Cross_Platform.Scripts
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-
-            Settings.ApplySettings(); // TEMPTEMPTEMP
-            Settings.InitializeSettings();
-
-            _graphics.PreferredBackBufferWidth = Settings.resolutionWidth;
-            _graphics.PreferredBackBufferHeight = Settings.resolutionHeight;
-            _graphics.IsFullScreen = Settings.isFullScreen;
-
-
 
             currentEntities = new List<Entity>() { player }; //TEMP THIS SHOULD BE HANDLED ELSEWHERE
 
@@ -58,7 +49,10 @@ namespace Monogame_Cross_Platform.Scripts
             // TODO: Add your initialization logic here
             contentLoader = new ContentLoader(this);
 
-            LevelGenerator.GenerateLevel(1); //TEMP
+            LevelGenerator.GenerateLevel(0, 7); //TEMP
+
+            Settings.ApplySettingsToFile(); //TEMP
+            Settings.InitializeSettings();
             base.Initialize();
         }
 
@@ -82,6 +76,9 @@ namespace Monogame_Cross_Platform.Scripts
 
             UpdateThings.UpdateLevel(levelEditor, player);
             UpdateThings.UpdateEntities(player);
+
+            MouseState mstate = new MouseState(); //TEMP
+            debugText = mstate.X.ToString() + mstate.Y.ToString(); //TEMP
 
             camera.Follow(player);
             Settings.UpdateZoom();

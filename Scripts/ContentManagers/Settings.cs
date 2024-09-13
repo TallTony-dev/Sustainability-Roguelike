@@ -24,16 +24,21 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
             if (Keyboard.GetState().IsKeyDown(Keys.F2))
                 settingsMenu.DisableMenu();
 
-            if (settingsMenu.IsButtonPressed(1))
-            {
-                isFullScreen = !isFullScreen;
-            }
             if (settingsMenu.IsButtonPressed(0))
             {
-                ApplySettings();
+                ApplySettingsToFile();
+                InitializeSettings();
+            }
+            if (settingsMenu.IsButtonPressed(1))
+            {
+                isFullScreen = true;
+            }
+            if (settingsMenu.IsButtonPressed(2))
+            {
+                isFullScreen = false;
             }
         }
-        public static void ApplySettings()
+        public static void ApplySettingsToFile()
         {
             File.WriteAllText("Settings.txt", $"{resolutionHeight},{resolutionWidth},{isFullScreen}");
         }
@@ -44,9 +49,17 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
             resolutionWidth = Convert.ToInt32(tokens[1]);
             isFullScreen = Convert.ToBoolean(tokens[2]);
 
+            Game1._graphics.IsFullScreen = isFullScreen; 
+            Game1._graphics.PreferredBackBufferWidth = resolutionWidth;
+            Game1._graphics.PreferredBackBufferHeight = resolutionHeight;
+            Game1._graphics.ApplyChanges();
+
             uiScaleX = 1 * ((float)resolutionWidth / 1920);
             uiScaleY = 1 * ((float)resolutionHeight / 1080);
-
+            foreach (Menu menu in Game1.activeMenus)
+            {
+                menu.UpdateElementsPositions();
+            }
         }
         public static void UpdateZoom()
         {
