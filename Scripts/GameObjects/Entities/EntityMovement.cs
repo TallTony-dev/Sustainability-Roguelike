@@ -38,7 +38,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                     {
                         Rectangle tileBounds = TileMap.GetTileBounds(absTileX + x, absTileY + y);
 
-                        //TODO: When entity is moving over half a tile in a frame it phases through wall
+                        //TODO: Fix corners by checking for collisions with tiles in corners as well
                         //entity.hitbox is updated to new position already
 
                         //If old entity left bound is

@@ -39,16 +39,23 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers.Camera
         {
             throw new NotImplementedException();
             //This should place the camera in between two entities for bossfights, etc
-            xToMove = -target.position.X;
-            yToMove = -target.position.Y;
-            var position = Matrix.CreateTranslation(xToMove / 1.5f, yToMove / 1.5f, 0);
+            if (isFirstPass)
+            {
+                xToMove = -target.position.X;
+                yToMove = -target.position.Y;
+                isFirstPass = false;
+            }
+            xToMove += (-target.position.X - xToMove)/5f;
+            yToMove += (-target.position.Y - yToMove)/5f;
+            
+            var position = Matrix.CreateTranslation(xToMove, yToMove, 0);
             var offset = Matrix.CreateTranslation(
                 (Settings.resolutionWidth / 2 / Settings.zoomLevel),
                 (Settings.resolutionHeight / 2 / Settings.zoomLevel),
                 0);
             var zoom = Matrix.CreateScale(Settings.zoomLevel);
-            xToMove -= xToMove / 1.5f;
-            yToMove -= yToMove / 1.5f;
+
+            Transform = position * offset * (zoom);
 
             Transform = position * offset * (zoom);
         }

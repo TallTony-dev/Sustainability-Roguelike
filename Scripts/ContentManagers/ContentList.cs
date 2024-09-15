@@ -8,46 +8,52 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
 {
     internal class ContentList
     {
+        public static int animationIndexOffset = 0;
+
+
         //Note that strings can be the same and will just create references to the loaded texture
         private List<(string textureName, Rectangle sourceRect, ushort index)> AlwaysLoadedToLoad = new List<(string, Rectangle, ushort)>() { };
         private List<(string textureName, Rectangle sourceRect, ushort index)> HomeTexturesToLoad = new List<(string, Rectangle, ushort)>() { };
         private List<(string textureName, Rectangle sourceRect, ushort index)> CityTexturesToLoad = new List<(string, Rectangle, ushort)>() { };
 
-        //Arrays of TileSets (4x4 grids of 32x32 textures)
-        private (string textureName, ushort startingIndex)[] AlwaysLoadedTileSets = { ("cobblestone", 0), ("cobblestone wall testing", 16) };
-        private (string textureName, ushort startingIndex)[] HomeTexturesTileSets = { };
-        private (string textureName, ushort startingIndex)[] CityTexturesTileSets = { };
+        //Arrays of all textures to load, texturetype indicates how the texture should be loaded, 0 loads as a tileset (currently 4x4 like cooblestone texture, TODO: make type 1 load a spritesheet (figure out how)
+        private (string textureName, ushort startingIndex, byte textureType)[] AlwaysLoadedTextures = { ("cobblestone", 0, 0), ("cobblestone wall testing", 16, 0) };
+        private (string textureName, ushort startingIndex, byte textureType)[] HomeTextures = { };
+        private (string textureName, ushort startingIndex, byte textureType)[] CityTextures = { };
 
         public List<(string textureName, Rectangle sourceRect, ushort index)> GetAlwaysLoadedTextures()
         {
-            PrepTileSet(AlwaysLoadedTileSets, AlwaysLoadedToLoad);
-            //AlwaysLoadedToLoad.Add(("ball", new(0,0,64,64), 0)); 
+            PrepTextureSet(AlwaysLoadedTextures, AlwaysLoadedToLoad);
+            //add any solo textures here
 
             return AlwaysLoadedToLoad; 
         }
         public List<(string textureName, Rectangle sourceRect, ushort index)> GetHomeTextures()
         {
-            PrepTileSet(HomeTexturesTileSets, HomeTexturesToLoad);
+            PrepTextureSet(HomeTextures, HomeTexturesToLoad);
+            //add any solo textures here
+
             return HomeTexturesToLoad;
         }
         public List<(string textureName, Rectangle sourceRect, ushort index)> GetCityTextures()
         {
-            PrepTileSet(CityTexturesTileSets, CityTexturesToLoad);
+            PrepTextureSet(CityTextures, CityTexturesToLoad);
             return CityTexturesToLoad;
         }
 
-        /// <summary>
-        /// Puts a TileSet into a TileList that will be sent off to load, Textures must be 32x32 and in a 4x4 grid. CurrentIndex is inited and stored in the method that gets a list of textures in which this method will be called, as it 
-        /// </summary>
-        public void PrepTileSet((string textureName, ushort startingIndex)[] tileSetToLoad, List<(string textureName, Rectangle sourceRect, ushort index)> TextureListToLoad)
+
+        public void PrepTextureSet((string textureName, ushort startingIndex, byte textureType)[] textureSetToLoad, List<(string textureName, Rectangle sourceRect, ushort index)> TextureListToLoad)
         {
-            foreach ((string textureName, ushort startingIndex) in tileSetToLoad)
+            foreach ((string textureName, ushort startingIndex, ushort textureType) in textureSetToLoad)
             {
-                for (ushort y = 0; y < 4; y++) //selects row
+                if (textureType == 0)
                 {
-                    for (ushort x = 0; x < 4; x++) //selects column
+                    for (ushort y = 0; y < 4; y++) //selects row
                     {
-                        TextureListToLoad.Add((textureName, new(x * 32, y * 32, 32, 32), (ushort)(startingIndex + (y * 4) + x)));
+                        for (ushort x = 0; x < 4; x++) //selects column
+                        {
+                            TextureListToLoad.Add((textureName, new(x * 32, y * 32, 32, 32), (ushort)(startingIndex + (y * 4) + x)));
+                        }
                     }
                 }
             }

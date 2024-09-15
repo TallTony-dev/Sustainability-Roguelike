@@ -16,14 +16,15 @@ namespace Monogame_Cross_Platform.Scripts
     {
         public static void UpdateLevel(LevelEditor levelEditor, Player player)
         {
-            levelEditor.Update(player, Game1.currentEntities);
+            levelEditor.Update(player, Game1.currentGameObjects);
             Settings.Update();
         }
         public static void UpdateEntities( Player player)
         {
-            foreach (Entity entity in Game1.currentEntities)
+            foreach (Entity entity in Game1.currentGameObjects)
             {
                 entity.Update(player);
+                entity.UpdateAnimation();
             }
         }
     }

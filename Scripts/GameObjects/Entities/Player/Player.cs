@@ -36,7 +36,8 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
                     isFlipped = true;
                 else
                     isFlipped = false;
-                if (position != playerNewPos)
+                movingSpeed = (Math.Abs(playerNewPos.X - position.X) + Math.Abs(playerNewPos.Y - position.Y)) * Game1.gameTime.ElapsedGameTime.Milliseconds;
+                if (movingSpeed > 0)
                     isMoving = true;
                 else
                     isMoving = false;
@@ -50,7 +51,8 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
                     isFlipped = true;
                 else
                     isFlipped = false;
-                if (position != playerNewPos)
+                movingSpeed = (Math.Abs(playerNewPos.X - position.X) + Math.Abs(playerNewPos.Y - position.Y)) * Game1.gameTime.ElapsedGameTime.Milliseconds;
+                if (movingSpeed > 0)
                     isMoving = true;
                 else
                     isMoving = false;

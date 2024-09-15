@@ -59,9 +59,9 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                 }
             }
         }
-        public void AddToDrawBuffer(List<Entity> entityList)
+        public void AddToDrawBuffer(List<GameObject> gameObjectList)
         {
-            foreach (Entity entity in entityList)
+            foreach (Entity entity in gameObjectList)
             {
                 if (entity.isFlipped == false)
                     AddToDrawBuffer(entity, SpriteEffects.None);

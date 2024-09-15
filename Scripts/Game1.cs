@@ -3,6 +3,7 @@ global using Microsoft.Xna.Framework.Graphics;
 global using Microsoft.Xna.Framework.Input;
 global using Monogame_Cross_Platform.Scripts.ContentManagers;
 global using Monogame_Cross_Platform.Scripts.GameObjects.Tiles;
+global using Monogame_Cross_Platform.Scripts.GameObjects;
 global using System;
 global using Monogame_Cross_Platform.Scripts.GameObjects.Entities;
 global using Monogame_Cross_Platform.Scripts.HUD;
@@ -28,9 +29,9 @@ namespace Monogame_Cross_Platform.Scripts
         SpriteFont font; //Temp font
         public static string debugText = "test";
 
-         Player player = new Player(100, 150, new Vector2(32 * 4 + 16, 32 * 4 + 16),new Hitboxes.Hitbox(0,0,30,30), 0); //Put this in a better spot inside of an initialize level function within update or smth
+         Player player = new Player(100, 150, new Vector2(28 * 5 + 9, 28 * 5 + 9),new Hitboxes.Hitbox(0,0,30,30), 0); //Put this in a better spot inside of an initialize level function within update or smth
          //Enemy testEnemy = new Enemy(100, 5, 100, new Vector2(10, 10), 3); //same with this one
-         internal static List<Entity> currentEntities; //temp?
+         internal static List<GameObject> currentGameObjects; //temp?
          internal static List<Menu> activeMenus = new List<Menu>();
 
         public Game1()
@@ -39,7 +40,7 @@ namespace Monogame_Cross_Platform.Scripts
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
 
-            currentEntities = new List<Entity>() { player }; //TEMP THIS SHOULD BE HANDLED ELSEWHERE
+            currentGameObjects = new List<GameObject>() { player }; //TEMP THIS SHOULD BE HANDLED ELSEWHERE
 
             levelEditor = new LevelEditor();
         }
@@ -49,7 +50,7 @@ namespace Monogame_Cross_Platform.Scripts
             // TODO: Add your initialization logic here
             contentLoader = new ContentLoader(this);
 
-            LevelGenerator.GenerateLevel(0, 7); //TEMP
+            LevelGenerator.GenerateLevel(1, 13); //TEMP
 
             Settings.ApplySettingsToFile(); //TEMP
             Settings.InitializeSettings();
@@ -90,7 +91,7 @@ namespace Monogame_Cross_Platform.Scripts
         {
             // Drawing everything to render target here
             GraphicsDevice.SetRenderTarget(renderTarget);
-            GraphicsDevice.Clear(Color.AliceBlue);
+            GraphicsDevice.Clear(Color.Black);
             drawEntities.BeginBuffer(camera);
 
             //Draws Tiles onto map rendering only the area visible to player
@@ -103,7 +104,7 @@ namespace Monogame_Cross_Platform.Scripts
                 }
             }
             //Draws entities active in the currentEntities list
-            drawEntities.AddToDrawBuffer(currentEntities);
+            drawEntities.AddToDrawBuffer(currentGameObjects);
 
             drawEntities.DrawBuffer();
             GraphicsDevice.SetRenderTarget(null);

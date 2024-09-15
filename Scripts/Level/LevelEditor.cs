@@ -23,7 +23,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
         double timeSinceT;
         double timeSinceTilePlaced;
 
-        internal void Update(Player player, List<Entity> entityList)
+        internal void Update(Player player, List<GameObject> gameObjectList)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.T) && Game1.gameTime.TotalGameTime.TotalSeconds - timeSinceT > 1)
             {
@@ -31,7 +31,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 {
                     player.position = new Vector2(TileMap.PosToAbsTileMapPos(player.position).Item1 * 32, TileMap.PosToAbsTileMapPos(player.position).Item2 * 32);
                     player.isInLevelEditorMode = true;
-                    foreach (Entity entity in entityList)
+                    foreach (Entity entity in gameObjectList)
                     {
                         entity.isInAbsMovementMode = true;
                         entity.ignoresCollisions = true;
@@ -42,7 +42,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 else if (isInEditor)
                 {
                     player.isInLevelEditorMode = false;
-                    foreach (Entity entity in entityList)
+                    foreach (Entity entity in gameObjectList)
                     {
                         entity.isInAbsMovementMode = false;
                         entity.ignoresCollisions = false;
@@ -55,19 +55,28 @@ namespace Monogame_Cross_Platform.Scripts.Level
             if (isInEditor)
             {
                 var kstate = Keyboard.GetState();
-                if (kstate.IsKeyDown(Keys.E) && Game1.gameTime.TotalGameTime.TotalSeconds - timeSinceTilePlaced > 0.2)
+                if (kstate.IsKeyDown(Keys.E) && Game1.gameTime.TotalGameTime.TotalSeconds - timeSinceTilePlaced > 0.3)
                 {
                     LevelGenerator.ChangeTileAtPos(player.position, selectedTextureIndex, selectedIsBarrier, selectedBreakEffect, selectedStatusGiven);
                     timeSinceTilePlaced = Game1.gameTime.TotalGameTime.TotalSeconds;
+                    TileMap.SettleTileMap();
                 }
-                if (kstate.IsKeyDown(Keys.R) && Game1.gameTime.TotalGameTime.TotalSeconds - timeSinceTilePlaced > 0.2)
+                if (kstate.IsKeyDown(Keys.R) && Game1.gameTime.TotalGameTime.TotalSeconds - timeSinceTilePlaced > 0.3)
                 {
                     LevelGenerator.Change3x3TilesAroundPos(player.position, selectedTextureIndex, selectedIsBarrier, selectedBreakEffect, selectedStatusGiven);
                     timeSinceTilePlaced = Game1.gameTime.TotalGameTime.TotalSeconds;
+                    TileMap.SettleTileMap();
                 }
                 if (editorMenu.IsButtonPressed(0))
                 {
-                    LevelGenerator.UpdateTileMap();
+                    Room room = LevelGenerator.PosToRoom(player.position);
+                    if (room.isOpen)
+                        room.CloseSides();
+                    else
+                    {
+                        room.OpenSides();
+                        LevelGenerator.UpdateTileMap();
+                    }
                 }
                 if (editorMenu.IsButtonPressed(1))
                 {

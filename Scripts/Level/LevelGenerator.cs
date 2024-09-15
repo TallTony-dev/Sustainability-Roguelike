@@ -9,7 +9,8 @@ namespace Monogame_Cross_Platform.Scripts.Level
 {
     internal static class LevelGenerator
     {
-        public static Room[,] rooms = new Room[9,9]; //must be square (odd preferred)
+        public static Room[,] rooms = new Room[11,11]; //must be square (odd preferred)
+        static short sqrtRoomsLength = 11;
         /// <summary>
         /// Edits the static class tilemap to fit the current level selected by param levelNumber
         /// </summary>
@@ -17,10 +18,13 @@ namespace Monogame_Cross_Platform.Scripts.Level
         {
             short sqrtRoomsLength = (short)Math.Sqrt(rooms.Length);
             (int index, ushort distance)[,] roomIndices = new (int, ushort)[sqrtRoomsLength,sqrtRoomsLength];
-            (int x, int y) currentRoom = (4, 4);
+            (int x, int y) currentRoom = (5, 5);
             Random rand = new Random();
 
+            //makes the entrance
             roomIndices[currentRoom.x, currentRoom.y] = (1, 0);
+
+            //Generates active rooms
             while (levelLength > 0)
             {
                 int roomChange = rand.Next(1, 5);
@@ -36,152 +40,212 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 if (roomIndices[currentRoom.x, currentRoom.y].index == 0)
                 {
                     roomIndices[currentRoom.x, currentRoom.y].index = 1;
-                    roomIndices[currentRoom.x, currentRoom.y].distance = (ushort)(Math.Abs(4 - currentRoom.x) + Math.Abs(4 - currentRoom.y));
+                    roomIndices[currentRoom.x, currentRoom.y].distance = (ushort)(Math.Abs(5 - currentRoom.x) + Math.Abs(5 - currentRoom.y));
                     levelLength--;
                 }
             }
 
-            ushort bossRooms = 0;
+            (int roomX, int roomY) bossRoom = (0,0);
             ushort treasureRooms = 0;
+            ushort otherRooms = 0;
             ushort enemyRooms = 0;
-            (ushort, ushort) exitRoom = (0,0);
-            ushort maxDistance = 0;
+            (int roomX, int roomY) maxDistanceRoom = (0,0);
+
+            //finds max distance
             for (var x = 0; x < sqrtRoomsLength; x++)
             {
                 for (var y = 0; y < sqrtRoomsLength; y++)
                 {
-                    if (roomIndices[x, y].distance > maxDistance)
-                        maxDistance = roomIndices[x, y].distance;
+                    if (roomIndices[x, y].distance > (roomIndices[maxDistanceRoom.roomX, maxDistanceRoom.roomY].distance))
+                        maxDistanceRoom = (x, y);
                 }
             }
+            roomIndices[maxDistanceRoom.roomX, maxDistanceRoom.roomY].index = 6;
 
+            //settles indices according to a set of rules
             for (var x = 0; x < sqrtRoomsLength; x++)
             {
                 for (var y = 0; y < sqrtRoomsLength; y++)
                 {
-                    (int index, ushort distance) = roomIndices[x, y];
-                    if (distance > 0)
+                    if (roomIndices[x, y].index == 1 && roomIndices[x, y].distance != 0)
                     {
-                        //settle the room indices here based off distance to the indices in document (1 is an entrance, 2 is an enemy room, 3 is a treasure room, 4 is a boss room, 5 is an exit)
+                        //settle the room indices starting here based off distance to the indices in document (1 is an entrance, 2 is an enemy room, 3 is an other room, 4 is a treasure room, 5 is a boss room, 6 is an exit)
+                        bool isX0 = false;
+                        bool isY0 = false;
+                        bool isXAtArrayLimit = false;
+                        bool isYAtArrayLimit = false;
+
+                        if (x == 0)
+                            isX0 = true;
+                        if (y == 0)
+                            isY0 = true;
+                        if (x + 1 >= sqrtRoomsLength)
+                            isXAtArrayLimit = true;
+                        if (y + 1 >= sqrtRoomsLength)
+                            isYAtArrayLimit = true;
+
                         ushort adjacentTiles = 0;
-                        if (roomIndices[x + 1, y].index > 0)
-                            adjacentTiles++;
-                        if (roomIndices[x - 1, y].index > 0)
-                            adjacentTiles++;
-                        if (roomIndices[x, y + 1].index > 0)
-                            adjacentTiles++;
-                        if (roomIndices[x, y - 1].index > 0)
-                            adjacentTiles++;
-
-                        //If its max distance away and exit is uninited, makes an exit
-                        if (distance == maxDistance && exitRoom == (0, 0))
+                        if (!isXAtArrayLimit && roomIndices[x + 1, y].index > 0)
                         {
-                            roomIndices[x, y].index = 5;
+                            adjacentTiles++;
+                        }
+                        if (!isX0 && roomIndices[x - 1, y].index > 0)
+                        {
+                            adjacentTiles++;
+                        }
+                        if (!isYAtArrayLimit && roomIndices[x, y + 1].index > 0)
+                        {
+                            adjacentTiles++;
+                        }
+                        if (!isY0 && roomIndices[x, y - 1].index > 0)
+                        {
+                            adjacentTiles++;
                         }
 
-                        //If not an exit, If theres an adjacent exit and no bossrooms, makes a boss room
-                        else if (bossRooms == 0)
+                        //If theres an adjacent exit and no bossrooms, makes a boss room
+                        if (bossRoom == (0,0))
                         {
-                            if (roomIndices[x + 1, y].index == 5)
+                            if (!isXAtArrayLimit && roomIndices[x + 1, y].index == 6)
                             {
-                                roomIndices[x, y].index = 4;
-                                bossRooms++;
+                                roomIndices[x, y].index = 5;
+                                bossRoom = (x, y);
                             }
-                            if (roomIndices[x - 1, y].index == 5)
+                            else if (!isX0 && roomIndices[x - 1, y].index == 6)
                             {
-                                roomIndices[x, y].index = 4;
-                                bossRooms++;
+                                roomIndices[x, y].index = 5;
+                                bossRoom = (x, y);
                             }
-                            if (roomIndices[x, y + 1].index == 5)
+                            else if (!isYAtArrayLimit && roomIndices[x, y + 1].index == 6)
                             {
-                                roomIndices[x, y].index = 4;
-                                bossRooms++;
+                                roomIndices[x, y].index = 5;
+                                bossRoom = (x, y);
                             }
-                            if (roomIndices[x, y - 1].index == 5)
+                            else if (!isY0 && roomIndices[x, y - 1].index == 6)
                             {
-                                roomIndices[x, y].index = 4;
-                                bossRooms++;
+                                roomIndices[x, y].index = 5;
+                                bossRoom = (x, y);
                             }
                         }
-
-                        //If not an exit or boss room, If its a dead end and theres less than 2 treasure rooms, its a treasure room
-                        else if (adjacentTiles == 3 && treasureRooms < 2)
+                        if (roomIndices[x, y].index != 5)
                         {
-                            roomIndices[x, y].index = 3;
-                            treasureRooms++;
-                        }
+                            //if is next to a boss room and is not 5, will bug if bossroom is 0,0
+                            if (bossRoom != (0,0) && (bossRoom.roomX + 1 == x || bossRoom.roomX - 1 == x || bossRoom.roomY + 1 == y || bossRoom.roomY - 1 == y) && roomIndices[x, y].index != 5)
+                            {
+                                roomIndices[x, y].index = 0;
+                            }
+                            //If not an exit or boss room, If its a dead end and theres less than 2 treasure rooms, its a treasure room
+                            if (adjacentTiles == 1 && treasureRooms < 2)
+                            {
+                                roomIndices[x, y].index = 4;
+                                treasureRooms++;
+                            }
+                            //if enemy rooms are more than double or equal to double the number of other rooms, make it an other room
+                            else if (enemyRooms >= otherRooms * 2)
+                            {
+                                roomIndices[x, y].index = 3;
+                                otherRooms++;
+                            }
 
-                        //If nothing else, make it an enemy room
-                        else 
-                            roomIndices[x, y].index = 2;
-                        //entrance is default so it just wont be inited due to being distance 0
+                            //If nothing else, make it an enemy room
+                            else
+                            {
+                                roomIndices[x, y].index = 2;
+                                enemyRooms++;
+                            }
+                            //entrance is default so it just wont be inited due to being distance 0
+                        }
                     }
                 }
             }
 
-            if (levelType == 0) //Debug/make new room mode
+            for(var x = 0; x < sqrtRoomsLength; x++)
             {
-                for (var x = 0; x < sqrtRoomsLength; x++)
+                for (var y = 0; y < sqrtRoomsLength; y++)
                 {
-                    for (var y = 0; y < sqrtRoomsLength; y++)
-                    {
-                        rooms[x, y] = new Room(0); //this is for testing purposes only, change to default room later or entirely delete level 0 as it is for debugging
-                        for (var tileY = 0; tileY < 32; tileY++)
-                        {
-                            for (var tileX = 0; tileX < 32; tileX++)
-                            {
-                                TileMap.tileMap[x * 32 + tileX, y * 32 + tileY] = rooms[x, y].tileArray[tileX, tileY];
-                            }
-                        }
-                        rooms[x, y].SettleTiles();
-                    }
-                }
-            }
-
-            if (levelType == 1)
-            {
-                for(var x = 0; x < sqrtRoomsLength; x++)
-                {
-                    for (var y = 0; y < sqrtRoomsLength; y++)
-                    {
-                        if (roomIndices[x, y].index == 0)
-                            rooms[x, y] = new Room(0);
-                        if (roomIndices[x, y].index == 1)
-                            rooms[x, y] = new Room(1);
-                        if (roomIndices[x, y].index == 2)
-                            rooms[x, y] = new Room((ushort)rand.Next(2, 18));
-                        if (roomIndices[x, y].index == 3)
-                            rooms[x, y] = new Room((ushort)rand.Next(18, 20)); //min is inclusive, max is exclusive, who knows why
-                        if (roomIndices[x, y].index == 4)
-                            rooms[x, y] = new Room(20);
-                        if (roomIndices[x, y].index == 5)
-                            rooms[x, y] = new Room(21);
-
-
-                        //Adds Rooms to tilemap TODO: make this have bridges between active rooms
-                        for (var tileY = 0; tileY < 32; tileY++)
-                        {
-                            for (var tileX = 0; tileX < 32; tileX++)
-                            {
-                                TileMap.tileMap[x*32 + tileX, y*32 + tileY] = rooms[x, y].tileArray[tileX, tileY];
-                            }
-                        }
-                        rooms[x, y].SettleTiles();
-                    }
+                    rooms[x, y] = new Room(levelType, (ushort)roomIndices[x, y].index, rand, x, y);
                 }
             }
 
 
-            //Set tilemap to the rooms tiles then updates tilemap
+
+            //Sets room properties that are about their position in the array, then sets the tilemap tiles to their tiles
             for (var x = 0; x < sqrtRoomsLength; x++)
             {
                 for (var y = 0; y < sqrtRoomsLength; y++)
                 {
-                    for (var tileY = 0; tileY < 32; tileY++)
+                    Room room = rooms[x, y];
+
+                    if (x == 0)
+                        room.isX0 = true;
+                    if (y == 0)
+                        room.isY0 = true;
+                    if (x + 1 >= sqrtRoomsLength)
+                        room.isXAtArrayLimit = true;
+                    if (y + 1 >= sqrtRoomsLength)
+                        room.isYAtArrayLimit = true;
+
+                    bool isRightARoom = false;
+                    bool isLeftARoom = false;
+                    bool isBottomARoom = false;
+                    bool isTopARoom = false;
+
+                    if (!room.isXAtArrayLimit && rooms[x + 1, y].isARoom)
                     {
-                        for (var tileX = 0; tileX < 32; tileX++)
+                        isRightARoom = true;
+                    }
+                    if (!room.isX0 && rooms[x - 1, y].isARoom)
+                    {
+                        isLeftARoom = true;
+                    }
+                    if (!room.isYAtArrayLimit && rooms[x, y + 1].isARoom)
+                    {
+                        isBottomARoom = true;
+                    }
+                    if (!room.isY0 && rooms[x, y - 1].isARoom)
+                    {
+                        isTopARoom = true;
+                    }
+                    //TODO: Add level specific bridges here
+                    if (room.isARoom)
+                        room.OpenSides();
+                    if ((isRightARoom || isLeftARoom) && room.isARoom)
+                    {
+                        short bridgeSide = 0;
+                        if (isRightARoom)
+                            bridgeSide = 1;
+                        if (isLeftARoom)
+                            bridgeSide = -1;
+                        //Generate horizontal bridges
+                        if (levelType == 1)
                         {
-                            TileMap.tileMap[x * 32 + tileX, y * 32 + tileY] = rooms[x, y].tileArray[tileX, tileY];
+                            for (var tilex = 0; tilex < 10; tilex++)
+                            {
+                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + ((room.sqrtTileArrayLength - 1) / 2) - 2] = new Tile(18, true, 0, 0);
+                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + ((room.sqrtTileArrayLength - 1) / 2) - 1] = new Tile(6, false, 0, 0);
+                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + (room.sqrtTileArrayLength - 1) / 2] = new Tile(10, false, 0, 0);
+                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + ((room.sqrtTileArrayLength - 1) / 2) + 1] = new Tile(14, false, 0, 0);
+                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + ((room.sqrtTileArrayLength - 1) / 2) + 2] = new Tile(18, true, 0, 0);
+                            }
+                        }
+                    }
+                    if ((isTopARoom || isBottomARoom) && room.isARoom)
+                    {
+                        short bridgeSide = 0;
+                        if (isBottomARoom)
+                            bridgeSide = 1;
+                        if (isTopARoom)
+                            bridgeSide = -1;
+                        //Generate vertical bridges
+                        if (levelType == 1)
+                        {
+                            for (var tiley = 0; tiley < 10; tiley++)
+                            {
+                                TileMap.tileMap[28 * x + ((room.sqrtTileArrayLength - 1) / 2) - 2, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(18, true, 0, 0);
+                                TileMap.tileMap[28 * x + ((room.sqrtTileArrayLength - 1) / 2) - 1, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(6, false, 0, 0);
+                                TileMap.tileMap[28 * x + (room.sqrtTileArrayLength - 1) / 2, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(10, false, 0, 0);
+                                TileMap.tileMap[28 * x + ((room.sqrtTileArrayLength - 1) / 2) + 1, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(14, false, 0, 0);
+                                TileMap.tileMap[28 * x + ((room.sqrtTileArrayLength - 1) / 2) + 2, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(18, true, 0, 0);
+                            }
                         }
                     }
                 }
@@ -191,40 +255,51 @@ namespace Monogame_Cross_Platform.Scripts.Level
 
         public static void UpdateTileMap()
         {
-            short sqrtRoomsLength = (short)Math.Sqrt(rooms.Length);
+
             for (var x = 0; x < sqrtRoomsLength; x++)
             {
                 for (var y = 0; y < sqrtRoomsLength; y++)
                 {
-                    for (var tileY = 0; tileY < 32; tileY++)
-                    {
-                        for (var tileX = 0; tileX < 32; tileX++)
-                        {
-                            TileMap.tileMap[x * 32 + tileX, y * 32 + tileY] = rooms[x, y].tileArray[tileX, tileY];
-                        }
-                    }
-                    rooms[x, y].SettleTiles();
+                    SetTileMapToRoom(x, y);
+                }
+            }
+            TileMap.SettleTileMap();
+        }
+        public static void SetTileMapToRoom(int roomX, int roomY)
+        {
+            Room room = rooms[roomX, roomY];
+            for (var tileY = 0; tileY < room.sqrtTileArrayLength; tileY++)
+            {
+                for (var tileX = 0; tileX < room.sqrtTileArrayLength; tileX++)
+                {
+                    TileMap.tileMap[roomX * 28 + tileX, roomY * 28 + tileY] = room.tileArray[tileX, tileY];
                 }
             }
         }
         public static Room PosToRoom(Vector2 position)
         {
             (int x, int y) tileMapPos = TileMap.PosToAbsTileMapPos(position);
-            return rooms[tileMapPos.x / 32, tileMapPos.y / 32];
+            return rooms[tileMapPos.x / 28, tileMapPos.y / 28];
+        }
+        public static (int x, int y) PosToRoomIndex(Vector2 position)
+        {
+            (int x, int y) tileMapPos = TileMap.PosToAbsTileMapPos(position);
+            return (tileMapPos.x / 28, tileMapPos.y / 28);
         }
         public static (int, int) PosToTileOfRoom(Vector2 position)
         {
-            return (TileMap.PosToAbsTileMapPos(position).Item1 % 32, TileMap.PosToAbsTileMapPos(position).Item2 % 32);
+            return (TileMap.PosToAbsTileMapPos(position).Item1 % 28, TileMap.PosToAbsTileMapPos(position).Item2 % 28);
         }
-        public static void ChangeTileAtPos(Vector2 position, ushort startingIndex, bool isBarrier, byte breakEffect, byte statusGiven)
+        public static void ChangeTileAtPos(Vector2 position, ushort startingIndex, bool isBarrier, byte breakEffect, byte tileObject)
         {
             (int tileX, int tileY) = PosToTileOfRoom(position);
             Room room = PosToRoom(position);
             if (tileX < room.sqrtTileArrayLength && tileY < room.sqrtTileArrayLength && tileX > -1 && tileY > -1)
-                room.SetTile(tileX, tileY, startingIndex, isBarrier, breakEffect, statusGiven);
-            UpdateTileMap();
+                room.SetTile(tileX, tileY, startingIndex, isBarrier, breakEffect, tileObject);
+
+            SetTileMapToRoom(PosToRoomIndex(position).x, PosToRoomIndex(position).y);
         }
-        public static void Change3x3TilesAroundPos(Vector2 position, ushort startingIndex, bool isBarrier, byte breakEffect, byte statusGiven)
+        public static void Change3x3TilesAroundPos(Vector2 position, ushort startingIndex, bool isBarrier, byte breakEffect, byte tileObject)
         {
             (int tileX, int tileY) = PosToTileOfRoom(position);
             Room room = PosToRoom(position);
@@ -233,17 +308,21 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 for (int y = -1; y < 2; y++)
                 {
                     if (tileX + x < room.sqrtTileArrayLength && tileY + y < room.sqrtTileArrayLength && tileX + x > -1 && tileY + y > -1)
-                        room.SetTile(tileX + x, tileY + y, startingIndex, isBarrier, breakEffect, statusGiven);
+                        room.SetTile(tileX + x, tileY + y, startingIndex, isBarrier, breakEffect, tileObject);
                 }
             }
-            UpdateTileMap();
+            SetTileMapToRoom(PosToRoomIndex(position).x, PosToRoomIndex(position).y);
         }
+
         /// <summary>
         /// Takes player position and writes the room the player is in to the roomdata file
         /// </summary>
         public static void WriteRoomToFile(Player player)
         {
             Room roomToWrite = PosToRoom(player.position);
+
+            SetTileMapToRoom(PosToRoomIndex(player.position).x, PosToRoomIndex(player.position).y);
+
             StreamWriter writer = File.AppendText("C:/Users/User/source/repos/Monogame Cross Platform/Content/RoomData.txt");
             writer.Write("\n");
 
@@ -252,7 +331,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 for (var tileX = 0; tileX < roomToWrite.sqrtTileArrayLength; tileX++)
                 {
                     Tile tile = roomToWrite.tileArray[tileX, tileY];
-                    writer.Write($"{16 * (int)(tile.textureIndex / 16)},{tile.isBarrier},{tile.statusGiven},{tile.breakEffect},");
+                    writer.Write($"{16 * (int)(tile.textureIndex / 16)},{tile.isBarrier},{tile.tileObject},{tile.breakEffect},");
                 }
             }
             writer.Close();

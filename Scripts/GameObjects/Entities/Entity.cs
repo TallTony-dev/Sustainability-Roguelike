@@ -17,10 +17,12 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         public Vector2 position { get; internal set; }
         internal bool isFlipped { get; set; }
         internal int movesLeft { get; set; } = 1; //Temp at 1
-        internal bool isMoving { get; set; }
         internal bool isInAbsMovementMode = false;
         internal bool ignoresCollisions = false;
         internal List<(int, int)> pointToPathfind = new List<(int, int)>();
+
+        internal float movingSpeed;
+        internal bool isMoving = false;
 
         internal EntityMovement entityMovement;
         internal Hitbox hitBox;
@@ -39,6 +41,18 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         public void Update(Player.Player player)
         {
             Move(player);
+            if (movingSpeed > 0)
+            {
+                isMoving = true;
+                animationHandler.SetAnimation(1);
+                animationHandler.SetAnimationSpeed(1, (int)(20000/movingSpeed));
+            }
+            else
+            {
+                isMoving = false;
+                animationHandler.SetAnimation(0);
+            }
+
         }
         public virtual void Move(Player.Player playerToFollow)
         {
@@ -56,6 +70,11 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                     isFlipped = true;
                 else
                     isFlipped = false;
+                movingSpeed = (Math.Abs(entityNewPos.X - position.X) + Math.Abs(entityNewPos.Y - position.Y)) * Game1.gameTime.ElapsedGameTime.Milliseconds;
+                if (movingSpeed > 0)
+                    isMoving = true;
+                else
+                    isMoving = false;
                 position = entityNewPos;
             }
             else
