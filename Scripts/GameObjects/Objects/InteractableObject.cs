@@ -10,7 +10,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Objects
     {
         public InteractableObject(ushort textureIndex) : base(textureIndex)
         {
-        }
 
+        }
     }
 }

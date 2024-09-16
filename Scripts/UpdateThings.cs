@@ -18,6 +18,10 @@ namespace Monogame_Cross_Platform.Scripts
         {
             levelEditor.Update(player, Game1.currentGameObjects);
             Settings.Update();
+            foreach (Menu menu in Game1.menus)
+            {
+                menu.UpdateElements();
+            }
         }
         public static void UpdateEntities( Player player)
         {

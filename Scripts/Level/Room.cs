@@ -22,10 +22,9 @@ namespace Monogame_Cross_Platform.Scripts.Level
         public int roomArrayX = 0;
         public int roomArrayY = 0;
 
-        public void SetTile(int x, int y, ushort startingTileTextureIndex, bool isBarrier, byte breakEffect, byte tileObject)
+        public void SetTile(int x, int y, ushort startingTileTextureIndex, bool isBarrier, byte breakEffect)
         {
             tileArray[x,y].textureIndex = startingTileTextureIndex;
-            tileArray[x,y].tileObject = tileObject;
             tileArray[x,y].isBarrier = isBarrier;
             tileArray[x,y].breakEffect = breakEffect;
         }
@@ -94,12 +93,18 @@ namespace Monogame_Cross_Platform.Scripts.Level
             {
                 for (int x = 0; x < sqrtTileArrayLength; x++)
                 {
-                    tileArray[x, y].textureIndex = Convert.ToUInt16(tokens[(x * 4) + (y * sqrtTileArrayLength * 4)]);
-                    tileArray[x, y].isBarrier = Convert.ToBoolean(tokens[1 + (x * 4) + (y * sqrtTileArrayLength * 4)]);
-                    tileArray[x, y].tileObject = Convert.ToByte(tokens[2 + (x * 4) + (y * sqrtTileArrayLength * 4)]);
-                    tileArray[x, y].breakEffect = Convert.ToByte(tokens[3 + (x * 4) + (y * sqrtTileArrayLength * 4)]);
+                    tileArray[x, y].textureIndex = Convert.ToUInt16(tokens[1 + (x * 3) + (y * sqrtTileArrayLength * 3)]);
+                    tileArray[x, y].isBarrier = Convert.ToBoolean(tokens[2 + (x * 3) + (y * sqrtTileArrayLength * 3)]);
+                    tileArray[x, y].breakEffect = Convert.ToByte(tokens[3 + (x * 3) + (y * sqrtTileArrayLength * 3)]);
                 }
             }
+
+            //TODO: gameobjects are here
+            string[] gameObjects = tokens[0].Split("*");
+
+
+
+
 
             this.roomArrayX = roomArrayX;
             this.roomArrayY = roomArrayY;
@@ -115,7 +120,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 if(levelType == 1)
                 {
                     for (var y = 0; y < 3; y++)
-                        SetTile(sqrtTileArrayLength - 1, (sqrtTileArrayLength - 1) / 2 + y - 1, 0, false, 0, 0);
+                        SetTile(sqrtTileArrayLength - 1, (sqrtTileArrayLength - 1) / 2 + y - 1, 0, false, 0);
                 }
             }
             if (!isX0 && LevelGenerator.rooms[roomArrayX - 1, roomArrayY].isARoom)
@@ -123,7 +128,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 if (levelType == 1)
                 {
                     for (var y = 0; y < 3; y++)
-                        SetTile(0, (sqrtTileArrayLength - 1) / 2 + y - 1, 0, false, 0, 0);
+                        SetTile(0, (sqrtTileArrayLength - 1) / 2 + y - 1, 0, false, 0);
                 }
             }
             if (!isY0 && LevelGenerator.rooms[roomArrayX, roomArrayY - 1].isARoom)
@@ -131,7 +136,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 if (levelType == 1)
                 {
                     for (var x = 0; x < 3; x++)
-                        SetTile((sqrtTileArrayLength - 1) / 2 + x - 1, 0, 0, false, 0, 0);
+                        SetTile((sqrtTileArrayLength - 1) / 2 + x - 1, 0, 0, false, 0);
                 }
             }
             if (!isYAtArrayLimit && LevelGenerator.rooms[roomArrayX, roomArrayY + 1].isARoom)
@@ -139,7 +144,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 if (levelType == 1)
                 {
                     for (var x = 0; x < 3; x++)
-                        SetTile((sqrtTileArrayLength - 1) / 2 + x - 1, sqrtTileArrayLength - 1, 0, false, 0, 0);
+                        SetTile((sqrtTileArrayLength - 1) / 2 + x - 1, sqrtTileArrayLength - 1, 0, false, 0);
                 }
             }
             isOpen = true;
@@ -149,13 +154,13 @@ namespace Monogame_Cross_Platform.Scripts.Level
             if (levelType == 1)
             {
                 for (var y = 0; y < 3; y++)
-                    tileArray[sqrtTileArrayLength - 1, (sqrtTileArrayLength - 1) / 2 + y - 1] = new Tile(16, true, 0, 0);
+                    tileArray[sqrtTileArrayLength - 1, (sqrtTileArrayLength - 1) / 2 + y - 1] = new Tile(16, true, 0);
                 for (var y = 0; y < 3; y++)
-                    tileArray[0, (sqrtTileArrayLength - 1) / 2 + y - 1] = new Tile(16, true, 0, 0);
+                    tileArray[0, (sqrtTileArrayLength - 1) / 2 + y - 1] = new Tile(16, true, 0);
                 for (var x = 0; x < 3; x++)
-                    tileArray[(sqrtTileArrayLength - 1) / 2 + x - 1, 0] = new Tile(16, true, 0, 0);
+                    tileArray[(sqrtTileArrayLength - 1) / 2 + x - 1, 0] = new Tile(16, true, 0);
                 for (var x = 0; x < 3; x++)
-                    tileArray[(sqrtTileArrayLength - 1) / 2 + x - 1, sqrtTileArrayLength - 1] = new Tile(16, true, 0, 0);
+                    tileArray[(sqrtTileArrayLength - 1) / 2 + x - 1, sqrtTileArrayLength - 1] = new Tile(16, true, 0);
             }
             SettleTiles();
             LevelGenerator.SetTileMapToRoom(roomArrayX, roomArrayY);

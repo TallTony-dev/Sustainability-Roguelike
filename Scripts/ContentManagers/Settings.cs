@@ -37,6 +37,11 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
             {
                 isFullScreen = false;
             }
+            if (settingsMenu.IsButtonPressed(3))
+            {
+                settingsMenu.elements[3].MoveTo(1000, 1000, 2, 5000, UiElement.MovementType.linear);
+                Console.WriteLine("3rd Button clicked");
+            }
         }
         public static void ApplySettingsToFile()
         {
@@ -56,10 +61,6 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
 
             uiScaleX = 1 * ((float)resolutionWidth / 1920);
             uiScaleY = 1 * ((float)resolutionHeight / 1080);
-            foreach (Menu menu in Game1.activeMenus)
-            {
-                menu.UpdateElementsPositions();
-            }
         }
         public static void UpdateZoom()
         {

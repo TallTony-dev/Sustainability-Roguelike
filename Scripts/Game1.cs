@@ -32,7 +32,7 @@ namespace Monogame_Cross_Platform.Scripts
          Player player = new Player(100, 150, new Vector2(28 * 5 + 9, 28 * 5 + 9),new Hitboxes.Hitbox(0,0,30,30), 0); //Put this in a better spot inside of an initialize level function within update or smth
          //Enemy testEnemy = new Enemy(100, 5, 100, new Vector2(10, 10), 3); //same with this one
          internal static List<GameObject> currentGameObjects; //temp?
-         internal static List<Menu> activeMenus = new List<Menu>();
+         internal static List<Menu> menus = new List<Menu>();
 
         public Game1()
         {
@@ -116,7 +116,7 @@ namespace Monogame_Cross_Platform.Scripts
             drawEntities.DrawBuffer();
 
             drawEntities.BeginUiBuffer();
-            drawEntities.AddToUiBuffer(activeMenus); //draws menus
+            drawEntities.AddToUiBuffer(menus); //draws menus
             drawEntities.DrawUiBuffer();
 
             base.Draw(gameTime);

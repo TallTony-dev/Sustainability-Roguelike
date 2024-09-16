@@ -42,12 +42,13 @@ namespace Monogame_Cross_Platform.Scripts.HUD
             {
 
             }
+            Game1.menus.Add(this);
         }
-        public void UpdateElementsPositions()
+        public void UpdateElements()
         {
             foreach (UiElement element in elements)
             {
-                element.UpdatePosition();
+                element.Update();
             }
         }
         public void AddElement(UiElement elementToAdd)
@@ -69,17 +70,17 @@ namespace Monogame_Cross_Platform.Scripts.HUD
         public void EnableMenu()
         {
             isActive = true;
-            Game1.activeMenus.Add(this);
+            Game1.menus.Add(this);
             foreach (var element in elements)
             {
                 element.isEnabled = true;
-                element.UpdatePosition();
+                element.Update();
             }
         }
         public void DisableMenu()
         {
             isActive = false;
-            Game1.activeMenus.Remove(this);
+            Game1.menus.Remove(this);
             foreach (var element in elements)
             {
                 element.Disable();

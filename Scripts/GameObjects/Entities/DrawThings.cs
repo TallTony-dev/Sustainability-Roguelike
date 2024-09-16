@@ -53,7 +53,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                         if (element.isEnabled)
                         {
                             (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(element.textureIndex);
-                            uiSpriteBatch.Draw(texture, new Vector2(element.xOffset, element.yOffset), rectangle, Color.White, 0f, new Vector2(0,0), new Vector2(Settings.uiScaleX, Settings.uiScaleY), SpriteEffects.None, 0f);
+                            uiSpriteBatch.Draw(texture, new Vector2(element.xOffset, element.yOffset), rectangle, Color.White, 0f, new Vector2(0,0), new Vector2(Settings.uiScaleX * element.scale, Settings.uiScaleY * element.scale), SpriteEffects.None, 0f);
                         }
                     }
                 }
