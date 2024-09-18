@@ -37,10 +37,10 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(entity.textureIndex);
             spriteBatch.Draw(texture, entity.position, rectangle, Color.White, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, spriteEffect, 0f);
         }
-        public void AddToDrawBuffer(Tiles.Tile tile, int tileMapX, int tileMapY)
+        public void AddToDrawBuffer(Tile tile, int tileMapX, int tileMapY)
         {
             (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(tile.textureIndex);
-            spriteBatch.Draw(texture, new Vector2(tileMapX * 32, tileMapY * 32), rectangle, Color.White, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0f);
+            spriteBatch.Draw(texture, new Vector2(tileMapX * 32, tileMapY * 32), rectangle, Color.White, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0.1f);
         }
         public void AddToUiBuffer(List<HUD.Menu> menus)
         {

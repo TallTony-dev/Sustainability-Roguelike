@@ -28,9 +28,9 @@ namespace Monogame_Cross_Platform.Scripts.Hitboxes
             xPos = x - width/2;
             yPos = y - width/2;
         }
-        public bool Intersects(Rectangle rectangle)
+        public bool Intersects(Hitbox hitbox)
         {
-            if (rectangle.Left < right && rectangle.Right > left && rectangle.Top < bottom && rectangle.Bottom > top)
+            if (hitbox.left < right && hitbox.right > left && hitbox.top < bottom && hitbox.bottom > top)
             {
                 return true;
             }

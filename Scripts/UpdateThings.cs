@@ -23,7 +23,7 @@ namespace Monogame_Cross_Platform.Scripts
                 menu.UpdateElements();
             }
         }
-        public static void UpdateEntities( Player player)
+        public static void UpdateEntities(Player player)
         {
             foreach (Entity entity in Game1.currentGameObjects)
             {

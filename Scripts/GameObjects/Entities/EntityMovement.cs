@@ -27,50 +27,50 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             if (tileMapY <= minVal)
                 entityNewPos.Y = minVal * entityHitBox.height;
 
-            (int absTileX, int absTileY) = TileMap.PosToAbsTileMapPos(entity.position); //old psotiion
+            (int oldAbsTileX, int oldAbsTileY) = TileMap.PosToAbsTileMapPos(entity.position); //old position
+            (int newAbsTileX, int newAbsTileY) = TileMap.PosToAbsTileMapPos(entityNewPos); //new position
+            int xTileDifference = Math.Abs(newAbsTileX - oldAbsTileX);
+            int yTileDifference = Math.Abs(newAbsTileY - oldAbsTileY); //can be optimized
+
             bool isXModified = false;
             bool isYModified = false;
-            for (int x = -1; x < 2; x++)
+            for (int x = -1 - xTileDifference; x < 2 + xTileDifference; x++)
             {
-                for (int y = -1; y < 2; y++)
+                for (int y = -1 - yTileDifference; y < 2 + yTileDifference; y++)
                 {
-                    if (TileMap.IsCollision(entity, x+absTileX, y+absTileY))
+                    (bool isBarrier, Hitboxes.Hitbox tileBounds) = TileMap.GetTileBounds(oldAbsTileX + x, oldAbsTileY + y);
+                    if (isBarrier)
                     {
-                        Rectangle tileBounds = TileMap.GetTileBounds(absTileX + x, absTileY + y);
-
-                        //TODO: Fix corners by checking for collisions with tiles in corners as well
-                        //entity.hitbox is updated to new position already
-
-                        //If old entity left bound is
-                        if (x != 0 && !isXModified && entity.position.Y + entityHitBox.height / 2 > tileBounds.Top && entity.position.Y - entityHitBox.height / 2 < tileBounds.Bottom)
+                        if (x != 0 && !isXModified && entity.position.Y + entityHitBox.height / 2 > tileBounds.top && entity.position.Y - entityHitBox.height / 2 < tileBounds.bottom)
                         {
                             //if new position is past hitbox, and if its old position wasn't past hitbox
-                            if (x < 0 && entityHitBox.left < tileBounds.Right && entity.position.X - entityHitBox.width / 2 >= tileBounds.Right) // Checking left tile
+                            if (x < 0 && entityHitBox.left < tileBounds.right && entity.position.X - entityHitBox.width / 2 >= tileBounds.right) // Checking left tile
                             {
-                                entityNewPos.X = tileBounds.Right + entityHitBox.width / 2;
+                                entityNewPos.X = tileBounds.right + entityHitBox.width / 2;
                                 isXModified = true;
                             }
-                            if (x > 0 && entityHitBox.right > tileBounds.Left && entity.position.X + entityHitBox.width / 2 <= tileBounds.Left ) // Checking right tile
+                            if (x > 0 && entityHitBox.right > tileBounds.left && entity.position.X + entityHitBox.width / 2 <= tileBounds.left) // Checking right tile
                             {
-                                entityNewPos.X = tileBounds.Left - entityHitBox.width / 2;
+                                entityNewPos.X = tileBounds.left - entityHitBox.width / 2;
                                 isXModified = true;
                             }
                         }
 
-                        if (y != 0 && !isYModified && entity.position.X + entityHitBox.width / 2 > tileBounds.Left && entity.position.X - entityHitBox.width / 2 < tileBounds.Right)
+                        if (y != 0 && !isYModified && entity.position.X + entityHitBox.width / 2 > tileBounds.left && entity.position.X - entityHitBox.width / 2 < tileBounds.right)
                         {
-                            if (y < 0 && entityHitBox.top < tileBounds.Bottom && entity.position.Y - entityHitBox.height / 2 >= tileBounds.Bottom) // Checking top tile
+                            if (y < 0 && entityHitBox.top < tileBounds.bottom && entity.position.Y - entityHitBox.height / 2 >= tileBounds.bottom) // Checking top tile
                             {
-                                entityNewPos.Y = tileBounds.Bottom + entityHitBox.height / 2;
+                                entityNewPos.Y = tileBounds.bottom + entityHitBox.height / 2;
                                 isYModified = true;
                             }
-                            if (y > 0 && entityHitBox.bottom > tileBounds.Top && entity.position.Y + entityHitBox.height / 2 <= tileBounds.Top) // Checking bottom tile
+                            if (y > 0 && entityHitBox.bottom > tileBounds.top && entity.position.Y + entityHitBox.height / 2 <= tileBounds.top) // Checking bottom tile
                             {
-                                entityNewPos.Y = tileBounds.Top - entityHitBox.height / 2;
+                                entityNewPos.Y = tileBounds.top - entityHitBox.height / 2;
                                 isYModified = true;
                             }
                         }
                     }
+
                 }
             }
             return entityNewPos;

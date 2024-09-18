@@ -255,7 +255,6 @@ namespace Monogame_Cross_Platform.Scripts.Level
 
         public static void UpdateTileMap()
         {
-
             for (var x = 0; x < sqrtRoomsLength; x++)
             {
                 for (var y = 0; y < sqrtRoomsLength; y++)
@@ -326,6 +325,11 @@ namespace Monogame_Cross_Platform.Scripts.Level
             StreamWriter writer = File.AppendText("C:/Users/User/source/repos/Monogame Cross Platform/Content/RoomData.txt");
             writer.Write("\n");
 
+            foreach (GameObject gameobject in roomToWrite.gameObjects)
+            {
+                writer.Write($"{gameobject.GetType().Name}-{TileMap.PosToAbsTileMapPos(gameobject.position).Item1}-{TileMap.PosToAbsTileMapPos(gameobject.position).Item2}-{gameobject.ObjectIndex}");
+            }
+
             for (var tileY = 0; tileY < roomToWrite.sqrtTileArrayLength; tileY++)
             {
                 for (var tileX = 0; tileX < roomToWrite.sqrtTileArrayLength; tileX++)
@@ -334,6 +338,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                     writer.Write($"{16 * (int)(tile.textureIndex / 16)},{tile.isBarrier},{tile.breakEffect},");
                 }
             }
+            writer.Write("\n");
             writer.Close();
         }
 

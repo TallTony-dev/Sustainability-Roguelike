@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿
+using System.IO;
 using System.Linq;
 
 
@@ -7,6 +8,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
     internal class Room
     {
         public Tile[,] tileArray;
+        public List<GameObject> gameObjects = new List<GameObject>();
         public int sqrtTileArrayLength { get; private set; }
         private ushort levelType = 0;
 
@@ -100,15 +102,42 @@ namespace Monogame_Cross_Platform.Scripts.Level
             }
 
             //TODO: gameobjects are here
+            tokens[0] = tokens[0].Trim();
             string[] gameObjects = tokens[0].Split("*");
+            foreach (string gameObject in gameObjects)
+            {
+                string[] gameObjectData = gameObject.Split("-");
+                string gameObjectType = gameObjectData[0];
+                Vector2 position = new Vector2(Convert.ToInt32(gameObjectData[1]), Convert.ToInt32(gameObjectData[2]));
+
+                if (gameObjectType == "Enemy")
+                {
+                    this.gameObjects.Add(new Enemy(Convert.ToUInt16(gameObjectData[3]), TileMap.TileMapPosToPos((int)position.X, (int)position.Y)));
+
+                }
+
+            }
 
 
-
-
+            foreach (GameObject gameObject in this.gameObjects)
+            {
+                Game1.currentGameObjects.Add(gameObject);
+            }
 
             this.roomArrayX = roomArrayX;
             this.roomArrayY = roomArrayY;
         }
+
+        public void InitializeRoom()
+        {
+            foreach (GameObject gameObject in gameObjects)
+            {
+                gameObject.isEnabled = true;
+            }
+        }
+
+
+
         public (int x, int y) RoomTileToTileMap(int roomTileX, int roomTileY)
         {
             return (roomArrayX * 28 + roomTileX, roomArrayY * 28 + roomTileY);

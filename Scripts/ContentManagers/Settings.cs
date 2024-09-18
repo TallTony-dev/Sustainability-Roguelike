@@ -39,8 +39,7 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
             }
             if (settingsMenu.IsButtonPressed(3))
             {
-                settingsMenu.elements[3].MoveTo(1000, 1000, 2, 5000, UiElement.MovementType.linear);
-                Console.WriteLine("3rd Button clicked");
+                settingsMenu.elements[3].MoveTo(400, 400, 2, 100, UiElement.MovementType.linear);
             }
         }
         public static void ApplySettingsToFile()

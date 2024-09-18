@@ -23,6 +23,9 @@
 /processorParam:TextureFormat=Compressed
 /build:Arial.spritefont
 
+#begin EnemyData.txt
+/copy:EnemyData.txt
+
 #begin Graphics/ball.png
 /importer:TextureImporter
 /processor:TextureProcessor

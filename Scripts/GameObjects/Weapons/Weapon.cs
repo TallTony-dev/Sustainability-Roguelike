@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
 {
-    internal class Weapon : GameObject
+    internal class Weapon
     {
         public int attackRange { get; protected set; }
-        public Weapon(int attackRange, ushort textureIndex) : base(textureIndex)
+        public Weapon(int attackRange, ushort textureIndex)
         {
             this.attackRange = attackRange;
         }

@@ -23,10 +23,8 @@ namespace Monogame_Cross_Platform.Scripts.HUD
         private float xOffsetToTravel;
         private float yOffsetToTravel;
         private float scaleToTravel;
-        private double timeWhenStartedAnim = 0;
-        private int animLengthMS;
-        double positionChange;
-        private bool isMoving = false;
+        private int animSpeed;
+        private float travelDistance;
         public UiElement(ushort textureIndex, int xOffset, int yOffset, Rectangle hitBox)
         {
             this.textureIndex = textureIndex;
@@ -46,46 +44,55 @@ namespace Monogame_Cross_Platform.Scripts.HUD
         /// </summary>
         public void Update()
         {
-            double timeSinceAnimStart = Game1.gameTime.TotalGameTime.TotalMilliseconds - timeWhenStartedAnim;
-            if (isMoving)
+            if ( (xOffsetToTravel != absxOffset || yOffsetToTravel != yOffset) && animSpeed != 0)
             {
-                if (animLengthMS < timeSinceAnimStart)
+                if (movementType == MovementType.linear)
                 {
-                    isMoving = false;
-                }
-                else
-                {
-                    if (movementType == MovementType.linear)
-                    {
-                        positionChange = timeSinceAnimStart / animLengthMS;
-                        scale = (float)(scaleToTravel * positionChange);
-                        absxOffset += (float)(xOffsetToTravel * positionChange);
-                        absyOffset += (float)(yOffsetToTravel * positionChange);
-                        xOffsetToTravel -= (float)(xOffsetToTravel * positionChange);
-                        yOffsetToTravel -= (float)(yOffsetToTravel * positionChange);
-                    }
-                    if (movementType == MovementType.bounce)
-                    {
+                    float updatedMoveSpeed = (float)(animSpeed * Game1.gameTime.ElapsedGameTime.TotalSeconds);
 
-                    }
+                    float nextScale = scale + updatedMoveSpeed * Math.Sign(scaleToTravel - scale) / (animSpeed * (travelDistance + 1) / 100); //modify scaling speed here
+                    float nextX = absxOffset + updatedMoveSpeed * Math.Sign(xOffsetToTravel - absxOffset);
+                    float nextY = absyOffset + updatedMoveSpeed * Math.Sign(yOffsetToTravel - absyOffset);
+
+                    if (Math.Sign(xOffsetToTravel - absxOffset) != Math.Sign(xOffsetToTravel - nextX)) //checks for x overshoot
+                        absxOffset = xOffsetToTravel;
+                    else
+                        absxOffset = nextX;
+
+                    if (Math.Sign(yOffsetToTravel - absyOffset) != Math.Sign(yOffsetToTravel - nextY)) //checks for y overshoot
+                        absyOffset = yOffsetToTravel;
+                    else
+                        absyOffset = nextY;
+
+                    if (Math.Sign(scaleToTravel - scale) != Math.Sign(scaleToTravel - nextScale)) //checks for scaling overshoot
+                        scale = scaleToTravel;
+                    else
+                        scale = nextScale;
+
+                }
+
+                if (movementType == MovementType.bounce)
+                {
+
                 }
             }
+
+
+
+
+
             xOffset = absxOffset * Settings.uiScaleX;
             yOffset = absyOffset * Settings.uiScaleY;
             hitBox = new Hitboxes.Hitbox(xOffset, yOffset, hitBox.width * Settings.uiScaleX, hitBox.height * Settings.uiScaleY); 
         }
-        public void MoveTo(int xOffset, int yOffset, float scale, int milliseconds, MovementType movementType)
+        public void MoveTo(int xOffset, int yOffset, float scale, int speed, MovementType movementType)
         {
-            if (!isMoving)
-            {
-                timeWhenStartedAnim = Game1.gameTime.TotalGameTime.TotalMilliseconds;
-                xOffsetToTravel = (int)(xOffset - absxOffset); //int conversions here might cause wackyness
-                yOffsetToTravel = (int)(yOffset - absyOffset);
-                scaleToTravel = scale - this.scale;
-                isMoving = true;
-                animLengthMS = milliseconds;
-                this.movementType = movementType;
-            }
+            xOffsetToTravel = xOffset; //int conversions here might cause wackyness
+            yOffsetToTravel = yOffset;
+            scaleToTravel = scale;
+            animSpeed = speed;
+            this.movementType = movementType;
+            travelDistance = Math.Abs(yOffsetToTravel - absyOffset) + Math.Abs(xOffsetToTravel - absxOffset);
         }
         public void Enable()
         {

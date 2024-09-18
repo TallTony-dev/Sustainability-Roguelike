@@ -22,7 +22,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
 
         public override void Move(Player _)
         {
-            if (!isInAbsMovementMode)
+            if (!isInAbsMovementMode && isEnabled)
             {
                 Vector2 playerNewPos = inputHandler.GetPlayerMovement(position, Game1.gameTime, entitySpeed);
                 if (!ignoresCollisions)
@@ -43,7 +43,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
                     isMoving = false;
                 position = playerNewPos;
             }
-            else
+            else if(isEnabled)
             {
                 Vector2 playerNewPos = inputHandler.GetPlayerTurnBasedMovement(position, Game1.gameTime, entitySpeed, movesLeft, isMoving, ignoresCollisions);
 

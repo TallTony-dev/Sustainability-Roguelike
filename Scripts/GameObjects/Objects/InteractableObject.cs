@@ -8,7 +8,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Objects
 {
     internal class InteractableObject : GameObject
     {
-        public InteractableObject(ushort textureIndex) : base(textureIndex)
+        public InteractableObject(ushort textureIndex, Vector2 startingPos) : base(textureIndex, startingPos)
         {
 
         }

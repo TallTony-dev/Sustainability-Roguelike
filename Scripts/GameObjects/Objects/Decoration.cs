@@ -8,7 +8,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Objects
 {
     internal class Decoration : GameObject
     {
-        public Decoration(ushort textureIndex) : base(textureIndex)
+        public Decoration(ushort textureIndex, Vector2 startingPos) : base(textureIndex, startingPos)
         {
         }
     }

@@ -1,0 +1,2 @@
+﻿100,100,3,500,500,32,32
+^basic thingy, look at enemy to find how this data is ordered

@@ -9,6 +9,7 @@ global using Monogame_Cross_Platform.Scripts.GameObjects.Entities;
 global using Monogame_Cross_Platform.Scripts.HUD;
 global using System.Collections.Generic;
 global using Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player;
+global using Monogame_Cross_Platform.Scripts.GameObjects.Entities.Enemy;
 using Monogame_Cross_Platform.Scripts.Level;
 
 namespace Monogame_Cross_Platform.Scripts
@@ -30,7 +31,6 @@ namespace Monogame_Cross_Platform.Scripts
         public static string debugText = "test";
 
          Player player = new Player(100, 150, new Vector2(28 * 5 + 9, 28 * 5 + 9),new Hitboxes.Hitbox(0,0,30,30), 0); //Put this in a better spot inside of an initialize level function within update or smth
-         //Enemy testEnemy = new Enemy(100, 5, 100, new Vector2(10, 10), 3); //same with this one
          internal static List<GameObject> currentGameObjects; //temp?
          internal static List<Menu> menus = new List<Menu>();
 
@@ -112,7 +112,7 @@ namespace Monogame_Cross_Platform.Scripts
             // Drawing the render target to the screen here
             drawEntities.BeginBuffer();
             drawEntities.spriteBatch.Draw(renderTarget, new Rectangle(0,0,Settings.resolutionWidth,Settings.resolutionHeight), Color.White);
-            drawEntities.spriteBatch.DrawString(font, debugText, new Vector2(400, 400), Color.Fuchsia); //draws debug text
+            drawEntities.spriteBatch.DrawString(font, debugText, new Vector2(400, 400), Color.DarkBlue); //draws debug text
             drawEntities.DrawBuffer();
 
             drawEntities.BeginUiBuffer();
