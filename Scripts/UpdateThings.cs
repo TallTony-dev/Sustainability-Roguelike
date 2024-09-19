@@ -22,6 +22,13 @@ namespace Monogame_Cross_Platform.Scripts
             {
                 menu.UpdateElements();
             }
+            for (int x = 0; x < Math.Sqrt(LevelGenerator.rooms.Length); x++)
+            {
+                for (int y = 0; y < Math.Sqrt(LevelGenerator.rooms.Length); y++)
+                {
+                    LevelGenerator.rooms[x, y].Update(player);
+                }
+            }
         }
         public static void UpdateEntities(Player player)
         {

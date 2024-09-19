@@ -28,19 +28,24 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         internal Weapons.Weapon weapon1;
         internal Weapons.Weapon weapon2;
         internal EntityMovement.AIType aiType;
+
+
         
         public Entity(float entitySpeed, Vector2 startingTile, ushort textureIndex, Hitbox hitBox, EntityMovement.AIType aiType) : base(textureIndex, startingTile)
         {
             this.entitySpeed = entitySpeed;
-            entityMovement = new EntityMovement(aiType, this);
+            entityMovement = new EntityMovement(aiType);
             this.hitBox = hitBox;
             this.aiType = aiType;
+            weapon1 = new Weapons.Weapon(6, 1); //TEMP
+            weapon2 = new Weapons.Weapon(2, 1); //TEMP
         }
         public void Update(Player.Player player)
         {
             if (isEnabled)
             {
                 Move(player);
+
                 if (movingSpeed > 0)
                 {
                     isMoving = true;
@@ -56,31 +61,35 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         }
         public virtual void Move(Player.Player playerToFollow)
         {
-            //if (!isInAbsMovementMode)
-            //{
-            //    Vector2 entityNewPos = entityMovement.GetPathfindingMovement(weapon1.attackRange, position, entitySpeed, aiType, playerToFollow);
-            //    if (!ignoresCollisions)
-            //    {
-            //        hitBox.UpdatePosition(entityNewPos.X, entityNewPos.Y);
-            //        entityNewPos = entityMovement.ValidateMovement(this, entityNewPos);
-            //    }
-            //    hitBox.UpdatePosition(entityNewPos.X, entityNewPos.Y);
+            if (!isInAbsMovementMode)
+            {
+                Vector2 entityNewPos = entityMovement.GetNormalPathfindingMovement(weapon1.attackRange, position, entitySpeed, aiType, playerToFollow);
 
-            //    if (entityNewPos.X > position.X)
-            //        isFlipped = true;
-            //    else
-            //        isFlipped = false;
-            //    movingSpeed = (Math.Abs(entityNewPos.X - position.X) + Math.Abs(entityNewPos.Y - position.Y)) * Game1.gameTime.ElapsedGameTime.Milliseconds;
-            //    if (movingSpeed > 0)
-            //        isMoving = true;
-            //    else
-            //        isMoving = false;
-            //    position = entityNewPos;
-            //}
-            //else
-            //{
+                if (!ignoresCollisions)
+                {
+                    hitBox.UpdatePosition(entityNewPos.X, entityNewPos.Y);
+                }
+                hitBox.UpdatePosition(entityNewPos.X, entityNewPos.Y);
 
-            //}
+                //checks if should be flipped
+                if (entityNewPos.X > position.X)
+                    isFlipped = true;
+                else
+                    isFlipped = false;
+                
+                //checks if moving for animations
+                movingSpeed = (Math.Abs(entityNewPos.X - position.X) + Math.Abs(entityNewPos.Y - position.Y)) * Game1.gameTime.ElapsedGameTime.Milliseconds;
+                if (movingSpeed > 0)
+                    isMoving = true;
+                else
+                    isMoving = false;
+
+                position = entityNewPos;
+            }
+            else
+            {
+
+            }
         }
     }
 }

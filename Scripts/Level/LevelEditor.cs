@@ -59,23 +59,24 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 {
                     LevelGenerator.ChangeTileAtPos(player.position, selectedTextureIndex, selectedIsBarrier, selectedBreakEffect, selectedStatusGiven);
                     timeSinceTilePlaced = Game1.gameTime.TotalGameTime.TotalSeconds;
-                    TileMap.SettleTileMap();
                 }
                 if (kstate.IsKeyDown(Keys.R) && Game1.gameTime.TotalGameTime.TotalSeconds - timeSinceTilePlaced > 0.3)
                 {
                     LevelGenerator.Change3x3TilesAroundPos(player.position, selectedTextureIndex, selectedIsBarrier, selectedBreakEffect, selectedStatusGiven);
                     timeSinceTilePlaced = Game1.gameTime.TotalGameTime.TotalSeconds;
-                    TileMap.SettleTileMap();
                 }
                 if (editorMenu.IsButtonPressed(0))
                 {
                     Room room = LevelGenerator.PosToRoom(player.position);
                     if (room.isOpen)
+                    {
                         room.CloseSides();
+                        LevelGenerator.SetTileMapToRoom(room.roomArrayX, room.roomArrayY);
+                    }
                     else
                     {
                         room.OpenSides();
-                        LevelGenerator.UpdateTileMap();
+                        LevelGenerator.SetTileMapToRoom(room.roomArrayX, room.roomArrayY);
                     }
                 }
                 if (editorMenu.IsButtonPressed(1))

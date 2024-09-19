@@ -17,6 +17,8 @@ namespace Monogame_Cross_Platform.Scripts.HUD
         internal float yOffset;
         private float absxOffset;
         private float absyOffset;
+        private float absHitBoxHeight;
+        private float absHitBoxWidth;
         internal float scale = 1;
 
         private MovementType movementType;
@@ -32,6 +34,8 @@ namespace Monogame_Cross_Platform.Scripts.HUD
             absyOffset = yOffset;
             this.xOffset = xOffset * Settings.uiScaleX;
             this.yOffset = yOffset * Settings.uiScaleY;
+            absHitBoxHeight = hitBox.Height;
+            absHitBoxWidth = hitBox.Width;
             this.hitBox = new Hitboxes.Hitbox(this.xOffset, this.yOffset, hitBox.Width * Settings.uiScaleX * scale, hitBox.Height * Settings.uiScaleY * scale);
         }
         public virtual bool IsPressed()
@@ -83,7 +87,7 @@ namespace Monogame_Cross_Platform.Scripts.HUD
 
             xOffset = absxOffset * Settings.uiScaleX;
             yOffset = absyOffset * Settings.uiScaleY;
-            hitBox = new Hitboxes.Hitbox(xOffset, yOffset, hitBox.width * Settings.uiScaleX, hitBox.height * Settings.uiScaleY); 
+            hitBox = new Hitboxes.Hitbox(xOffset, yOffset, absHitBoxWidth * Settings.uiScaleX, absHitBoxHeight * Settings.uiScaleY); 
         }
         public void MoveTo(int xOffset, int yOffset, float scale, int speed, MovementType movementType)
         {

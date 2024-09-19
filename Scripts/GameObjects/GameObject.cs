@@ -12,7 +12,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects
         public ushort ObjectIndex { get; set; }
         internal AnimationHandler animationHandler;
         public Vector2 position { get; internal set; }
-        public bool isEnabled = true; //should be false
+        public bool isEnabled = false; //should be false
         public GameObject(ushort textureIndex, Vector2 startingTile)
         {
             position = TileMap.TileMapPosToPos((int)startingTile.X, (int)startingTile.Y);

@@ -250,10 +250,11 @@ namespace Monogame_Cross_Platform.Scripts.Level
                     }
                 }
             }
-            UpdateTileMap();
+            SetTileMapToRooms();
+            TileMap.SettleTileMap();
         }
 
-        public static void UpdateTileMap()
+        public static void SetTileMapToRooms()
         {
             for (var x = 0; x < sqrtRoomsLength; x++)
             {
@@ -262,8 +263,12 @@ namespace Monogame_Cross_Platform.Scripts.Level
                     SetTileMapToRoom(x, y);
                 }
             }
-            TileMap.SettleTileMap();
         }
+        /// <summary>
+        /// Takes the room at the indices provide from the room array and sets its tiles to tilemap, then settles all tiles in the room on the tilemap with a one tile border
+        /// </summary>
+        /// <param name="roomX"></param>
+        /// <param name="roomY"></param>
         public static void SetTileMapToRoom(int roomX, int roomY)
         {
             Room room = rooms[roomX, roomY];
@@ -274,6 +279,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                     TileMap.tileMap[roomX * 28 + tileX, roomY * 28 + tileY] = room.tileArray[tileX, tileY];
                 }
             }
+            TileMap.SettleTileMap(roomX * 28 - 1, roomY * 28 - 1, roomX * 28 + room.sqrtTileArrayLength + 1, roomY * 28 + room.sqrtTileArrayLength + 1);
         }
         public static Room PosToRoom(Vector2 position)
         {
@@ -327,7 +333,8 @@ namespace Monogame_Cross_Platform.Scripts.Level
 
             foreach (GameObject gameobject in roomToWrite.gameObjects)
             {
-                writer.Write($"{gameobject.GetType().Name}-{TileMap.PosToAbsTileMapPos(gameobject.position).Item1}-{TileMap.PosToAbsTileMapPos(gameobject.position).Item2}-{gameobject.ObjectIndex}");
+                (int roomPosX, int roomPosY) = roomToWrite.TileMapToRoomTile(TileMap.PosToAbsTileMapPos(gameobject.position).Item1, TileMap.PosToAbsTileMapPos(gameobject.position).Item2);
+                writer.Write($"{gameobject.GetType().Name}-{roomPosX}-{roomPosY}*");
             }
 
             for (var tileY = 0; tileY < roomToWrite.sqrtTileArrayLength; tileY++)

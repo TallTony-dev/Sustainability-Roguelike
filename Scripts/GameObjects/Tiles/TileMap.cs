@@ -91,6 +91,62 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Tiles
                 }
             }
         }
+        public static void SettleTileMap(int startingTileX, int startingTileY, int endingTileX, int endingTileY)
+        {
+            int sqrtTileMapLength = (int)Math.Sqrt(tileMap.Length);
+            for (var y = startingTileY; y < endingTileY; y++)
+            {
+                for (var x = startingTileX; x < endingTileY; x++)
+                {
+                    if (x > -1 && y > -1 && x < sqrtTileMapLength && y < sqrtTileMapLength)
+                    {
+                        short enumToPick = 0;
+                        Tile tile = tileMap[x, y];
+                        ushort tileIndex = (ushort)(tile.textureIndex - (tile.textureIndex % 16));
+
+                        if (x + 1 < sqrtTileMapLength && tileMap[x + 1, y].textureIndex >= tileIndex && tileMap[x + 1, y].textureIndex < tileIndex + 16) //checking right
+                        {
+                            enumToPick += 1;
+                        }
+                        if (x - 1 >= 0 && tileMap[x - 1, y].textureIndex >= tileIndex && tileMap[x - 1, y].textureIndex < tileIndex + 16) //checking left
+                        {
+                            enumToPick += 2;
+                        }
+                        if (y + 1 < sqrtTileMapLength && tileMap[x, y + 1].textureIndex >= tileIndex && tileMap[x, y + 1].textureIndex < tileIndex + 16)//checking bottom
+                        {
+                            enumToPick += 4;
+                        }
+                        if (y - 1 >= 0 && tileMap[x, y - 1].textureIndex >= tileIndex && tileMap[x, y - 1].textureIndex < tileIndex + 16)//checking top
+                        {
+                            enumToPick += 8;
+                        }
+
+                        tileIndex += ((adjTiles1)enumToPick) switch
+                        {
+                            adjTiles1.none => 0,
+                            adjTiles1.right => 1,
+                            adjTiles1.rightleft => 2,
+                            adjTiles1.left => 3,
+                            adjTiles1.bottom => 4,
+                            adjTiles1.bottomright => 5,
+                            adjTiles1.bottomrightleft => 6,
+                            adjTiles1.bottomleft => 7,
+                            adjTiles1.topbottom => 8,
+                            adjTiles1.topbottomright => 9,
+                            adjTiles1.topbottomrightleft => 10,
+                            adjTiles1.topbottomleft => 11,
+                            adjTiles1.top => 12,
+                            adjTiles1.topright => 13,
+                            adjTiles1.toprightleft => 14,
+                            adjTiles1.topleft => 15,
+                            _ => 0
+                        };
+
+                        tileMap[x, y].textureIndex = tileIndex;
+                    }
+                }
+            }
+        }
         /// <summary>
         /// Checks if the entity hitbox collides with a tile hitbox, returns true if it collides
         /// </summary>
@@ -104,6 +160,28 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Tiles
             {
                 return true;
             }
+            return false;
+        }
+        
+        public static bool DoesRaycastCollide(float targetPosTileX, float targetPosTileY, float sourcePosTileX, float sourcePosTileY)
+        {
+            //int bottomX = (int)Math.Min(targetPosTileX, sourcePosTileX);
+            //int topX = (int)Math.Max(targetPosTileX, sourcePosTileX);
+            //int bottomY = (int)Math.Min(targetPosTileY, sourcePosTileY);
+            //int topY = (int)Math.Max(targetPosTileY, sourcePosTileY);
+            //for (int x = bottomX; x < topX; x++)
+            //{
+            //    for (int y = bottomY; y < topY; y++)
+            //    {
+            //        if (tileMap[x,y].isBarrier)
+            //        {
+            //            (_, Hitboxes.Hitbox hitbox) = GetTileBounds(x, y);
+                        
+            //        }
+            //    }
+            //}
+
+            //throw new NotImplementedException();
             return false;
         }
 

@@ -18,6 +18,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
          public Player(int health, float entitySpeed, Vector2 startingTile, Hitboxes.Hitbox hitBox, ushort textureIndex) : base(entitySpeed, startingTile, textureIndex, hitBox, EntityMovement.AIType.none)
         {
             this.health = health;
+            isEnabled = true;
         }
 
         public override void Move(Player _)
