@@ -27,7 +27,9 @@ namespace Monogame_Cross_Platform.Scripts.HUD
                 elements.Add(new Button(0, 64, 0, new Rectangle(0, 0, 32, 32)));
                 elements.Add(new Button(16, 96, 0, new Rectangle(0, 0, 32, 32)));
                 elements.Add(new Button(0, 256, 0, new Rectangle(0, 0, 32, 32)));
-                elements.Add(new Button(0, 288, 0, new Rectangle(0, 0, 32, 32)));
+                elements.Add(new Button(16, 288, 0, new Rectangle(0, 0, 32, 32)));
+                elements.Add(new Button(16, 384, 0, new Rectangle(0, 0, 32, 32)));
+                elements.Add(new Button(0, 416, 0, new Rectangle(0, 0, 32, 32)));
                 elements.Add(new Button(1, 1888, 0, new Rectangle(0, 0, 32, 32)));
             }
             if (menuType == MenuType.settings)

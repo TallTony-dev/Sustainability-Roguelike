@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Linq;
 using System.Collections;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -15,8 +15,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
 
         ushort selectedTextureIndex = 0;
         bool selectedIsBarrier = false;
-        byte selectedStatusGiven = 0;
-        byte selectedBreakEffect = 0;
+        bool selectedBreakable = false;
 
         Menu editorMenu = new Menu(Menu.MenuType.levelEditor);
 
@@ -31,22 +30,26 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 {
                     player.position = new Vector2(TileMap.PosToAbsTileMapPos(player.position).Item1 * 32, TileMap.PosToAbsTileMapPos(player.position).Item2 * 32);
                     player.isInLevelEditorMode = true;
+                    player.isInAbsMovementMode = true;
                     foreach (Entity entity in gameObjectList)
                     {
-                        entity.isInAbsMovementMode = true;
+                        entity.isEnabled = false;
                         entity.ignoresCollisions = true;
                     }
+                    player.isEnabled = true;
                     isInEditor = true;
                     editorMenu.EnableMenu();
                 }
                 else if (isInEditor)
                 {
                     player.isInLevelEditorMode = false;
+                    player.isInAbsMovementMode = false;
                     foreach (Entity entity in gameObjectList)
                     {
-                        entity.isInAbsMovementMode = false;
+                        entity.isEnabled = true;
                         entity.ignoresCollisions = false;
                     }
+                    player.isEnabled = true;
                     isInEditor = false;
                     editorMenu.DisableMenu();
                 }
@@ -57,12 +60,12 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 var kstate = Keyboard.GetState();
                 if (kstate.IsKeyDown(Keys.E) && Game1.gameTime.TotalGameTime.TotalSeconds - timeSinceTilePlaced > 0.3)
                 {
-                    LevelGenerator.ChangeTileAtPos(player.position, selectedTextureIndex, selectedIsBarrier, selectedBreakEffect, selectedStatusGiven);
+                    LevelGenerator.ChangeTileAtPos(player.position, selectedTextureIndex, selectedIsBarrier, selectedBreakable);
                     timeSinceTilePlaced = Game1.gameTime.TotalGameTime.TotalSeconds;
                 }
                 if (kstate.IsKeyDown(Keys.R) && Game1.gameTime.TotalGameTime.TotalSeconds - timeSinceTilePlaced > 0.3)
                 {
-                    LevelGenerator.Change3x3TilesAroundPos(player.position, selectedTextureIndex, selectedIsBarrier, selectedBreakEffect, selectedStatusGiven);
+                    LevelGenerator.Change3x3TilesAroundPos(player.position, selectedTextureIndex, selectedIsBarrier, selectedBreakable);
                     timeSinceTilePlaced = Game1.gameTime.TotalGameTime.TotalSeconds;
                 }
                 if (editorMenu.IsButtonPressed(0))
@@ -96,6 +99,24 @@ namespace Monogame_Cross_Platform.Scripts.Level
                     selectedIsBarrier = true;
                 }
                 if (editorMenu.IsButtonPressed(5))
+                {
+                    Room room = LevelGenerator.PosToRoom(player.position);
+                    Enemy enemy = new Enemy(0, player.position);
+
+                    room.gameObjects.Add(enemy);
+                    Game1.currentGameObjects.Add(enemy);
+                }
+                if (editorMenu.IsButtonPressed(6))
+                {
+                    Room room = LevelGenerator.PosToRoom(player.position);
+                    if (room.gameObjects.Count > 0 && room.gameObjects.Any(t => t.position == player.position))
+                    {
+                        GameObject gameObject = room.gameObjects.First(t => t.position == player.position);
+                        room.gameObjects.Remove(gameObject);
+                        Game1.currentGameObjects.Remove(gameObject);
+                    }
+                }
+                if (editorMenu.IsButtonPressed(7))
                 {
                     LevelGenerator.WriteRoomToFile(player);
                 }

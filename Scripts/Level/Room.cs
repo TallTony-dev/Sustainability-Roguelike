@@ -10,7 +10,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
         public Tile[,] tileArray;
         public List<GameObject> gameObjects = new List<GameObject>();
         public int sqrtTileArrayLength { get; private set; }
-        private ushort levelType = 0;
+        private ushort levelType = 1;
 
         public bool isX0 = false;
         public bool isY0 = false;
@@ -24,13 +24,13 @@ namespace Monogame_Cross_Platform.Scripts.Level
         public int roomArrayX = 0;
         public int roomArrayY = 0;
 
-        public void SetTile(int x, int y, ushort startingTileTextureIndex, bool isBarrier, byte breakEffect)
+        public void SetTile(int x, int y, ushort startingTileTextureIndex, bool isBarrier, bool breakable)
         {
             tileArray[x,y].textureIndex = startingTileTextureIndex;
             tileArray[x,y].isBarrier = isBarrier;
-            tileArray[x,y].breakEffect = breakEffect;
+            tileArray[x,y].breakable = breakable;
         }
-        public Room(ushort levelType, ushort roomIndex, Random rand, int roomArrayX, int roomArrayY)
+        public Room(ushort levelType, ushort roomIndex, int roomArrayX, int roomArrayY)
         {
             this.roomArrayX = roomArrayX;
             this.roomArrayY = roomArrayY;
@@ -49,19 +49,19 @@ namespace Monogame_Cross_Platform.Scripts.Level
             //enemy
             else if (roomIndex == 2)
             {
-                roomIndex = (ushort)rand.Next(2, 13); //min is inclusive, max is exclusive, who knows why
+                roomIndex = (ushort)Game1.rand.Next(2, 13); //min is inclusive, max is exclusive, who knows why
                 isARoom = true;
             }
             //other
             else if (roomIndex == 3)
             {
-                roomIndex = (ushort)rand.Next(13, 18);
+                roomIndex = (ushort)Game1.rand.Next(13, 18);
                 isARoom = true;
             }
             //treasure
             else if (roomIndex == 4)
             {
-                roomIndex = (ushort)rand.Next(18, 20);
+                roomIndex = (ushort)Game1.rand.Next(18, 20);
                 isARoom = true;
             }
             //boss
@@ -99,7 +99,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 {
                     tileArray[x, y].textureIndex = Convert.ToUInt16(tokens[1 + (x * 3) + (y * sqrtTileArrayLength * 3)]);
                     tileArray[x, y].isBarrier = Convert.ToBoolean(tokens[2 + (x * 3) + (y * sqrtTileArrayLength * 3)]);
-                    tileArray[x, y].breakEffect = Convert.ToByte(tokens[3 + (x * 3) + (y * sqrtTileArrayLength * 3)]);
+                    tileArray[x, y].breakable = Convert.ToBoolean(tokens[3 + (x * 3) + (y * sqrtTileArrayLength * 3)]);
                 }
             }
 
@@ -133,19 +133,21 @@ namespace Monogame_Cross_Platform.Scripts.Level
             }
 
         }
-
-        public void InitializeRoom()
-        {
-            foreach (GameObject gameObject in gameObjects)
-            {
-                gameObject.isEnabled = true;
-            }
-        }
         public void Update(Player player)
         {
-            if (LevelGenerator.PosToRoom(player.position) == this && LevelGenerator.PosToTileOfRoom(player.position).Item1 < 18 && LevelGenerator.PosToTileOfRoom(player.position).Item2 < 18)
+            if (isOpen)
             {
-                Activate();
+                if (LevelGenerator.PosToRoom(player.position) == this && LevelGenerator.PosToTileOfRoom(player.position).Item1 < 19 && LevelGenerator.PosToTileOfRoom(player.position).Item2 < 18 && !player.isInLevelEditorMode && gameObjects.Count > 0)
+                {
+                    Activate();
+                }
+            }
+            else
+            {
+                if (LevelGenerator.PosToRoom(player.position) != this || LevelGenerator.PosToTileOfRoom(player.position).Item1 > 19 || LevelGenerator.PosToTileOfRoom(player.position).Item2 > 18 || player.isInLevelEditorMode || gameObjects.Count == 0)
+                {
+                    Deactivate();
+                }
             }
         }
 
@@ -155,16 +157,29 @@ namespace Monogame_Cross_Platform.Scripts.Level
             {
                 gameObject.isEnabled = true;
             }
+            CloseSides();
+            LevelGenerator.SetTileMapToRoom(roomArrayX, roomArrayY);
+        }
+
+        public void Deactivate()
+        {
+            foreach (GameObject gameObject in gameObjects)
+            {
+                gameObject.isEnabled = false;
+            }
+            OpenSides();
+            LevelGenerator.SetTileMapToRoom(roomArrayX, roomArrayY);
         }
 
         public (int x, int y) TileMapToRoomTile(int tileX, int tileY)
         {
-            return (tileX / (roomArrayX * 28), tileY / (roomArrayY * 28));
+            return (tileX % (roomArrayX * 28), tileY % (roomArrayY * 28));
         }
         public (int x, int y) RoomTileToTileMap(int roomTileX, int roomTileY)
         {
             return (roomArrayX * 28 + roomTileX, roomArrayY * 28 + roomTileY);
         }
+
         public void OpenSides()
         {
             if (!isXAtArrayLimit && LevelGenerator.rooms[roomArrayX + 1, roomArrayY].isARoom)
@@ -172,7 +187,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 if(levelType == 1)
                 {
                     for (var y = 0; y < 3; y++)
-                        SetTile(sqrtTileArrayLength - 1, (sqrtTileArrayLength - 1) / 2 + y - 1, 0, false, 0);
+                        SetTile(sqrtTileArrayLength - 1, (sqrtTileArrayLength - 1) / 2 + y - 1, 0, false, false);
                 }
             }
             if (!isX0 && LevelGenerator.rooms[roomArrayX - 1, roomArrayY].isARoom)
@@ -180,7 +195,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 if (levelType == 1)
                 {
                     for (var y = 0; y < 3; y++)
-                        SetTile(0, (sqrtTileArrayLength - 1) / 2 + y - 1, 0, false, 0);
+                        SetTile(0, (sqrtTileArrayLength - 1) / 2 + y - 1, 0, false, false);
                 }
             }
             if (!isY0 && LevelGenerator.rooms[roomArrayX, roomArrayY - 1].isARoom)
@@ -188,7 +203,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 if (levelType == 1)
                 {
                     for (var x = 0; x < 3; x++)
-                        SetTile((sqrtTileArrayLength - 1) / 2 + x - 1, 0, 0, false, 0);
+                        SetTile((sqrtTileArrayLength - 1) / 2 + x - 1, 0, 0, false, false);
                 }
             }
             if (!isYAtArrayLimit && LevelGenerator.rooms[roomArrayX, roomArrayY + 1].isARoom)
@@ -196,7 +211,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 if (levelType == 1)
                 {
                     for (var x = 0; x < 3; x++)
-                        SetTile((sqrtTileArrayLength - 1) / 2 + x - 1, sqrtTileArrayLength - 1, 0, false, 0);
+                        SetTile((sqrtTileArrayLength - 1) / 2 + x - 1, sqrtTileArrayLength - 1, 0, false, false);
                 }
             }
             isOpen = true;
@@ -206,13 +221,13 @@ namespace Monogame_Cross_Platform.Scripts.Level
             if (levelType == 1)
             {
                 for (var y = 0; y < 3; y++)
-                    tileArray[sqrtTileArrayLength - 1, (sqrtTileArrayLength - 1) / 2 + y - 1] = new Tile(16, true, 0);
+                    tileArray[sqrtTileArrayLength - 1, (sqrtTileArrayLength - 1) / 2 + y - 1] = new Tile(16, true, false);
                 for (var y = 0; y < 3; y++)
-                    tileArray[0, (sqrtTileArrayLength - 1) / 2 + y - 1] = new Tile(16, true, 0);
+                    tileArray[0, (sqrtTileArrayLength - 1) / 2 + y - 1] = new Tile(16, true, false);
                 for (var x = 0; x < 3; x++)
-                    tileArray[(sqrtTileArrayLength - 1) / 2 + x - 1, 0] = new Tile(16, true, 0);
+                    tileArray[(sqrtTileArrayLength - 1) / 2 + x - 1, 0] = new Tile(16, true, false);
                 for (var x = 0; x < 3; x++)
-                    tileArray[(sqrtTileArrayLength - 1) / 2 + x - 1, sqrtTileArrayLength - 1] = new Tile(16, true, 0);
+                    tileArray[(sqrtTileArrayLength - 1) / 2 + x - 1, sqrtTileArrayLength - 1] = new Tile(16, true, false);
             }
             isOpen = false;
         }

@@ -94,10 +94,12 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
 
         public Vector2 GetAbsPathfindingMovement(int attackRange, Vector2 currentPos, float speed, AIType aiType, Player.Player playerToPathFindTo)
         {
+            throw new NotImplementedException();
+
+
+
             return new Vector2(0, 0);
         }
-
-
 
 
         /// <summary>
@@ -111,42 +113,46 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             float distanceBetween = DistanceBetween(new Vector2(playerTileX, playerTileY), new Vector2(entityTileX, entityTileY));
 
 
-            if (distanceBetween >= attackRange + 0.5 || distanceBetween <= attackRange - 0.25)
+            if (distanceBetween >= attackRange + 1 || distanceBetween <= attackRange - 0.2)
             {
                 if (pointsToTravelThrough.Count == 0 && Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenPathfound > 0.25)
                 {
                     pointsToTravelThrough = GetTileMapPointsToTravel(attackRange, currentPos, aiType, playerToPathFindTo);
                     timeWhenPathfound = Game1.gameTime.TotalGameTime.TotalSeconds;
                 }
-
-                if (pointsToTravelThrough.Count != 0)
-                {
-                    Vector2 coordToTravelTo = TileMap.TileMapPosToPos(pointsToTravelThrough.Last().Item1, pointsToTravelThrough.Last().Item2);
-                    float updatedEntitySpeed = (float)(speed * Game1.gameTime.ElapsedGameTime.TotalSeconds);
-
-                    float nextX = currentPos.X + updatedEntitySpeed * Math.Sign(coordToTravelTo.X - currentPos.X);
-                    float nextY = currentPos.Y + updatedEntitySpeed * Math.Sign(coordToTravelTo.Y - currentPos.Y);
-
-                    if (Math.Sign(coordToTravelTo.X - currentPos.X) != Math.Sign(coordToTravelTo.X - nextX)) //checks for x overshoot
-                        currentPos.X = coordToTravelTo.X;
-                    else
-                        currentPos.X = nextX;
-
-                    if (Math.Sign(coordToTravelTo.Y - currentPos.Y) != Math.Sign(coordToTravelTo.Y - nextY)) //checks for y overshoot
-                        currentPos.Y = coordToTravelTo.Y;
-                    else
-                        currentPos.Y = nextY;
-
-                    if (currentPos == coordToTravelTo)
-                    {
-                        pointsToTravelThrough.Remove(pointsToTravelThrough.Last());
-                    }
-                } 
             }
-            else if (!TileMap.DoesRaycastCollide(playerTileX, playerTileY, entityTileX, entityTileY))
+
+            if (pointsToTravelThrough.Count != 0)
             {
-                pointsToTravelThrough.Clear();
-            }
+                Vector2 coordToTravelTo = TileMap.TileMapPosToPos(pointsToTravelThrough.Last().Item1, pointsToTravelThrough.Last().Item2);
+
+                TileMap.SetPathfindingModeOfTile(pointsToTravelThrough.Last().Item1, pointsToTravelThrough.Last().Item2, true);
+
+                float updatedEntitySpeed = (float)(speed * Game1.gameTime.ElapsedGameTime.TotalSeconds);
+
+                float nextX = currentPos.X + updatedEntitySpeed * Math.Sign(coordToTravelTo.X - currentPos.X);
+                float nextY = currentPos.Y + updatedEntitySpeed * Math.Sign(coordToTravelTo.Y - currentPos.Y);
+
+                if (Math.Sign(coordToTravelTo.X - currentPos.X) != Math.Sign(coordToTravelTo.X - nextX)) //checks for x overshoot
+                    currentPos.X = coordToTravelTo.X;
+                else
+                    currentPos.X = nextX;
+
+                if (Math.Sign(coordToTravelTo.Y - currentPos.Y) != Math.Sign(coordToTravelTo.Y - nextY)) //checks for y overshoot
+                    currentPos.Y = coordToTravelTo.Y;
+                else
+                    currentPos.Y = nextY;
+
+                if (currentPos == coordToTravelTo)
+                {
+                    TileMap.SetPathfindingModeOfTileAtCoord(coordToTravelTo.X, coordToTravelTo.Y, false);
+                    pointsToTravelThrough.Remove(pointsToTravelThrough.Last());
+
+                    if (pointsToTravelThrough.Count != 0 && TileMap.IsCollisionAbs(pointsToTravelThrough.Last().Item1, pointsToTravelThrough.Last().Item2))
+                        pointsToTravelThrough.Clear();
+
+                }
+            } 
             return currentPos;  
         }
 
@@ -156,21 +162,33 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             List<(int prevX, int prevY, int checkedX, int checkedY, int weightT)> openTilesChecked = new List<(int prevX, int prevY, int checkedX, int checkedY, int weightT)>();
             List<(int prevX, int prevY, int checkedX, int checkedY, int weightT)> closedTilesChecked = new List<(int prevX, int prevY, int checkedX, int checkedY, int weightT)>();
 
+            int timesFailedToFind = 0;
+
+            (float entityTileX, float entityTileY) = TileMap.PosToTileMapPos(currentPos);
+            (float playerTileX, float playerTileY) = TileMap.PosToTileMapPos(player.position);
+            (int entityAbsTileX, int entityAbsTileY) = TileMap.PosToAbsTileMapPos(currentPos);
+            (int playerAbsTileX, int playerAbsTileY) = TileMap.PosToAbsTileMapPos(player.position);
+
             if (aiType == AIType.enemy)
             {
-                (float entityTileX, float entityTileY) = TileMap.PosToTileMapPos(currentPos);
-                (float playerTileX, float playerTileY) = TileMap.PosToTileMapPos(player.position);
-                (int entityAbsTileX, int entityAbsTileY) = TileMap.PosToAbsTileMapPos(currentPos);
-                (int playerAbsTileX, int playerAbsTileY) = TileMap.PosToAbsTileMapPos(player.position);
 
-                openTilesChecked.Add((entityAbsTileX, entityAbsTileY, entityAbsTileX, entityAbsTileY, CalculateWeight(playerAbsTileX, playerAbsTileY, entityAbsTileX, entityAbsTileY)));
+                openTilesChecked.Add((entityAbsTileX, entityAbsTileY, entityAbsTileX, entityAbsTileY, 0));
 
                 bool exitLoop = false;
                 int TileMapSize = (int)Math.Sqrt(TileMap.tileMap.Length);
-                while (!exitLoop)
+
+                while (!exitLoop && timesFailedToFind < 2)
                 {
-                    int index = openTilesChecked.IndexOf(openTilesChecked.First(t => t.weightT == openTilesChecked.Min(x => x.weightT))); //gets index of item with the lowest t value, NOT SURE HOW HANDLES TWO WITH SAME, probably gets first one
+                    int index = openTilesChecked.IndexOf(openTilesChecked.First(t => t.weightT == openTilesChecked.Min(x => x.weightT))); //gets index of item with the lowest t value
                     (int prevX, int prevY, int checkedX, int checkedY, int weightT) = openTilesChecked[index];
+
+
+                    //if its trying to go too far away (MEH impossible movement test) then exit loop
+                    if (Math.Abs(checkedX - entityAbsTileX) + Math.Abs(checkedY - entityAbsTileY) > 1 + attackRange * 2)
+                    {
+                        timesFailedToFind++;
+                        exitLoop = true;
+                    }
 
 
                     for (int x = -1; x < 2; x++)
@@ -190,8 +208,8 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                                 if (x != 0 && y != 0)
                                 {
                                     //get neighboring horizontal and vertical tiles between diagonal to check corner cutting
-                                    bool isHorizontallyWalkable = !TileMap.tileMap[prevX + x, prevY].isBarrier;
-                                    bool isVerticallyWalkable = !TileMap.tileMap[prevX, prevY + y].isBarrier;
+                                    bool isHorizontallyWalkable = !TileMap.tileMap[checkedX + x, checkedY].isBarrier;
+                                    bool isVerticallyWalkable = !TileMap.tileMap[checkedX, checkedY + y].isBarrier;
 
                                     //skip diagonal movement if either horizontal or vertical neighbor is blocked (corner-cut prevention)
                                     if (!isHorizontallyWalkable || !isVerticallyWalkable)
@@ -199,16 +217,17 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                                 }
 
 
-                                //if it wasnt previously checked, and isnt a barrier
-                                if (!closedTilesChecked.Any(t => t.checkedX == checkedX + x && t.checkedY == checkedY + y) && !TileMap.IsCollisionAbs(checkedX + x, checkedY + y))
+                                //if it wasnt previously checked, and isnt a collision
+                                if (!closedTilesChecked.Any(t => t.checkedX == checkedX + x && t.checkedY == checkedY + y) && !openTilesChecked.Any(t => t.checkedX == checkedX + x && t.checkedY == checkedY + y) && 
+                                    !TileMap.IsCollisionAbs(checkedX + x, checkedY + y))
                                 {
                                     //then add it to the list
-                                    weightT = CalculateWeight(playerAbsTileX, playerAbsTileY, checkedX + x, checkedY + y);
+                                    weightT = CalculateWeight(checkedX + x, checkedY + y, playerAbsTileX, playerAbsTileY, attackRange);
                                     openTilesChecked.Add((checkedX, checkedY, checkedX + x, checkedY + y, weightT));
 
                                     //if its in range and a raycast from there wouldn't collide with a tile NOT IMPLEMENTED
-                                    float distanceBetweenTileAndPlayer = DistanceBetween(new Vector2(playerTileX, playerTileY), new Vector2(checkedX + x, checkedY + y));
-                                    if (distanceBetweenTileAndPlayer <= attackRange + 0.5 && distanceBetweenTileAndPlayer >= attackRange - 0.25 && !TileMap.DoesRaycastCollide(playerTileX, playerTileY, checkedX + x, checkedY + y))
+                                    float tileDistanceBetweenTileAndPlayer = DistanceBetween(new Vector2(playerTileX, playerTileY), new Vector2(checkedX + x, checkedY + y));
+                                    if (tileDistanceBetweenTileAndPlayer <= attackRange + 1 && tileDistanceBetweenTileAndPlayer >= attackRange - 0.2 && !TileMap.DoesRaycastCollide(playerTileX, playerTileY, checkedX + x, checkedY + y))
                                     {
                                         exitLoop = true;
                                     }
@@ -216,42 +235,63 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                             }
                         }
                     }
-                    closedTilesChecked.Add(openTilesChecked[index]);
-                    openTilesChecked.Remove(openTilesChecked[index]);
 
+                    if (openTilesChecked.Count != 1)
+                    {
+                        closedTilesChecked.Add(openTilesChecked[index]);
+                        openTilesChecked.Remove(openTilesChecked[index]);
+                    }
+                    else
+                        timesFailedToFind++;
                 }
-
-                List<(int tileX, int tileY)> nodes = new List<(int, int)>();
-
-
-                //last open tile will be in range and the end point
-                nodes.Add((openTilesChecked.Last().checkedX, openTilesChecked.Last().checkedY));
-                (int backTrackTileX, int backTrackTileY) = (openTilesChecked.Last().prevX, openTilesChecked.Last().prevY);
-                do
-                { //backtracking here
-                    int currentTileIndex = closedTilesChecked.IndexOf(closedTilesChecked.First(t => t.checkedX == backTrackTileX && t.checkedY == backTrackTileY));
-                    (int prevX, int prevY, int checkedX, int checkedY, int weightT) = closedTilesChecked[currentTileIndex];
-                    nodes.Add((checkedX, checkedY));
-                    (backTrackTileX, backTrackTileY) = (prevX, prevY);
-
-
-                } while ((entityAbsTileX, entityAbsTileY) != nodes[nodes.Count - 1]);
-
-                return nodes;
             }
 
             if (aiType == AIType.npc)
             {
 
             }
-            return new List<(int, int)> { (0, 0) };
+
+            List<(int tileX, int tileY)> nodes = new List<(int, int)>();
+
+            if (closedTilesChecked.Count > 0)
+            {
+                int backTrackTileX;
+                int backTrackTileY;
+                if (timesFailedToFind == 0)
+                {
+                    //last open tile will be in range and the end point
+                    nodes.Add((openTilesChecked.Last().checkedX, openTilesChecked.Last().checkedY));
+                    (backTrackTileX, backTrackTileY) = (openTilesChecked.Last().prevX, openTilesChecked.Last().prevY);
+                }
+                else
+                {
+                    //if its known to be going way too far away, it will default to the lowest weight position
+                    int index = openTilesChecked.IndexOf(openTilesChecked.First(t => t.weightT == openTilesChecked.Min(x => x.weightT))); //gets index of item with the lowest t (weight) value
+                    nodes.Add((openTilesChecked[index].checkedX, openTilesChecked[index].checkedY));
+                    (backTrackTileX, backTrackTileY) = (openTilesChecked[index].prevX, openTilesChecked[index].prevY);
+                }
+
+                do
+                { //backtracking here
+                    int currentTileIndex = closedTilesChecked.IndexOf(closedTilesChecked.First(t => t.checkedX == backTrackTileX && t.checkedY == backTrackTileY));
+                    (int prevX, int prevY, int checkedX, int checkedY, int weightT) = closedTilesChecked[currentTileIndex];
+                    nodes.Add((checkedX, checkedY));
+                    (backTrackTileX, backTrackTileY) = (prevX, prevY);
+                } while ((entityAbsTileX, entityAbsTileY) != nodes[nodes.Count - 1]);
+
+                nodes.RemoveAt(nodes.Count - 1);
+                TileMap.tileMap[nodes.Last().tileX, nodes.Last().tileY].isBeingPathfoundTo = true;
+            }
+
+            return nodes;
         }
 
-        public int CalculateWeight(int playerTileX, int playerTileY, int tileX, int tileY)
+        public int CalculateWeight(int tileX, int tileY, int playerTileX, int playerTileY, int attackRange)
         {
             int deltaX = Math.Abs(tileX - playerTileX);
             int deltaY = Math.Abs(tileY - playerTileY);
-            return (deltaX * 10 + deltaY * 10 - (6 * Math.Min(deltaX, deltaY)));
+            return (deltaX * 10 + deltaY * 10 - (6 * Math.Min(deltaX, deltaY)) + Math.Abs(deltaX - attackRange) * 10 + Math.Abs(deltaY - attackRange) * 10); 
+            //how far it is from the player minus diagonal shortcuts possible, + the distance from attack range, TODO: maybe should skip how far it is from the player 
         }
         public enum AIType { none, enemy, npc }
     } 

@@ -19,7 +19,6 @@ namespace Monogame_Cross_Platform.Scripts.Level
             short sqrtRoomsLength = (short)Math.Sqrt(rooms.Length);
             (int index, ushort distance)[,] roomIndices = new (int, ushort)[sqrtRoomsLength,sqrtRoomsLength];
             (int x, int y) currentRoom = (5, 5);
-            Random rand = new Random();
 
             //makes the entrance
             roomIndices[currentRoom.x, currentRoom.y] = (1, 0);
@@ -27,7 +26,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
             //Generates active rooms
             while (levelLength > 0)
             {
-                int roomChange = rand.Next(1, 5);
+                int roomChange = Game1.rand.Next(1, 5);
                 if (roomChange == 1 && currentRoom.x + 1 < sqrtRoomsLength)
                     currentRoom.x += 1;
                 if (roomChange == 2 && currentRoom.x > 0)
@@ -162,7 +161,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
             {
                 for (var y = 0; y < sqrtRoomsLength; y++)
                 {
-                    rooms[x, y] = new Room(levelType, (ushort)roomIndices[x, y].index, rand, x, y);
+                    rooms[x, y] = new Room(levelType, (ushort)roomIndices[x, y].index, x, y);
                 }
             }
 
@@ -220,11 +219,11 @@ namespace Monogame_Cross_Platform.Scripts.Level
                         {
                             for (var tilex = 0; tilex < 10; tilex++)
                             {
-                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + ((room.sqrtTileArrayLength - 1) / 2) - 2] = new Tile(18, true, 0);
-                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + ((room.sqrtTileArrayLength - 1) / 2) - 1] = new Tile(6, false, 0);
-                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + (room.sqrtTileArrayLength - 1) / 2] = new Tile(10, false, 0);
-                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + ((room.sqrtTileArrayLength - 1) / 2) + 1] = new Tile(14, false, 0);
-                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + ((room.sqrtTileArrayLength - 1) / 2) + 2] = new Tile(18, true, 0);
+                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + ((room.sqrtTileArrayLength - 1) / 2) - 2] = new Tile(18, true, false);
+                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + ((room.sqrtTileArrayLength - 1) / 2) - 1] = new Tile(6, false, false);
+                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + (room.sqrtTileArrayLength - 1) / 2] = new Tile(10, false, false);
+                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + ((room.sqrtTileArrayLength - 1) / 2) + 1] = new Tile(14, false, false);
+                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + ((room.sqrtTileArrayLength - 1) / 2) + 2] = new Tile(18, true, false);
                             }
                         }
                     }
@@ -240,11 +239,11 @@ namespace Monogame_Cross_Platform.Scripts.Level
                         {
                             for (var tiley = 0; tiley < 10; tiley++)
                             {
-                                TileMap.tileMap[28 * x + ((room.sqrtTileArrayLength - 1) / 2) - 2, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(18, true, 0);
-                                TileMap.tileMap[28 * x + ((room.sqrtTileArrayLength - 1) / 2) - 1, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(6, false, 0);
-                                TileMap.tileMap[28 * x + (room.sqrtTileArrayLength - 1) / 2, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(10, false, 0);
-                                TileMap.tileMap[28 * x + ((room.sqrtTileArrayLength - 1) / 2) + 1, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(14, false, 0);
-                                TileMap.tileMap[28 * x + ((room.sqrtTileArrayLength - 1) / 2) + 2, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(18, true, 0);
+                                TileMap.tileMap[28 * x + ((room.sqrtTileArrayLength - 1) / 2) - 2, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(18, true, false);
+                                TileMap.tileMap[28 * x + ((room.sqrtTileArrayLength - 1) / 2) - 1, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(6, false, false);
+                                TileMap.tileMap[28 * x + (room.sqrtTileArrayLength - 1) / 2, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(10, false, false);
+                                TileMap.tileMap[28 * x + ((room.sqrtTileArrayLength - 1) / 2) + 1, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(14, false, false);
+                                TileMap.tileMap[28 * x + ((room.sqrtTileArrayLength - 1) / 2) + 2, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(18, true, false);
                             }
                         }
                     }
@@ -281,6 +280,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
             }
             TileMap.SettleTileMap(roomX * 28 - 1, roomY * 28 - 1, roomX * 28 + room.sqrtTileArrayLength + 1, roomY * 28 + room.sqrtTileArrayLength + 1);
         }
+
         public static Room PosToRoom(Vector2 position)
         {
             (int x, int y) tileMapPos = TileMap.PosToAbsTileMapPos(position);
@@ -295,16 +295,16 @@ namespace Monogame_Cross_Platform.Scripts.Level
         {
             return (TileMap.PosToAbsTileMapPos(position).Item1 % 28, TileMap.PosToAbsTileMapPos(position).Item2 % 28);
         }
-        public static void ChangeTileAtPos(Vector2 position, ushort startingIndex, bool isBarrier, byte breakEffect, byte tileObject)
+        public static void ChangeTileAtPos(Vector2 position, ushort startingIndex, bool isBarrier, bool breakable)
         {
             (int tileX, int tileY) = PosToTileOfRoom(position);
             Room room = PosToRoom(position);
             if (tileX < room.sqrtTileArrayLength && tileY < room.sqrtTileArrayLength && tileX > -1 && tileY > -1)
-                room.SetTile(tileX, tileY, startingIndex, isBarrier, breakEffect);
+                room.SetTile(tileX, tileY, startingIndex, isBarrier, breakable);
 
             SetTileMapToRoom(PosToRoomIndex(position).x, PosToRoomIndex(position).y);
         }
-        public static void Change3x3TilesAroundPos(Vector2 position, ushort startingIndex, bool isBarrier, byte breakEffect, byte tileObject)
+        public static void Change3x3TilesAroundPos(Vector2 position, ushort startingIndex, bool isBarrier, bool breakable)
         {
             (int tileX, int tileY) = PosToTileOfRoom(position);
             Room room = PosToRoom(position);
@@ -313,7 +313,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 for (int y = -1; y < 2; y++)
                 {
                     if (tileX + x < room.sqrtTileArrayLength && tileY + y < room.sqrtTileArrayLength && tileX + x > -1 && tileY + y > -1)
-                        room.SetTile(tileX + x, tileY + y, startingIndex, isBarrier, breakEffect);
+                        room.SetTile(tileX + x, tileY + y, startingIndex, isBarrier, breakable);
                 }
             }
             SetTileMapToRoom(PosToRoomIndex(position).x, PosToRoomIndex(position).y);
@@ -334,7 +334,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
             foreach (GameObject gameobject in roomToWrite.gameObjects)
             {
                 (int roomPosX, int roomPosY) = roomToWrite.TileMapToRoomTile(TileMap.PosToAbsTileMapPos(gameobject.position).Item1, TileMap.PosToAbsTileMapPos(gameobject.position).Item2);
-                writer.Write($"{gameobject.GetType().Name}-{roomPosX}-{roomPosY}*");
+                writer.Write($"{gameobject.GetType().Name}-{roomPosX}-{roomPosY}-{gameobject.ObjectIndex}*");
             }
 
             for (var tileY = 0; tileY < roomToWrite.sqrtTileArrayLength; tileY++)
@@ -342,7 +342,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 for (var tileX = 0; tileX < roomToWrite.sqrtTileArrayLength; tileX++)
                 {
                     Tile tile = roomToWrite.tileArray[tileX, tileY];
-                    writer.Write($"{16 * (int)(tile.textureIndex / 16)},{tile.isBarrier},{tile.breakEffect},");
+                    writer.Write($",{16 * (int)(tile.textureIndex / 16)},{tile.isBarrier},{tile.breakable}");
                 }
             }
             writer.Write("\n");

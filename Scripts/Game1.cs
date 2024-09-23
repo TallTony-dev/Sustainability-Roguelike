@@ -10,6 +10,7 @@ global using Monogame_Cross_Platform.Scripts.HUD;
 global using System.Collections.Generic;
 global using Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player;
 global using Monogame_Cross_Platform.Scripts.GameObjects.Entities.Enemy;
+global using Monogame_Cross_Platform.Scripts.GameObjects.Weapons;
 using Monogame_Cross_Platform.Scripts.Level;
 
 namespace Monogame_Cross_Platform.Scripts
@@ -17,6 +18,7 @@ namespace Monogame_Cross_Platform.Scripts
     public class Game1 : Game
     {
         public static GraphicsDeviceManager _graphics;
+        public static Random rand = new Random();
 
         ContentLoader contentLoader;
         DrawThings drawEntities;
@@ -30,9 +32,11 @@ namespace Monogame_Cross_Platform.Scripts
         SpriteFont font; //Temp font
         public static string debugText = "test";
 
-         Player player = new Player(100, 150, new Vector2(28 * 5 + 9, 28 * 5 + 9),new Hitboxes.Hitbox(0,0,30,30), 0); //Put this in a better spot inside of an initialize level function within update or smth
-         internal static List<GameObject> currentGameObjects; //temp?
-         internal static List<Menu> menus = new List<Menu>();
+        Player player = new Player(100, 160, new Vector2(28 * 5 + 9, 28 * 5 + 9),new Hitboxes.Hitbox(0,0,30,30), 0); //Put this in a better spot inside of an initialize level function within update or smth
+        internal static List<GameObject> currentGameObjects;
+        internal static List<Menu> menus = new List<Menu>();
+        internal static List<Projectile> activePlayerProjectiles = new List<Projectile>();
+        internal static List<Projectile> activeEnemyProjectiles = new List<Projectile>();
 
         public Game1()
         {
@@ -40,7 +44,7 @@ namespace Monogame_Cross_Platform.Scripts
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
 
-            currentGameObjects = new List<GameObject>() { player }; //TEMP THIS SHOULD BE HANDLED ELSEWHERE
+            currentGameObjects = new List<GameObject>() { player }; //should be handled elsewhere maybe
 
             levelEditor = new LevelEditor();
         }
@@ -105,6 +109,8 @@ namespace Monogame_Cross_Platform.Scripts
             }
             //Draws entities active in the currentEntities list
             drawEntities.AddToDrawBuffer(currentGameObjects);
+            drawEntities.AddToDrawBuffer(activeEnemyProjectiles);
+            drawEntities.AddToDrawBuffer(activePlayerProjectiles);
 
             drawEntities.DrawBuffer();
             GraphicsDevice.SetRenderTarget(null);

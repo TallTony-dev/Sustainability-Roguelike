@@ -10,6 +10,56 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
     {
         int deadZone = 4096;
         Vector2 coordToTravelTo = new Vector2(0, 0);
+        public float GetShootingAngle()
+        {
+            float angle = 0;
+            var mstate = Mouse.GetState();
+            float y = 0;
+            float x = 0;
+
+            if (Joystick.LastConnectedIndex == 0)
+            {
+                JoystickState jstate = Joystick.GetState((int)PlayerIndex.One);
+                
+                if (jstate.Axes[3] < -deadZone || jstate.Axes[3] > deadZone)
+                {
+                    y = (float)jstate.Axes[3];
+                }
+
+                if (jstate.Axes[2] < -deadZone || jstate.Axes[2] > deadZone)
+                {
+                    x = (float)jstate.Axes[2];
+                }
+            }
+            else
+            {
+                y = (mstate.Position.Y - Settings.resolutionHeight / 2);
+                x = (mstate.Position.X - Settings.resolutionWidth / 2);
+            }
+
+            if (Math.Abs(x) > 0 || Math.Abs(y) > 0)
+                angle = (float)(Math.Atan2(y, x));
+            return angle;
+        }
+        public bool IsShooting()
+        {
+            var mstate = Mouse.GetState();
+            if (mstate.LeftButton == ButtonState.Pressed)
+            {
+                return true;
+            }
+
+            if (Joystick.LastConnectedIndex == 0)
+            {
+                JoystickState jstate = Joystick.GetState((int)PlayerIndex.One);
+
+                if (jstate.Axes[2] > deadZone || jstate.Axes[2] < -deadZone || jstate.Axes[3] > deadZone || jstate.Axes[3] < -deadZone)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         /// <summary>
         /// Gets a Vector2 of the location the player should be in, it also gets the inputs required for this function.
         /// </summary>
@@ -39,28 +89,26 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
                     playerPosition.X += updatedPlayerSpeed;
                 }
             }
-
-
-            if (Joystick.LastConnectedIndex == 0)
+            else
             {
                 JoystickState jstate = Joystick.GetState((int)PlayerIndex.One);
 
                 if (jstate.Axes[1] < -deadZone)
                 {
-                    playerPosition.Y -= updatedPlayerSpeed * (Math.Abs(jstate.Axes[1]) / 4096);
+                    playerPosition.Y -= (updatedPlayerSpeed / 8) * ((Math.Abs(jstate.Axes[1]) / 4096));
                 }
                 else if (jstate.Axes[1] > deadZone)
                 {
-                    playerPosition.Y += updatedPlayerSpeed * (Math.Abs(jstate.Axes[1]) / 4096);
+                    playerPosition.Y += (updatedPlayerSpeed / 8) * ((Math.Abs(jstate.Axes[1]) / 4096));
                 }
 
                 if (jstate.Axes[0] < -deadZone)
                 {
-                    playerPosition.X -= updatedPlayerSpeed * (Math.Abs(jstate.Axes[0]) / 4096);
+                    playerPosition.X -= (updatedPlayerSpeed / 8) * ((Math.Abs(jstate.Axes[0]) / 4096));
                 }
                 else if (jstate.Axes[0] > deadZone)
                 {
-                    playerPosition.X += updatedPlayerSpeed * (Math.Abs(jstate.Axes[0]) / 4096);
+                    playerPosition.X += (updatedPlayerSpeed / 8) * ((Math.Abs(jstate.Axes[0]) / 4096));
                 }
             }
             return playerPosition;
@@ -78,22 +126,22 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
                 JoystickState jstate = Joystick.GetState((int)PlayerIndex.One);
                 if (jstate.IsConnected)
                 {
-                    if ((jstate.Buttons[(int)Buttons.DPadDown] == ButtonState.Pressed) && (!TileMap.IsCollisionAbs(playerCurrentTile.Item1, playerCurrentTile.Item2 - 1) || (ignoreCollisions)))
+                    if ((jstate.Buttons[(int)Buttons.DPadDown] == ButtonState.Pressed || kstate.IsKeyDown(Keys.W)) && (!TileMap.IsCollisionAbs(playerCurrentTile.Item1, playerCurrentTile.Item2 - 1) || (ignoreCollisions)))
                     {
                         coordToTravelTo.Y = (playerCurrentTile.Item2 * 32) - 32;
                     }
 
-                    else if ((jstate.Buttons[(int)Buttons.DPadUp] == ButtonState.Pressed) && (!TileMap.IsCollisionAbs(playerCurrentTile.Item1, playerCurrentTile.Item2 + 1) || (ignoreCollisions)))
+                    else if ((jstate.Buttons[(int)Buttons.DPadUp] == ButtonState.Pressed || kstate.IsKeyDown(Keys.S)) && (!TileMap.IsCollisionAbs(playerCurrentTile.Item1, playerCurrentTile.Item2 + 1) || (ignoreCollisions)))
                     {
                         coordToTravelTo.Y = (playerCurrentTile.Item2 * 32) + 32;
                     }
 
-                    else if ((jstate.Buttons[(int)Buttons.DPadLeft] == ButtonState.Pressed) && (!TileMap.IsCollisionAbs(playerCurrentTile.Item1 - 1, playerCurrentTile.Item2) || (ignoreCollisions)))
+                    else if ((jstate.Buttons[(int)Buttons.DPadLeft] == ButtonState.Pressed || kstate.IsKeyDown(Keys.A)) && (!TileMap.IsCollisionAbs(playerCurrentTile.Item1 - 1, playerCurrentTile.Item2) || (ignoreCollisions)))
                     {
                         coordToTravelTo.X = (playerCurrentTile.Item1 * 32) - 32;
                     }
 
-                    else if ((jstate.Buttons[(int)Buttons.DPadRight] == ButtonState.Pressed) && (!TileMap.IsCollisionAbs(playerCurrentTile.Item1 + 1, playerCurrentTile.Item2) || (ignoreCollisions)))
+                    else if ((jstate.Buttons[(int)Buttons.DPadRight] == ButtonState.Pressed || kstate.IsKeyDown(Keys.D)) && (!TileMap.IsCollisionAbs(playerCurrentTile.Item1 + 1, playerCurrentTile.Item2) || (ignoreCollisions)))
                     {
                         coordToTravelTo.X = (playerCurrentTile.Item1 * 32) + 32;
                     }
@@ -141,7 +189,6 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
 
             return playerPosition;
         }   
-
 
     }
 }

@@ -22,6 +22,21 @@ namespace Monogame_Cross_Platform.Scripts
             {
                 menu.UpdateElements();
             }
+            if (Game1.activePlayerProjectiles.Count > 0)
+            {
+                for (int x = Game1.activePlayerProjectiles.Count - 1; x > -1; x--)
+                {
+                    Game1.activePlayerProjectiles[x].Update(true);
+                }
+            }
+            if (Game1.activeEnemyProjectiles.Count > 0)
+            {
+                for (int x = Game1.activeEnemyProjectiles.Count; x > -1; x--)
+                {
+                    Game1.activeEnemyProjectiles[x].Update(false);
+                }
+            }
+                
             for (int x = 0; x < Math.Sqrt(LevelGenerator.rooms.Length); x++)
             {
                 for (int y = 0; y < Math.Sqrt(LevelGenerator.rooms.Length); y++)
@@ -32,10 +47,17 @@ namespace Monogame_Cross_Platform.Scripts
         }
         public static void UpdateEntities(Player player)
         {
-            foreach (Entity entity in Game1.currentGameObjects)
+            if (Game1.currentGameObjects.Count > 0)
             {
-                entity.Update(player);
-                entity.UpdateAnimation();
+                for (int x = Game1.currentGameObjects.Count - 1; x > -1; x--)
+                {
+                    if (Game1.currentGameObjects[x] is Entity)
+                    {
+                        Entity entity = (Entity)Game1.currentGameObjects[x];
+                        entity.Update(player);
+                        entity.UpdateAnimation();
+                    }
+                }
             }
         }
     }

@@ -9,19 +9,22 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Tiles
     {
         public ushort textureIndex;
         public bool isBarrier;
-        public byte breakEffect;
+        public bool isBeingPathfoundTo;
+        public bool breakable;
 
-        public Tile(ushort textureIndex, bool isBarrier, byte breakEffect)
+        public Tile(ushort textureIndex, bool isBarrier, bool breakable)
         {
             this.textureIndex = textureIndex;
             this.isBarrier = isBarrier;
-            this.breakEffect = breakEffect;
+            this.breakable = breakable;
+            isBeingPathfoundTo = false;
         }
         public Tile()
         {
             textureIndex = 0;
             isBarrier = false;
-            breakEffect = 0;
+            breakable = false;
+            isBeingPathfoundTo = false;
         }
     }
 }

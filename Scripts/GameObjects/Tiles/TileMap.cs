@@ -8,7 +8,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Tiles
     internal static class TileMap
     {
         public static Tile[,] tileMap = new Tile[512,512];
-        public static Tile backgroundTile { get; private set; } = new Tile(0, false, 0);
+        public static Tile backgroundTile { get; private set; } = new Tile(0, false, false);
 
         /// <summary>
         /// Takes a posiiton of an entity and converts it to a position on the tilemap, centers the position assuming 32x32 texture
@@ -96,7 +96,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Tiles
             int sqrtTileMapLength = (int)Math.Sqrt(tileMap.Length);
             for (var y = startingTileY; y < endingTileY; y++)
             {
-                for (var x = startingTileX; x < endingTileY; x++)
+                for (var x = startingTileX; x < endingTileX; x++)
                 {
                     if (x > -1 && y > -1 && x < sqrtTileMapLength && y < sqrtTileMapLength)
                     {
@@ -148,7 +148,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Tiles
             }
         }
         /// <summary>
-        /// Checks if the entity hitbox collides with a tile hitbox, returns true if it collides
+        /// Checks if the entity hitbox collides with a tile hitbox or an entity at its abs position, returns true if it collides
         /// </summary>
         public static bool IsCollisionAbs(int tileX, int tileY)
         {
@@ -156,13 +156,33 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Tiles
             {
                 return true;
             }
-            if (tileMap[tileX, tileY].isBarrier)
+            if (tileMap[tileX, tileY].isBarrier || tileMap[tileX, tileY].isBeingPathfoundTo)
             {
                 return true;
             }
+            foreach (Entity entity in Game1.currentGameObjects)
+            {
+                (int entityX, int entityY) = PosToAbsTileMapPos(entity.position);
+                if (entity.isEnabled && (entityX, entityY) == (tileX, tileY))
+                {
+                    return true;
+                }
+            }
+
             return false;
         }
-        
+
+        public static void SetPathfindingModeOfTileAtCoord(float x, float y, bool mode)
+        {
+            (int tileX, int tileY) = PosToAbsTileMapPos(new Vector2(x, y));
+            tileMap[tileX, tileY].isBeingPathfoundTo = mode;
+        }
+        public static void SetPathfindingModeOfTile(int x, int y, bool mode)
+        {
+            tileMap[x, y].isBeingPathfoundTo = mode;
+        }
+
+
         public static bool DoesRaycastCollide(float targetPosTileX, float targetPosTileY, float sourcePosTileX, float sourcePosTileY)
         {
             //int bottomX = (int)Math.Min(targetPosTileX, sourcePosTileX);

@@ -11,9 +11,9 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
     /// </summary>
     internal class Player : Entity
     {
-        public int health;
         HandlePlayerInputs inputHandler = new HandlePlayerInputs();
         public bool isInLevelEditorMode = false;
+        private List<Weapon> weapons;
 
          public Player(int health, float entitySpeed, Vector2 startingTile, Hitboxes.Hitbox hitBox, ushort textureIndex) : base(entitySpeed, startingTile, textureIndex, hitBox, EntityMovement.AIType.none)
         {
@@ -21,7 +21,32 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
             isEnabled = true;
         }
 
-        public override void Move(Player _)
+        public override void Update(Player player)
+        {
+            if (isEnabled)
+            {
+                TakeAction(player);
+                activeWeapon.Update(inputHandler);
+
+                if (inputHandler.IsShooting())
+                    activeWeapon.Fire(position, true);
+
+                if (movingSpeed > 0)
+                {
+                    isMoving = true;
+                    animationHandler.SetAnimation(1);
+                    animationHandler.SetAnimationSpeed(1, (int)(20000 / movingSpeed));
+                }
+                else
+                {
+                    isMoving = false;
+                    animationHandler.SetAnimation(0);
+                }
+
+            }
+        }
+
+        public override void TakeAction(Player _)
         {
             if (!isInAbsMovementMode && isEnabled)
             {
@@ -44,7 +69,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
                     isMoving = false;
                 position = playerNewPos;
             }
-            else if(isEnabled)
+            else if(isEnabled && movesLeft > 0)
             {
                 Vector2 playerNewPos = inputHandler.GetPlayerTurnBasedMovement(position, Game1.gameTime, entitySpeed, movesLeft, isMoving, ignoresCollisions);
 

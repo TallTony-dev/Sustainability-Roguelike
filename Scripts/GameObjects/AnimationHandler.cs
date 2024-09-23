@@ -11,13 +11,13 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects
         public AnimationHandler(ushort textureIndex)
         {
             string animData = "error";
-            animData = File.ReadLines("Content/AnimationData.txt").Skip((textureIndex - ContentList.animationIndexOffset) * 2).Take(1).First();
+            animData = File.ReadLines("Content/AnimationData.txt").Skip((textureIndex) * 2).Take(1).First();
 
             string[] animationsSplit = animData.Split(",");
             foreach (string animation in animationsSplit)
             {
                 string[] tokens = animation.Split("-");
-                animations.Add((Convert.ToInt32(tokens[0]), Convert.ToInt32(tokens[1]), Convert.ToUInt16(tokens[2])));
+                animations.Add((Convert.ToInt32(tokens[0]), Convert.ToInt32(tokens[1]), (ushort)(Convert.ToUInt16(tokens[2]) - ContentList.animationIndexOffset)));
             }
         }
         public void SetAnimationSpeed(int animationIndex, int newMSPerFrame)
@@ -31,6 +31,19 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects
             {
                 currentAnimationIndex = animationIndex;
                 timeWhenStartedAnim = Game1.gameTime.TotalGameTime.TotalMilliseconds;
+            }
+        }
+        public void SetAnimationData(ushort animationDatatxtIndex)
+        {
+            animations.Clear();
+            string animData = "error";
+            animData = File.ReadLines("Content/AnimationData.txt").Skip((animationDatatxtIndex) * 2).Take(1).First();
+
+            string[] animationsSplit = animData.Split(",");
+            foreach (string animation in animationsSplit)
+            {
+                string[] tokens = animation.Split("-");
+                animations.Add((Convert.ToInt32(tokens[0]), Convert.ToInt32(tokens[1]), (ushort)(Convert.ToUInt16(tokens[2]) - ContentList.animationIndexOffset)));
             }
         }
 
