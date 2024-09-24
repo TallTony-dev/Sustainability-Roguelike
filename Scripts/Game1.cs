@@ -82,8 +82,7 @@ namespace Monogame_Cross_Platform.Scripts
             UpdateThings.UpdateLevel(levelEditor, player);
             UpdateThings.UpdateEntities(player);
 
-            MouseState mstate = new MouseState(); //TEMP
-            debugText = mstate.X.ToString() + mstate.Y.ToString(); //TEMP
+            debugText = player.health.ToString(); //TEMP
 
             camera.Follow(player);
             Settings.UpdateZoom();

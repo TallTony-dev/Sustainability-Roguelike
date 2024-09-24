@@ -35,19 +35,19 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         public void AddToDrawBuffer(Entity entity, SpriteEffects spriteEffect)
         {
             (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(entity.textureIndex);
-            spriteBatch.Draw(texture, entity.position, rectangle, Color.White, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, spriteEffect, 0.3f);
+            spriteBatch.Draw(texture, entity.position, rectangle, Color.White, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, spriteEffect, 0.03f);
 
             (Texture2D weaponTexture, Rectangle weaponRectangle) = ContentLoader.GetLoadedTileTexture(entity.activeWeapon.textureIndex);
-            spriteBatch.Draw(weaponTexture, new Vector2(entity.position.X, entity.position.Y + 8), weaponRectangle, Color.White, entity.activeWeapon.aimAngle, new Vector2(rectangle.Width / 2, rectangle.Height / 2), new Vector2(0.5f, 0.5f), spriteEffect, 0.2f);
+            spriteBatch.Draw(weaponTexture, new Vector2(entity.position.X, entity.position.Y + 8), weaponRectangle, Color.White, entity.activeWeapon.aimAngle, new Vector2(rectangle.Width / 2, rectangle.Height / 2), new Vector2(0.5f, 0.5f), spriteEffect, 0.02f);
         }
         public void AddToDrawBuffer(Tile tile, int tileMapX, int tileMapY)
         {
             (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(tile.textureIndex);
             //really temp for testing only
             if (!TileMap.tileMap[tileMapX,tileMapY].isBeingPathfoundTo)
-                spriteBatch.Draw(texture, new Vector2(tileMapX * 32, tileMapY * 32), rectangle, Color.Blue, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0.4f);
+                spriteBatch.Draw(texture, new Vector2(tileMapX * 32, tileMapY * 32), rectangle, Color.Blue, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0.04f);
             else
-                spriteBatch.Draw(texture, new Vector2(tileMapX * 32, tileMapY * 32), rectangle, Color.White, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0.4f);
+                spriteBatch.Draw(texture, new Vector2(tileMapX * 32, tileMapY * 32), rectangle, Color.White, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0.04f);
         }
         public void AddToUiBuffer(List<HUD.Menu> menus)
         {
@@ -81,7 +81,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             foreach (Projectile projectile in gameObjectList)
             {
                 (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(projectile.textureIndex);
-                spriteBatch.Draw(texture, projectile.position, rectangle, Color.White, projectile.travelAngle, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0.2f);
+                spriteBatch.Draw(texture, projectile.position, rectangle, Color.White, projectile.travelAngle, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0.02f);
             }
         }
 

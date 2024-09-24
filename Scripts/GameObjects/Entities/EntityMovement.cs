@@ -87,7 +87,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             this.aiType = aiType;
         }
 
-        public float DistanceBetween (Vector2 point1, Vector2 point2)
+        public static float DistanceBetween (Vector2 point1, Vector2 point2)
         {
             return (float)Math.Sqrt(Math.Pow(point1.X - point2.X, 2) + Math.Pow(point1.Y - point2.Y, 2));
         }
@@ -113,7 +113,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             float distanceBetween = DistanceBetween(new Vector2(playerTileX, playerTileY), new Vector2(entityTileX, entityTileY));
 
 
-            if (distanceBetween >= attackRange + 1 || distanceBetween <= attackRange - 0.2)
+            if (distanceBetween >= attackRange + 1 || distanceBetween <= attackRange - 0.2 || TileMap.DoesRaycastCollide(playerTileX, playerTileY, entityTileX, entityTileY, 30, 30))
             {
                 if (pointsToTravelThrough.Count == 0 && Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenPathfound > 0.25)
                 {
@@ -227,7 +227,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
 
                                     //if its in range and a raycast from there wouldn't collide with a tile NOT IMPLEMENTED
                                     float tileDistanceBetweenTileAndPlayer = DistanceBetween(new Vector2(playerTileX, playerTileY), new Vector2(checkedX + x, checkedY + y));
-                                    if (tileDistanceBetweenTileAndPlayer <= attackRange + 1 && tileDistanceBetweenTileAndPlayer >= attackRange - 0.2 && !TileMap.DoesRaycastCollide(playerTileX, playerTileY, checkedX + x, checkedY + y))
+                                    if (tileDistanceBetweenTileAndPlayer <= attackRange + 1 && tileDistanceBetweenTileAndPlayer >= attackRange - 0.2 && !TileMap.DoesRaycastCollide(playerTileX, playerTileY, checkedX + x, checkedY + y, 30, 30))
                                     {
                                         exitLoop = true;
                                     }

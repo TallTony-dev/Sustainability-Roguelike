@@ -31,7 +31,7 @@ namespace Monogame_Cross_Platform.Scripts
             }
             if (Game1.activeEnemyProjectiles.Count > 0)
             {
-                for (int x = Game1.activeEnemyProjectiles.Count; x > -1; x--)
+                for (int x = Game1.activeEnemyProjectiles.Count - 1; x > -1; x--)
                 {
                     Game1.activeEnemyProjectiles[x].Update(false);
                 }

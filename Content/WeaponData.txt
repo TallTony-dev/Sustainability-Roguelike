@@ -1,4 +1,4 @@
-﻿1,0,0,0,10,20,20,0.2
-^melee (attackrange, textureIndex, projectileSpeed, lifespan, damage, hitboxWidth, hitboxHeight, fireRate in seconds)
-4,32,300,0.5,20,20,10,0.2
+﻿1,0,0,0.2,10,20,20,0.2,2
+^melee (attackrange, textureIndex, projectileSpeed, lifespan, damage, hitboxWidth, hitboxHeight, fireRate in seconds, animindex)
+4,32,300,0.5,20,20,10,0.2,3
 ^short ranged

@@ -10,7 +10,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Enemy
     internal class Enemy : Entities.Entity
     {
 
-        public Enemy(ushort enemyIndex, Vector2 startingPos) : base(1, new Vector2(1,1), 0, new Hitboxes.Hitbox(0,0,0,0), EntityMovement.AIType.enemy)
+        public Enemy(ushort enemyIndex, Vector2 startingPos) : base(1, new Vector2(1,1), 0, new Hitboxes.Hitbox(0,0,0,0), EntityMovement.AIType.enemy, 1)
         {
             string enemyData = "error";
             enemyData = File.ReadLines("Content/EnemyData.txt").Skip((enemyIndex) * 2).Take(1).First();

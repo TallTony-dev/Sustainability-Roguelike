@@ -1,3 +1,8 @@
 ﻿300-5-1, 100-7-16
 ^msPerFrame,frames,startingIndex
 300-5-32, 100-7-32
+^thing
+40-5-1
+^melee weaponAnim
+200-5-32
+^ranged weaponAnim

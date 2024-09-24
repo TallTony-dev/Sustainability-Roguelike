@@ -183,25 +183,47 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Tiles
         }
 
 
-        public static bool DoesRaycastCollide(float targetPosTileX, float targetPosTileY, float sourcePosTileX, float sourcePosTileY)
+        public static bool DoesRaycastCollide(float targetPosTileX, float targetPosTileY, float sourcePosTileX, float sourcePosTileY, float width, float height)
         {
-            //int bottomX = (int)Math.Min(targetPosTileX, sourcePosTileX);
-            //int topX = (int)Math.Max(targetPosTileX, sourcePosTileX);
-            //int bottomY = (int)Math.Min(targetPosTileY, sourcePosTileY);
-            //int topY = (int)Math.Max(targetPosTileY, sourcePosTileY);
-            //for (int x = bottomX; x < topX; x++)
-            //{
-            //    for (int y = bottomY; y < topY; y++)
-            //    {
-            //        if (tileMap[x,y].isBarrier)
-            //        {
-            //            (_, Hitboxes.Hitbox hitbox) = GetTileBounds(x, y);
-                        
-            //        }
-            //    }
-            //}
+            int bottomX = (int)Math.Round(Math.Min(targetPosTileX, sourcePosTileX));
+            int topX = (int)Math.Round(Math.Max(targetPosTileX, sourcePosTileX));
+            int bottomY = (int)Math.Round(Math.Min(targetPosTileY, sourcePosTileY));
+            int topY = (int)Math.Round(Math.Max(targetPosTileY, sourcePosTileY));
+            float deltaY = Math.Abs(targetPosTileY - sourcePosTileY);
+            float deltaX = Math.Abs(targetPosTileX - sourcePosTileX);
 
-            //throw new NotImplementedException();
+
+            float slope = (targetPosTileY * 32 - sourcePosTileY * 32) / (targetPosTileX * 32 - sourcePosTileX * 32);
+            float b = (targetPosTileY * 32 - slope * targetPosTileX * 32);
+
+            for (int x = bottomX - 1; x < topX + 1; x++)
+            {
+                for (int y = bottomY - 1; y < topY + 1; y++)
+                {
+                    if (tileMap[x, y].isBarrier)
+                    {
+                        (_, Hitboxes.Hitbox hitbox) = GetTileBounds(x, y);
+
+                        //if its more horizontal than vertical, then check every x and calculate y, otherwise invert that
+                        (float tileCoordX, float tileCoordY) = TileMapPosToPos(x, y);
+
+                        if (deltaX > deltaY)
+                        {
+                            if (hitbox.Intersects(new Hitboxes.Hitbox(tileCoordX, slope * tileCoordX + b, width, height)))
+                            {
+                                return true;
+                            }
+                        }
+                        else
+                        {
+                            if (hitbox.Intersects(new Hitboxes.Hitbox((tileCoordY - b) / slope, tileCoordY, width, height)))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
             return false;
         }
 

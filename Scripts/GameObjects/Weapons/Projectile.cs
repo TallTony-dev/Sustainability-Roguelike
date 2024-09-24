@@ -12,11 +12,13 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
         private float speed { get; set; }
         public Vector2 position { get; set; }
         private int damage;
-        public ushort textureIndex { get; }
+        public ushort textureIndex { get; private set; }
         private float lifespan;
         public Hitboxes.Hitbox hitBox;
         private double timeCreated;
-        public Projectile(float travelAngle, float speed, int damage, Vector2 startingPosition, ushort textureIndex, float lifespan, int hitBoxWidth, int hitBoxHeight)
+
+        public AnimationHandler animationHandler;
+        public Projectile(float travelAngle, float speed, int damage, Vector2 startingPosition, ushort textureIndex, float lifespan, int hitBoxWidth, int hitBoxHeight, ushort ?animationIndex)
         {
             this.travelAngle = travelAngle;
             this.speed = speed;
@@ -26,6 +28,8 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
             this.damage = damage;
             hitBox = new Hitboxes.Hitbox(startingPosition.X, startingPosition.Y,hitBoxWidth,hitBoxHeight);
             timeCreated = Game1.gameTime.TotalGameTime.TotalSeconds;
+            if (animationIndex != null)
+                animationHandler = new AnimationHandler((ushort)animationIndex);
         }
 
         public void Update(bool isPlayerProjectile)
@@ -36,52 +40,58 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
             position = new Vector2(newXPos, newYPos);
             hitBox.xPos = newXPos;
             hitBox.yPos = newYPos;
-            bool destroy = false;
 
-            for(int x = -1; x < 2; x++)
+            textureIndex = animationHandler.Update();
+
+            if (Game1.gameTime.TotalGameTime.TotalSeconds - timeCreated > lifespan - speed)
             {
-                for (int y = -1; y < 2; y++)
+                bool destroyed = false;
+
+                for (int x = -1; x < 2; x++)
                 {
-                    (int tileX, int tileY) = TileMap.PosToAbsTileMapPos(position);
-                    if (hitBox.Intersects(TileMap.GetTileBounds(tileX, tileY).Item2))
+                    for (int y = -1; y < 2; y++)
                     {
-                        destroy = true;
+                        (int tileX, int tileY) = TileMap.PosToAbsTileMapPos(position);
+                        if (!destroyed && hitBox.Intersects(TileMap.GetTileBounds(tileX, tileY).Item2))
+                        {
+                            destroyed = true;
+                        }
                     }
                 }
-            }
 
-            if (!destroy && isPlayerProjectile)
-            {
-                foreach (Entity entity in Game1.currentGameObjects)
+                if (!destroyed && isPlayerProjectile)
                 {
-                    if (entity.isEnabled && hitBox.Intersects(entity.hitBox) && !(entity is Player))
+                    foreach (Entity entity in Game1.currentGameObjects)
                     {
-                        entity.health -= damage;
-                        destroy = true;
+                        if (!destroyed && entity.isEnabled && hitBox.Intersects(entity.hitBox) && !(entity is Player))
+                        {
+                            entity.health -= damage;
+                            destroyed = true;
+                        }
                     }
                 }
-            }
-            else if (!destroy)
-            {
-                foreach (Entity entity in Game1.currentGameObjects)
+                else if (!destroyed)
                 {
-                    if (entity is Player && entity.isEnabled && hitBox.Intersects(entity.hitBox))
+                    foreach (Entity entity in Game1.currentGameObjects)
                     {
-                        entity.health -= damage;
-                        destroy = true;
+                        if (!destroyed && entity is Player && entity.isEnabled && hitBox.Intersects(entity.hitBox))
+                        {
+                            entity.health -= damage;
+                            destroyed = true;
+                        }
                     }
                 }
-            }
 
-            if (Game1.gameTime.TotalGameTime.TotalSeconds - timeCreated > lifespan) //CAN BE OPTIMIZED HERE
-            {
-                destroy = true;
-            }
+                if (Game1.gameTime.TotalGameTime.TotalSeconds - timeCreated > lifespan) //CAN BE OPTIMIZED HERE
+                {
+                    destroyed = true;
+                }
 
 
-            if (destroy)
-            {
-                Destroy(isPlayerProjectile);
+                if (destroyed)
+                {
+                    Destroy(isPlayerProjectile);
+                }
             }
         }
 

@@ -30,13 +30,13 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
 
 
         
-        public Entity(float entitySpeed, Vector2 startingTile, ushort animationIndex, Hitbox hitBox, EntityMovement.AIType aiType) : base(animationIndex, startingTile)
+        public Entity(float entitySpeed, Vector2 startingTile, ushort animationIndex, Hitbox hitBox, EntityMovement.AIType aiType, int health) : base(animationIndex, startingTile)
         {
             this.entitySpeed = entitySpeed;
             entityMovement = new EntityMovement(aiType);
             this.hitBox = hitBox;
             this.aiType = aiType;
-            
+            this.health = health;
             activeWeapon = new Weapon(1); //TEMP
         }
         public void Destroy()
@@ -58,7 +58,6 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             if (isEnabled)
             {
                 TakeAction(player);
-                activeWeapon.Update(player.position, position);
 
                 if (movingSpeed > 0)
                 {
@@ -79,8 +78,9 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             if (!isInAbsMovementMode)
             {
                 Vector2 entityNewPos = entityMovement.GetNormalPathfindingMovement(activeWeapon.attackRange, position, entitySpeed, aiType, playerToFollow);
-
                 hitBox.UpdatePosition(entityNewPos.X, entityNewPos.Y);
+
+                activeWeapon.Update(playerToFollow.position, position);
 
                 //checks if should be flipped
                 if (entityNewPos.X > position.X)
@@ -90,7 +90,11 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                 
                 //checks if moving for animations
                 movingSpeed = (Math.Abs(entityNewPos.X - position.X) + Math.Abs(entityNewPos.Y - position.Y)) * Game1.gameTime.ElapsedGameTime.Milliseconds;
-
+                (int playerTileX, int playerTileY) = TileMap.PosToAbsTileMapPos(playerToFollow.position);
+                (int entityTileX, int entityTileY) = TileMap.PosToAbsTileMapPos(entityNewPos);
+                float distanceBetween = EntityMovement.DistanceBetween(new Vector2(playerTileX, playerTileY), new Vector2(entityTileX, entityTileY));
+                if (distanceBetween < activeWeapon.attackRange + 1.4)
+                    activeWeapon.Fire(entityNewPos, false);
                 position = entityNewPos;
             }
             else if (movesLeft > 0)

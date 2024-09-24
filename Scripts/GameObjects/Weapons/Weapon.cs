@@ -15,7 +15,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
 
 
 
-
+        private ushort animIndex;
         public int attackRange { get; set; }
         public float fireRate;
 
@@ -29,17 +29,19 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
         internal float aimAngle { get; set; }
         internal double timeWhenShot;
 
-        public void Fire(Vector2 startingPos, bool isPlayer)
+        public void Fire(Vector2 entityPos, bool isPlayer)
         {
             if (Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenShot > fireRate)
             {
+                entityPos.X += 32 * (float)Math.Cos(aimAngle);
+                entityPos.Y += 32 * (float)Math.Sin(aimAngle);
                 if (isPlayer)
                 {
-                    Game1.activePlayerProjectiles.Add(new Projectile(aimAngle, projectileSpeed, damage, startingPos, textureIndex, lifespan, projWidth, projHeight));
+                    Game1.activePlayerProjectiles.Add(new Projectile(aimAngle, projectileSpeed, damage, entityPos, textureIndex, lifespan, projWidth, projHeight, animIndex));
                 }
                 else
                 {
-                    Game1.activeEnemyProjectiles.Add(new Projectile(aimAngle, projectileSpeed, damage, startingPos, textureIndex, lifespan, projWidth, projHeight));
+                    Game1.activeEnemyProjectiles.Add(new Projectile(aimAngle, projectileSpeed, damage, entityPos, textureIndex, lifespan, projWidth, projHeight, animIndex));
                 }
 
                 timeWhenShot = Game1.gameTime.TotalGameTime.TotalSeconds;
@@ -55,9 +57,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
             float y = (targetPos.Y - entityPos.Y);
             float x = (targetPos.X - entityPos.X);
             if (Math.Abs(x) > 0 && Math.Abs(y) > 0)
-                aimAngle = (float)(Math.Atan(y / x));
-            else
-                aimAngle = 0;
+                aimAngle = (float)(Math.Atan2(y, x));
         }
 
         /// <summary>
@@ -66,7 +66,6 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
         public void Update(HandlePlayerInputs inputHandler)
         {
             aimAngle = inputHandler.GetShootingAngle();
-
         }
 
         public Weapon(ushort weaponIndex)
@@ -82,6 +81,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
             projWidth = Convert.ToInt32(tokens[5]);
             projHeight = Convert.ToInt32(tokens[6]);
             fireRate = Convert.ToSingle(tokens[7]);
+            animIndex = Convert.ToUInt16(tokens[8]);
         }
     }
 }

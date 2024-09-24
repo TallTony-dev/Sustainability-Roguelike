@@ -15,9 +15,8 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
         public bool isInLevelEditorMode = false;
         private List<Weapon> weapons;
 
-         public Player(int health, float entitySpeed, Vector2 startingTile, Hitboxes.Hitbox hitBox, ushort textureIndex) : base(entitySpeed, startingTile, textureIndex, hitBox, EntityMovement.AIType.none)
+         public Player(int health, float entitySpeed, Vector2 startingTile, Hitboxes.Hitbox hitBox, ushort textureIndex) : base(entitySpeed, startingTile, textureIndex, hitBox, EntityMovement.AIType.none, health)
         {
-            this.health = health;
             isEnabled = true;
         }
 
