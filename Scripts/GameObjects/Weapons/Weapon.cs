@@ -38,6 +38,9 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
                 if (isPlayer)
                 {
                     Game1.activePlayerProjectiles.Add(new Projectile(aimAngle, projectileSpeed, damage, entityPos, textureIndex, lifespan, projWidth, projHeight, animIndex, weaponType));
+                    float xTrans = (float)Math.Cos(aimAngle) * damage * projectileSpeed / 3000f;
+                    float yTrans = (float)Math.Sin(aimAngle) * damage * projectileSpeed / 3000f;
+                    Game1.camera.cameraAnimationsToPlay.Add((xTrans, yTrans, 0.2f));
                 }
                 else
                 {
@@ -63,9 +66,9 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
         /// <summary>
         /// Use only with the player to update
         /// </summary>
-        public void Update(HandlePlayerInputs inputHandler)
+        public void Update(HandlePlayerInputs inputHandler, Vector2 playerPos)
         {
-            aimAngle = inputHandler.GetShootingAngle();
+            aimAngle = inputHandler.GetShootingAngle(playerPos);
         }
 
         public Weapon(ushort weaponIndex)

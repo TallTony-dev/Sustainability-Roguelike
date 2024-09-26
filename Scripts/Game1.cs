@@ -72,19 +72,32 @@ namespace Monogame_Cross_Platform.Scripts
 
         }
 
+        double timeWhenPaused = 0;
         protected override void Update(GameTime _gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             gameTime = _gameTime;
             // TODO: Add your update logic here
+            if (Keyboard.GetState().IsKeyDown(Keys.Y) && !TurnManager.isPaused && gameTime.TotalGameTime.TotalSeconds - timeWhenPaused > 0.5)
+            {
+                TurnManager.PauseGame(player);
+                timeWhenPaused = gameTime.TotalGameTime.TotalSeconds;
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.Y) && TurnManager.isPaused && gameTime.TotalGameTime.TotalSeconds - timeWhenPaused > 0.5)
+            {
+                TurnManager.ResumeGame(player);
+                timeWhenPaused = gameTime.TotalGameTime.TotalSeconds;
+            }
 
+
+            camera.Update();
             UpdateThings.UpdateLevel(levelEditor, player);
             UpdateThings.UpdateEntities(player);
 
             debugText = player.health.ToString(); //TEMP
 
-            camera.Follow(player);
+            
             Settings.UpdateZoom();
 
             base.Update(gameTime);

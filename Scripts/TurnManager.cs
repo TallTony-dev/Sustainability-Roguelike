@@ -12,9 +12,12 @@ namespace Monogame_Cross_Platform.Scripts
         internal static bool isInComboMode = false;
         internal static bool isPlayerTurn = true;
         internal static bool isInGame = true;
+        public static bool isPaused = false;
 
         public static void Update(Player player)
         {
+
+
             Room room = LevelGenerator.PosToRoom(player.position);
             if (!isInComboMode)
             {
@@ -44,6 +47,7 @@ namespace Monogame_Cross_Platform.Scripts
                 projectile.isEnabled = false;
             }
             player.isEnabled = false;
+            isPaused = true;
         }
         /// <summary>
         /// Should resume all functions in the game
@@ -63,6 +67,7 @@ namespace Monogame_Cross_Platform.Scripts
                 gameObject.isEnabled = true;
             }
             player.isEnabled = true;
+            isPaused = false;
         }
     }
 }

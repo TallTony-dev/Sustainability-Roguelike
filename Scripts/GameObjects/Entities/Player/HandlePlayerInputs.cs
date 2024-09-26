@@ -17,7 +17,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
 
         
 
-        public float GetShootingAngle()
+        public float GetShootingAngle(Vector2 playerPos)
         {
             float angle = 0;
             var mstate = Mouse.GetState();
@@ -40,8 +40,10 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
             }
             else
             {
-                y = (mstate.Position.Y - Settings.resolutionHeight / 2);
-                x = (mstate.Position.X - Settings.resolutionWidth / 2);
+                var playerScreenPos = Vector2.Transform(playerPos, Game1.camera.Transform);
+                y = ((mstate.Position.Y - (playerScreenPos.Y - Settings.resolutionHeight / 2)) - Settings.resolutionHeight / 2);
+                x = ((mstate.Position.X - (playerScreenPos.X - Settings.resolutionWidth / 2)) - Settings.resolutionWidth / 2);
+                
             }
 
             if (Math.Abs(x) > 0 || Math.Abs(y) > 0)

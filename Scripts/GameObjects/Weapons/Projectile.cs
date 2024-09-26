@@ -14,9 +14,9 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
         public Vector2 position { get; set; }
         private int damage;
         public ushort textureIndex { get; private set; }
+        private double lifespanRemaining;
         private float lifespan;
         public Hitboxes.Hitbox hitBox;
-        private double timeCreated;
 
         public bool isEnabled = true;
         private bool destroyed = false;
@@ -30,9 +30,9 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
             position = startingPosition;
             this.textureIndex = textureIndex;
             this.lifespan = lifespan;
+            lifespanRemaining = lifespan;
             this.damage = damage;
             hitBox = new Hitboxes.Hitbox(startingPosition.X, startingPosition.Y,hitBoxWidth,hitBoxHeight);
-            timeCreated = Game1.gameTime.TotalGameTime.TotalSeconds;
             if (animationIndex != null)
                 animationHandler = new AnimationHandler((ushort)animationIndex);
             this.weaponType = weaponType;
@@ -48,10 +48,10 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
                 position = new Vector2(newXPos, newYPos);
                 hitBox.xPos = newXPos;
                 hitBox.yPos = newYPos;
+                lifespanRemaining -= Game1.gameTime.ElapsedGameTime.TotalSeconds;
 
                 textureIndex = animationHandler.Update();
 
-                destroyed = false;
                 if (!destroyed)
                 {
                     for (int x = -1; x < 2; x++)
@@ -59,7 +59,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
                         for (int y = -1; y < 2; y++)
                         {
                             (int tileX, int tileY) = TileMap.PosToAbsTileMapPos(position);
-                            if (!destroyed && hitBox.Intersects(TileMap.GetTileBounds(tileX, tileY).Item2))
+                            if (hitBox.Intersects(TileMap.GetTileBounds(tileX, tileY).Item2))
                             {
                                 destroyed = true;
                             }
@@ -89,14 +89,14 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
                         }
                     }
 
-                    if (Game1.gameTime.TotalGameTime.TotalSeconds - timeCreated > lifespan)
+                    if (lifespanRemaining < 0)
                     {
                         destroyed = true;
                     }
                 }
                 
 
-                if (weaponType != "melee" || Game1.gameTime.TotalGameTime.TotalSeconds - timeCreated > lifespan - speed)
+                if (weaponType != "melee" || 0.1 > lifespanRemaining)
                 {
                     if (destroyed)
                     {

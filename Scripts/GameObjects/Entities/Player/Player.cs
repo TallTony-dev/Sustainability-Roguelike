@@ -15,6 +15,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
         public bool isInLevelEditorMode = false;
         private List<Weapon> weapons = new List<Weapon>();
         short activeWeaponIndex = 0;
+        Vector2 entityToFollowPos;
 
          public Player(int health, float entitySpeed, Vector2 startingTile, Hitboxes.Hitbox hitBox, ushort textureIndex) : base(entitySpeed, startingTile, textureIndex, hitBox, EntityMovement.AIType.none, health)
         {
@@ -27,13 +28,32 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
 
         public override void Update(Player player)
         {
+            if (ContentManagers.Camera.Camera.IsLocked)
+                Game1.camera.Follow(this);
+            else
+            {
+                if (Level.LevelGenerator.PosToRoom(position).gameObjects.Count != 0)
+                {
+                    foreach (Entity entity in Level.LevelGenerator.PosToRoom(position).gameObjects)
+                    {
+                        if (Vector2.Distance(position, entity.position) < Vector2.Distance(position, entityToFollowPos))
+                        {
+                            entityToFollowPos = entity.position;
+                        }
+                    }
+                    Game1.camera.Follow(position, entityToFollowPos);
+                }
+                else
+                    ContentManagers.Camera.Camera.IsLocked = true;
+            }
             if (isEnabled)
             {
+
                 TakeAction(player);
 
                 activeWeaponIndex = inputHandler.GetWeaponIndex(activeWeaponIndex, weapons.Count);
                 activeWeapon = weapons[activeWeaponIndex];
-                activeWeapon.Update(inputHandler);
+                activeWeapon.Update(inputHandler, player.position);
 
                 if (inputHandler.IsShooting())
                     activeWeapon.Fire(position, true);

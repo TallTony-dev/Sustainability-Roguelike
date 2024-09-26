@@ -11,11 +11,37 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers.Camera
         float xToMove = 0;
         float yToMove = 0;
         bool isFirstPass = true;
-        public void Scale(float scale)
+        public List<(float deltaX, float deltaY, float timeRemaining)> cameraAnimationsToPlay = new List<(float deltaX, float deltaY, float timeRemaining)>();
+
+        private double timeWhenCameraLocked = 0;
+        public static bool IsLocked = true;
+        public void Update()
         {
-            Transform = Matrix.CreateScale(scale);
+            if (cameraAnimationsToPlay.Count > 0)
+            {
+                for (var x = cameraAnimationsToPlay.Count - 1; x >= 0; x--)
+                {
+                    var animation = cameraAnimationsToPlay[x];
+                    xToMove += animation.deltaX * (1 / (float)(animation.timeRemaining - Game1.gameTime.ElapsedGameTime.TotalSeconds + 0.5)) / 10f;
+                    yToMove += animation.deltaY * (1 / (float)(animation.timeRemaining - Game1.gameTime.ElapsedGameTime.TotalSeconds + 0.5)) / 10f;
+                    cameraAnimationsToPlay[x] = (animation.deltaX, animation.deltaY, animation.timeRemaining - (float)Game1.gameTime.ElapsedGameTime.TotalSeconds);
+                    if (animation.timeRemaining < 0)
+                        cameraAnimationsToPlay.RemoveRange(x, 1);
+                }
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Q) && !TurnManager.isPaused && Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenCameraLocked > 0.5 && !IsLocked)
+            {
+                IsLocked = true;
+                timeWhenCameraLocked = Game1.gameTime.TotalGameTime.TotalSeconds;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.Q) && !TurnManager.isPaused && Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenCameraLocked > 0.5 && IsLocked)
+            {
+                IsLocked = false;
+                timeWhenCameraLocked = Game1.gameTime.TotalGameTime.TotalSeconds;
+            }
         }
-        public void Follow(GameObjects.Entities.Entity target)
+        public void Follow(Entity target)
         {
             if (isFirstPass)
             {
@@ -35,18 +61,17 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers.Camera
 
             Transform = position * offset * (zoom);
         }
-        public void Follow(GameObjects.Entities.Entity target, GameObjects.Entities.Entity target2)
+        public void Follow(Vector2 target, Vector2 target2)
         {
-            throw new NotImplementedException();
             //This should place the camera in between two entities for bossfights, etc
             if (isFirstPass)
             {
-                xToMove = -target.position.X;
-                yToMove = -target.position.Y;
+                xToMove = (-target.X / 2 - target2.X / 2);
+                yToMove = (-target.Y / 2 - target2.Y / 2);
                 isFirstPass = false;
             }
-            xToMove += (-target.position.X - xToMove)/5f;
-            yToMove += (-target.position.Y - yToMove)/5f;
+            xToMove += ((-target.X / 2 - target2.X / 2) - xToMove)/5f;
+            yToMove += ((-target.Y / 2 - target2.Y / 2) - yToMove)/5f;
             
             var position = Matrix.CreateTranslation(xToMove, yToMove, 0);
             var offset = Matrix.CreateTranslation(
