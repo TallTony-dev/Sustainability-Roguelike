@@ -63,13 +63,16 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
         }
         public static void UpdateZoom()
         {
-            MouseState newMouseState = Mouse.GetState();
-            int deltaScroll = newMouseState.ScrollWheelValue - mstate.ScrollWheelValue;
-            if (deltaScroll > 0 && zoomLevel < 4)
-                zoomLevel += 0.06f * (zoomLevel);
-            else if (deltaScroll < 0 && zoomLevel > 2)
-                zoomLevel -= 0.06f * (zoomLevel);
-            mstate = newMouseState;
+            if (Keyboard.GetState().IsKeyDown(Keys.LeftShift))
+            {
+                MouseState newMouseState = Mouse.GetState();
+                int deltaScroll = newMouseState.ScrollWheelValue - mstate.ScrollWheelValue;
+                if (deltaScroll > 0 && zoomLevel < 4)
+                    zoomLevel += 0.06f * (zoomLevel);
+                else if (deltaScroll < 0 && zoomLevel > 2)
+                    zoomLevel -= 0.06f * (zoomLevel);
+                mstate = newMouseState;
+            }
         }   
     }
 }

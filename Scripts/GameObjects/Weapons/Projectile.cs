@@ -8,6 +8,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
 {
     internal class Projectile
     {
+        string weaponType;
         public float travelAngle { get; private set; }
         private float speed { get; set; }
         public Vector2 position { get; set; }
@@ -17,8 +18,12 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
         public Hitboxes.Hitbox hitBox;
         private double timeCreated;
 
+        public bool isEnabled = true;
+        private bool destroyed = false;
+        private bool isReplica = false;
+
         public AnimationHandler animationHandler;
-        public Projectile(float travelAngle, float speed, int damage, Vector2 startingPosition, ushort textureIndex, float lifespan, int hitBoxWidth, int hitBoxHeight, ushort ?animationIndex)
+        public Projectile(float travelAngle, float speed, int damage, Vector2 startingPosition, ushort textureIndex, float lifespan, int hitBoxWidth, int hitBoxHeight, ushort ?animationIndex, string weaponType)
         {
             this.travelAngle = travelAngle;
             this.speed = speed;
@@ -30,78 +35,114 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
             timeCreated = Game1.gameTime.TotalGameTime.TotalSeconds;
             if (animationIndex != null)
                 animationHandler = new AnimationHandler((ushort)animationIndex);
+            this.weaponType = weaponType;
         }
 
         public void Update(bool isPlayerProjectile)
         {
-            float updatedProjectileSpeed = (float)(speed * Game1.gameTime.ElapsedGameTime.TotalSeconds);
-            float newXPos = position.X + (float)Math.Cos(travelAngle) * updatedProjectileSpeed;
-            float newYPos = position.Y + (float)Math.Sin(travelAngle) * updatedProjectileSpeed;
-            position = new Vector2(newXPos, newYPos);
-            hitBox.xPos = newXPos;
-            hitBox.yPos = newYPos;
-
-            textureIndex = animationHandler.Update();
-
-            if (Game1.gameTime.TotalGameTime.TotalSeconds - timeCreated > lifespan - speed)
+            if (isEnabled)
             {
-                bool destroyed = false;
+                float updatedProjectileSpeed = (float)(speed * Game1.gameTime.ElapsedGameTime.TotalSeconds);
+                float newXPos = position.X + (float)Math.Cos(travelAngle) * updatedProjectileSpeed;
+                float newYPos = position.Y + (float)Math.Sin(travelAngle) * updatedProjectileSpeed;
+                position = new Vector2(newXPos, newYPos);
+                hitBox.xPos = newXPos;
+                hitBox.yPos = newYPos;
 
-                for (int x = -1; x < 2; x++)
+                textureIndex = animationHandler.Update();
+
+                destroyed = false;
+                if (!destroyed)
                 {
-                    for (int y = -1; y < 2; y++)
+                    for (int x = -1; x < 2; x++)
                     {
-                        (int tileX, int tileY) = TileMap.PosToAbsTileMapPos(position);
-                        if (!destroyed && hitBox.Intersects(TileMap.GetTileBounds(tileX, tileY).Item2))
+                        for (int y = -1; y < 2; y++)
                         {
-                            destroyed = true;
+                            (int tileX, int tileY) = TileMap.PosToAbsTileMapPos(position);
+                            if (!destroyed && hitBox.Intersects(TileMap.GetTileBounds(tileX, tileY).Item2))
+                            {
+                                destroyed = true;
+                            }
                         }
                     }
-                }
 
-                if (!destroyed && isPlayerProjectile)
-                {
-                    foreach (Entity entity in Game1.currentGameObjects)
+                    if (isPlayerProjectile)
                     {
-                        if (!destroyed && entity.isEnabled && hitBox.Intersects(entity.hitBox) && !(entity is Player))
+                        foreach (Entity entity in Game1.currentGameObjects)
                         {
-                            entity.health -= damage;
-                            destroyed = true;
+                            if (!destroyed && entity.isEnabled && hitBox.Intersects(entity.hitBox) && !(entity is Player))
+                            {
+                                entity.health -= damage;
+                                destroyed = true;
+                            }
                         }
                     }
-                }
-                else if (!destroyed)
-                {
-                    foreach (Entity entity in Game1.currentGameObjects)
+                    else
                     {
-                        if (!destroyed && entity is Player && entity.isEnabled && hitBox.Intersects(entity.hitBox))
+                        foreach (Entity entity in Game1.currentGameObjects)
                         {
-                            entity.health -= damage;
-                            destroyed = true;
+                            if (!destroyed && entity is Player && entity.isEnabled && hitBox.Intersects(entity.hitBox))
+                            {
+                                entity.health -= damage;
+                                destroyed = true;
+                            }
                         }
                     }
+
+                    if (Game1.gameTime.TotalGameTime.TotalSeconds - timeCreated > lifespan)
+                    {
+                        destroyed = true;
+                    }
                 }
+                
 
-                if (Game1.gameTime.TotalGameTime.TotalSeconds - timeCreated > lifespan) //CAN BE OPTIMIZED HERE
+                if (weaponType != "melee" || Game1.gameTime.TotalGameTime.TotalSeconds - timeCreated > lifespan - speed)
                 {
-                    destroyed = true;
-                }
-
-
-                if (destroyed)
-                {
-                    Destroy(isPlayerProjectile);
+                    if (destroyed)
+                    {
+                        Destroy(isPlayerProjectile);
+                    }
                 }
             }
         }
 
         public void Destroy(bool isPlayerProj)
         {
-            if (isPlayerProj)
-                Game1.activePlayerProjectiles.Remove(this);
-            else
-                Game1.activeEnemyProjectiles.Remove(this);
-        }
+            if (weaponType == "ranged" || weaponType == "melee" || isReplica) 
+            {
+                if (isPlayerProj)
+                    Game1.activePlayerProjectiles.Remove(this);
+                else
+                    Game1.activeEnemyProjectiles.Remove(this);
+            }
+            if (weaponType == "6burst" && !isReplica)
+            {
+                //offsets pos back by how far it moves in 1/20 of a second
+                float xPos = position.X - (float)Math.Cos(travelAngle) * speed / 20;
+                float yPos = position.Y - (float)Math.Sin(travelAngle) * speed / 20;
+                Vector2 offsetPos = new Vector2(xPos, yPos);
 
+                //releases smaller and weaker projectiles upon destruction, make a different small texture for these projectiles
+                if (isPlayerProj)
+                {
+                    Game1.activePlayerProjectiles.Remove(this);
+                    for (int i = 0; i < 6; i++)
+                    {
+                        Game1.activePlayerProjectiles.Add(new Projectile(i * 45, speed / 1.3f, damage / 6, offsetPos, textureIndex, lifespan/1.5f, (int)hitBox.width - 10, (int)hitBox.height - 10, animationHandler.animationIndex, "6burst"));
+                        Game1.activePlayerProjectiles.Last().isReplica = true;
+                    }
+                }
+                else
+                {
+                    Game1.activeEnemyProjectiles.Remove(this);
+                    for (int i = 0; i < 6; i++)
+                    {
+                        Game1.activeEnemyProjectiles.Add(new Projectile(i * 45, speed / 1.3f, damage / 6, offsetPos, textureIndex, lifespan/1.5f, (int)hitBox.width - 10, (int)hitBox.height - 10, animationHandler.animationIndex, "6burst"));
+                        Game1.activeEnemyProjectiles.Last().isReplica = true;
+                    }
+                }
+            }
+
+        }
     }
 }

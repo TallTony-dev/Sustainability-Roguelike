@@ -44,6 +44,11 @@ namespace Monogame_Cross_Platform.Scripts.HUD
             {
 
             }
+            if (menuType == MenuType.inGameUi)
+            {
+                elements.Add(new Button(32, 256, 256, new Rectangle(0, 0, 32, 32)));
+
+            }
             Game1.menus.Add(this);
         }
         public void UpdateElements()
@@ -89,6 +94,6 @@ namespace Monogame_Cross_Platform.Scripts.HUD
             }
         }
 
-        public enum MenuType { pauseMenu, levelEditor, settings, miniMap }
+        public enum MenuType { pauseMenu, levelEditor, settings, miniMap, inGameUi }
     }
 }

@@ -22,7 +22,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
         double timeSinceT;
         double timeSinceTilePlaced;
 
-        internal void Update(Player player, List<GameObject> gameObjectList)
+        internal void Update(Player player)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.T) && Game1.gameTime.TotalGameTime.TotalSeconds - timeSinceT > 1)
             {
@@ -30,8 +30,8 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 {
                     player.position = new Vector2(TileMap.PosToAbsTileMapPos(player.position).Item1 * 32, TileMap.PosToAbsTileMapPos(player.position).Item2 * 32);
                     player.isInLevelEditorMode = true;
-                    player.isInAbsMovementMode = true;
-                    foreach (Entity entity in gameObjectList)
+                    player.isInComboMode = true;
+                    foreach (Entity entity in LevelGenerator.PosToRoom(player.position).gameObjects)
                     {
                         entity.isEnabled = false;
                         entity.ignoresCollisions = true;
@@ -43,8 +43,8 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 else if (isInEditor)
                 {
                     player.isInLevelEditorMode = false;
-                    player.isInAbsMovementMode = false;
-                    foreach (Entity entity in gameObjectList)
+                    player.isInComboMode = false;
+                    foreach (Entity entity in LevelGenerator.PosToRoom(player.position).gameObjects)
                     {
                         entity.isEnabled = true;
                         entity.ignoresCollisions = false;

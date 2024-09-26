@@ -17,7 +17,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         public float entitySpeed { get; set; }
         internal bool isFlipped { get; set; }
         internal int movesLeft { get; set; } = 1; //Temp at 1
-        internal bool isInAbsMovementMode = false;
+        internal bool isInComboMode = false;
         internal bool ignoresCollisions = false;
 
         internal float movingSpeed;
@@ -37,7 +37,6 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             this.hitBox = hitBox;
             this.aiType = aiType;
             this.health = health;
-            activeWeapon = new Weapon(1); //TEMP
         }
         public void Destroy()
         {
@@ -75,7 +74,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         }
         public virtual void TakeAction(Player.Player playerToFollow)
         {
-            if (!isInAbsMovementMode)
+            if (!isInComboMode)
             {
                 Vector2 entityNewPos = entityMovement.GetNormalPathfindingMovement(activeWeapon.attackRange, position, entitySpeed, aiType, playerToFollow);
                 hitBox.UpdatePosition(entityNewPos.X, entityNewPos.Y);

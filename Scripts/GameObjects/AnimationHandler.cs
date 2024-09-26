@@ -8,8 +8,10 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects
         private List<(int msPerFrame, int frames, ushort startingIndex)> animations = new List<(int msPerFrame, int frames, ushort startingIndex)>();
         private int currentAnimationIndex = 0;
         private double timeWhenStartedAnim = 0;
+        public ushort animationIndex;
         public AnimationHandler(ushort animationIndex)
         {
+            this.animationIndex = animationIndex;
             string animData = "error";
             animData = File.ReadLines("Content/AnimationData.txt").Skip((animationIndex) * 2).Take(1).First();
 

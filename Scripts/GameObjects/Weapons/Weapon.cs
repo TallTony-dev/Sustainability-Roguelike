@@ -14,7 +14,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
         public static ushort rangedEndIndex = 1;
 
 
-
+        private string weaponType;
         private ushort animIndex;
         public int attackRange { get; set; }
         public float fireRate;
@@ -37,11 +37,11 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
                 entityPos.Y += 32 * (float)Math.Sin(aimAngle);
                 if (isPlayer)
                 {
-                    Game1.activePlayerProjectiles.Add(new Projectile(aimAngle, projectileSpeed, damage, entityPos, textureIndex, lifespan, projWidth, projHeight, animIndex));
+                    Game1.activePlayerProjectiles.Add(new Projectile(aimAngle, projectileSpeed, damage, entityPos, textureIndex, lifespan, projWidth, projHeight, animIndex, weaponType));
                 }
                 else
                 {
-                    Game1.activeEnemyProjectiles.Add(new Projectile(aimAngle, projectileSpeed, damage, entityPos, textureIndex, lifespan, projWidth, projHeight, animIndex));
+                    Game1.activeEnemyProjectiles.Add(new Projectile(aimAngle, projectileSpeed, damage, entityPos, textureIndex, lifespan, projWidth, projHeight, animIndex, weaponType));
                 }
 
                 timeWhenShot = Game1.gameTime.TotalGameTime.TotalSeconds;
@@ -73,15 +73,16 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
             string weaponData = File.ReadLines("Content/WeaponData.txt").Skip((weaponIndex) * 2).Take(1).First();
 
             string[] tokens = weaponData.Split(",");
-            attackRange = Convert.ToInt32(tokens[0]);
-            textureIndex = Convert.ToUInt16(tokens[1]);
-            projectileSpeed = Convert.ToSingle(tokens[2]);
-            lifespan = Convert.ToSingle(tokens[3]);
-            damage = Convert.ToInt32(tokens[4]);
-            projWidth = Convert.ToInt32(tokens[5]);
-            projHeight = Convert.ToInt32(tokens[6]);
-            fireRate = Convert.ToSingle(tokens[7]);
-            animIndex = Convert.ToUInt16(tokens[8]);
+            weaponType = Convert.ToString(tokens[0]);
+            attackRange = Convert.ToInt32(tokens[1]);
+            textureIndex = Convert.ToUInt16(tokens[2]);
+            projectileSpeed = Convert.ToSingle(tokens[3]);
+            lifespan = Convert.ToSingle(tokens[4]);
+            damage = Convert.ToInt32(tokens[5]);
+            projWidth = Convert.ToInt32(tokens[6]);
+            projHeight = Convert.ToInt32(tokens[7]);
+            fireRate = Convert.ToSingle(tokens[8]);
+            animIndex = Convert.ToUInt16(tokens[9]);
         }
     }
 }

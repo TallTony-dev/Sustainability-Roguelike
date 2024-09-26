@@ -13,11 +13,16 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
     {
         HandlePlayerInputs inputHandler = new HandlePlayerInputs();
         public bool isInLevelEditorMode = false;
-        private List<Weapon> weapons;
+        private List<Weapon> weapons = new List<Weapon>();
+        short activeWeaponIndex = 0;
 
          public Player(int health, float entitySpeed, Vector2 startingTile, Hitboxes.Hitbox hitBox, ushort textureIndex) : base(entitySpeed, startingTile, textureIndex, hitBox, EntityMovement.AIType.none, health)
         {
             isEnabled = true;
+            weapons.Add(new Weapon(0));
+            weapons.Add(new Weapon(1));
+            weapons.Add(new Weapon(2));
+            weapons.Add(new Weapon(3));
         }
 
         public override void Update(Player player)
@@ -25,6 +30,9 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
             if (isEnabled)
             {
                 TakeAction(player);
+
+                activeWeaponIndex = inputHandler.GetWeaponIndex(activeWeaponIndex, weapons.Count);
+                activeWeapon = weapons[activeWeaponIndex];
                 activeWeapon.Update(inputHandler);
 
                 if (inputHandler.IsShooting())
@@ -47,7 +55,8 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
 
         public override void TakeAction(Player _)
         {
-            if (!isInAbsMovementMode && isEnabled)
+            //TODO: rework this from abs movement to combo mode
+            if (!isInComboMode && isEnabled)
             {
                 Vector2 playerNewPos = inputHandler.GetPlayerMovement(position, Game1.gameTime, entitySpeed);
                 if (!ignoresCollisions)

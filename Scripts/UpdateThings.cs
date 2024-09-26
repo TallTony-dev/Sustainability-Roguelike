@@ -16,7 +16,7 @@ namespace Monogame_Cross_Platform.Scripts
     {
         public static void UpdateLevel(LevelEditor levelEditor, Player player)
         {
-            levelEditor.Update(player, Game1.currentGameObjects);
+            levelEditor.Update(player);
             Settings.Update();
             foreach (Menu menu in Game1.menus)
             {

@@ -45,7 +45,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(tile.textureIndex);
             //really temp for testing only
             if (!TileMap.tileMap[tileMapX,tileMapY].isBeingPathfoundTo)
-                spriteBatch.Draw(texture, new Vector2(tileMapX * 32, tileMapY * 32), rectangle, Color.Blue, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0.04f);
+                spriteBatch.Draw(texture, new Vector2(tileMapX * 32, tileMapY * 32), rectangle, Color.White, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0.04f);
             else
                 spriteBatch.Draw(texture, new Vector2(tileMapX * 32, tileMapY * 32), rectangle, Color.White, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0.04f);
         }

@@ -10,6 +10,13 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
     {
         int deadZone = 4096;
         Vector2 coordToTravelTo = new Vector2(0, 0);
+        double timeWhenDashed = 0;
+        bool isDashing = false;
+        Vector2 dashDirection;
+        int oldScrollValue = 0;
+
+        
+
         public float GetShootingAngle()
         {
             float angle = 0;
@@ -66,7 +73,20 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
         public Vector2 GetPlayerMovement (Vector2 playerPosition, GameTime gameTime, float playerSpeed)
         {
             float updatedPlayerSpeed = (float)(playerSpeed * gameTime.ElapsedGameTime.TotalSeconds);
+            Vector2 oldPlayerPos = playerPosition;
             var kstate = Keyboard.GetState();
+            
+            if (isDashing)
+            {
+                float timeSinceDashed = (float)(Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenDashed);
+                playerPosition.X += dashDirection.X * updatedPlayerSpeed * ((1 / (timeSinceDashed + 0.15f) - 1.6f) / 1.5f);
+                playerPosition.Y += dashDirection.Y * updatedPlayerSpeed * ((1 / (timeSinceDashed + 0.15f) - 1.6f) / 1.5f);
+                if (timeSinceDashed > 0.5)
+                {
+                    isDashing = false;
+                }
+            }
+
             if (Joystick.LastConnectedIndex != 0)
             {
                 if (kstate.IsKeyDown(Keys.W))
@@ -88,11 +108,19 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
                 {
                     playerPosition.X += updatedPlayerSpeed;
                 }
+
+                if (!isDashing && kstate.IsKeyDown(Keys.Space) && Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenDashed > 0.6)
+                {
+                    dashDirection = Vector2.Normalize(new Vector2(playerPosition.X - oldPlayerPos.X, playerPosition.Y - oldPlayerPos.Y));
+                    isDashing = true;
+                    timeWhenDashed = Game1.gameTime.TotalGameTime.TotalSeconds;
+                }
             }
             else
             {
                 JoystickState jstate = Joystick.GetState((int)PlayerIndex.One);
-
+                GamePadState gstate = GamePad.GetState((int)PlayerIndex.One);
+                
                 if (jstate.Axes[1] < -deadZone)
                 {
                     playerPosition.Y -= (updatedPlayerSpeed / 8) * ((Math.Abs(jstate.Axes[1]) / 4096));
@@ -110,9 +138,60 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
                 {
                     playerPosition.X += (updatedPlayerSpeed / 8) * ((Math.Abs(jstate.Axes[0]) / 4096));
                 }
+                if (!isDashing && gstate.Triggers.Right > 0.1f && Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenDashed > 0.6)
+                {
+                    dashDirection = Vector2.Normalize(new Vector2(playerPosition.X - oldPlayerPos.X, playerPosition.Y - oldPlayerPos.Y));
+                    isDashing = true;
+                    timeWhenDashed = Game1.gameTime.TotalGameTime.TotalSeconds;
+                }
             }
             return playerPosition;
         }
+
+
+        double timeWhenChangedWeapons = 0;
+        public short GetWeaponIndex(short currentWeapon, int inventoryCount)
+        {
+            double deltaTime = Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenChangedWeapons;
+
+            if (Joystick.LastConnectedIndex != 0 && deltaTime > 0.1)
+            {
+                KeyboardState kstate = Keyboard.GetState();
+                MouseState newMouseState = Mouse.GetState();
+                int deltaScroll = newMouseState.ScrollWheelValue - oldScrollValue;
+                if (kstate.IsKeyDown(Keys.V) || deltaScroll > 0)
+                {
+                    currentWeapon += 1;
+                }
+                else if (kstate.IsKeyDown(Keys.C) || deltaScroll < 0)
+                {
+                    currentWeapon -= 1;
+                }
+                        
+                oldScrollValue = newMouseState.ScrollWheelValue;
+                timeWhenChangedWeapons = Game1.gameTime.TotalGameTime.TotalSeconds;
+            }
+            else if (deltaTime > 0.1)
+            {
+                GamePadState gstate = GamePad.GetState((int)PlayerIndex.One);
+                if (gstate.Buttons.LeftShoulder == ButtonState.Pressed)
+                {
+                    currentWeapon -= 1;
+                }
+                if (gstate.Buttons.RightShoulder == ButtonState.Pressed)
+                {
+                    currentWeapon += 1;
+                }
+                timeWhenChangedWeapons = Game1.gameTime.TotalGameTime.TotalSeconds;
+            }
+            if (currentWeapon < 0)
+                currentWeapon++;
+            if (currentWeapon > inventoryCount - 1)
+                currentWeapon--;
+
+            return currentWeapon;
+        }
+
 
         public Vector2 GetPlayerTurnBasedMovement(Vector2 playerPosition, GameTime gameTime, float playerSpeed, int movesLeft, bool isMoving, bool ignoreCollisions)
         {
@@ -123,25 +202,25 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
             {
                 coordToTravelTo = playerPosition;
                 KeyboardState kstate = Keyboard.GetState();
-                JoystickState jstate = Joystick.GetState((int)PlayerIndex.One);
+                GamePadState jstate = GamePad.GetState((int)PlayerIndex.One);
                 if (jstate.IsConnected)
                 {
-                    if ((jstate.Buttons[(int)Buttons.DPadDown] == ButtonState.Pressed || kstate.IsKeyDown(Keys.W)) && (!TileMap.IsCollisionAbs(playerCurrentTile.Item1, playerCurrentTile.Item2 - 1) || (ignoreCollisions)))
+                    if ((jstate.DPad.Down == ButtonState.Pressed || kstate.IsKeyDown(Keys.W)) && (!TileMap.IsCollisionAbs(playerCurrentTile.Item1, playerCurrentTile.Item2 - 1) || (ignoreCollisions)))
                     {
                         coordToTravelTo.Y = (playerCurrentTile.Item2 * 32) - 32;
                     }
 
-                    else if ((jstate.Buttons[(int)Buttons.DPadUp] == ButtonState.Pressed || kstate.IsKeyDown(Keys.S)) && (!TileMap.IsCollisionAbs(playerCurrentTile.Item1, playerCurrentTile.Item2 + 1) || (ignoreCollisions)))
+                    else if ((jstate.DPad.Up == ButtonState.Pressed || kstate.IsKeyDown(Keys.S)) && (!TileMap.IsCollisionAbs(playerCurrentTile.Item1, playerCurrentTile.Item2 + 1) || (ignoreCollisions)))
                     {
                         coordToTravelTo.Y = (playerCurrentTile.Item2 * 32) + 32;
                     }
 
-                    else if ((jstate.Buttons[(int)Buttons.DPadLeft] == ButtonState.Pressed || kstate.IsKeyDown(Keys.A)) && (!TileMap.IsCollisionAbs(playerCurrentTile.Item1 - 1, playerCurrentTile.Item2) || (ignoreCollisions)))
+                    else if ((jstate.DPad.Left == ButtonState.Pressed || kstate.IsKeyDown(Keys.A)) && (!TileMap.IsCollisionAbs(playerCurrentTile.Item1 - 1, playerCurrentTile.Item2) || (ignoreCollisions)))
                     {
                         coordToTravelTo.X = (playerCurrentTile.Item1 * 32) - 32;
                     }
 
-                    else if ((jstate.Buttons[(int)Buttons.DPadRight] == ButtonState.Pressed || kstate.IsKeyDown(Keys.D)) && (!TileMap.IsCollisionAbs(playerCurrentTile.Item1 + 1, playerCurrentTile.Item2) || (ignoreCollisions)))
+                    else if ((jstate.DPad.Right == ButtonState.Pressed || kstate.IsKeyDown(Keys.D)) && (!TileMap.IsCollisionAbs(playerCurrentTile.Item1 + 1, playerCurrentTile.Item2) || (ignoreCollisions)))
                     {
                         coordToTravelTo.X = (playerCurrentTile.Item1 * 32) + 32;
                     }
