@@ -48,8 +48,8 @@ namespace Monogame_Cross_Platform.Scripts.HUD
             }
             if (menuType == MenuType.inGameUi)
             {
-                elements.Add(new MiniMap(32, 64, 256, new Rectangle(0, 0, 32, 32)));
-                elements.Add(new Meter(16, 32, 416, 256, new Rectangle(0, 0, 32, 32), false, 1, 0));
+                elements.Add(new MiniMap(16, 0, 0, new Rectangle(0, 0, 32, 32)));
+                elements.Add(new Meter(16, 32, 416, 0, new Rectangle(0, 0, 128, 32), false, 1, 0));
                 elements.First().scale = 2;
 
             }

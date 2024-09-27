@@ -11,12 +11,12 @@ namespace Monogame_Cross_Platform.Scripts.HUD
         public MiniMap(ushort backgroundTextureIndex, int xOffset, int yOffset, Rectangle hitBox) : base(backgroundTextureIndex, xOffset, yOffset, hitBox)
         {
         }
-        public ushort entranceTextureIndex = 1;
-        public ushort enemyRoomTextureIndex = 2;
-        public ushort otherRoomTextureIndex = 3;
-        public ushort treasureRoomTextureIndex = 4;
-        public ushort bossRoomTextureIndex = 5;
-        public ushort exitTextureIndex = 6;
+        public ushort entranceTextureIndex = 32;
+        public ushort enemyRoomTextureIndex = 33;
+        public ushort otherRoomTextureIndex = 34;
+        public ushort treasureRoomTextureIndex = 35;
+        public ushort bossRoomTextureIndex = 36;
+        public ushort exitTextureIndex = 37;
         public ushort bridgeTextureIndex = 16;
 
         private float mapIconScale = 1f;
@@ -48,8 +48,8 @@ namespace Monogame_Cross_Platform.Scripts.HUD
             //draw background
             uiSpriteBatch.Draw(backTexture, new Vector2(xOffset, yOffset), backRectangle, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * scale, Settings.uiScaleY * scale), SpriteEffects.None, 0f);
 
-            var deltaX = maxInitedX - minInitedX + 1;
-            var deltaY = maxInitedY - minInitedY + 1;
+            float deltaX = maxInitedX - minInitedX;
+           float deltaY = maxInitedY - minInitedY;
             int sqrtRoomsLength = (int)Math.Sqrt(knownRoomTypes.Length);
             float usableWidthOverBackground = backRectangle.Width * Settings.uiScaleX * scale - borderDistance * 2;
             float usableHeightOverBackground = backRectangle.Height * Settings.uiScaleY * scale - borderDistance * 2;
@@ -69,9 +69,19 @@ namespace Monogame_Cross_Platform.Scripts.HUD
 
 
 
-
-                            uiSpriteBatch.Draw(entranceTexture, placement, entranceRectangle, Color.White, 0f, new Vector2(entranceRectangle.Width / 2, entranceRectangle.Height / 2), new Vector2(Settings.uiScaleX * mapIconScale, Settings.uiScaleY * mapIconScale), SpriteEffects.None, 0f);
-
+                            if (roomType == 1)
+                                uiSpriteBatch.Draw(entranceTexture, placement, entranceRectangle, Color.White, 0f, new Vector2(entranceRectangle.Width / 2, entranceRectangle.Height / 2), new Vector2(Settings.uiScaleX * mapIconScale, Settings.uiScaleY * mapIconScale), SpriteEffects.None, 0f);
+                            if (roomType == 2)
+                                uiSpriteBatch.Draw(enemyRoomTexture, placement, enemyRoomRectangle, Color.White, 0f, new Vector2(enemyRoomRectangle.Width / 2, enemyRoomRectangle.Height / 2), new Vector2(Settings.uiScaleX * mapIconScale, Settings.uiScaleY * mapIconScale), SpriteEffects.None, 0f);
+                            if (roomType == 3)
+                                uiSpriteBatch.Draw(otherRoomTexture, placement, otherRoomRectangle, Color.White, 0f, new Vector2(otherRoomRectangle.Width / 2, otherRoomRectangle.Height / 2), new Vector2(Settings.uiScaleX * mapIconScale, Settings.uiScaleY * mapIconScale), SpriteEffects.None, 0f);
+                            if (roomType == 4)
+                                uiSpriteBatch.Draw(treasureRoomTexture, placement, treasureRoomRectangle, Color.White, 0f, new Vector2(treasureRoomRectangle.Width / 2, treasureRoomRectangle.Height / 2), new Vector2(Settings.uiScaleX * mapIconScale, Settings.uiScaleY * mapIconScale), SpriteEffects.None, 0f);
+                            if (roomType == 5)
+                                uiSpriteBatch.Draw(bossRoomTexture, placement, bossRoomRectangle, Color.White, 0f, new Vector2(bossRoomRectangle.Width / 2, bossRoomRectangle.Height / 2), new Vector2(Settings.uiScaleX * mapIconScale, Settings.uiScaleY * mapIconScale), SpriteEffects.None, 0f);
+                            if (roomType == 6)
+                                uiSpriteBatch.Draw(exitTexture, placement, exitRectangle, Color.White, 0f, new Vector2(exitRectangle.Width / 2, exitRectangle.Height / 2), new Vector2(Settings.uiScaleX * mapIconScale, Settings.uiScaleY * mapIconScale), SpriteEffects.None, 0f);
+                            //draw bridges here if theres adjacent tiles?? maybe not needed
                         }
                     }
                 }
