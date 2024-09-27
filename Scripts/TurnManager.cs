@@ -7,15 +7,35 @@ using Monogame_Cross_Platform.Scripts.Level;
 
 namespace Monogame_Cross_Platform.Scripts
 {
+    /// <summary>
+    /// State manager
+    /// </summary>
     internal static class TurnManager
     {
         internal static bool isInComboMode = false;
         internal static bool isPlayerTurn = true;
         internal static bool isInGame = true;
         public static bool isPaused = false;
+        public static Menu inGameMenu = new Menu(Menu.MenuType.inGameUi);
 
         public static void Update(Player player)
         {
+            if (isInGame && !inGameMenu.isActive)
+            {
+                inGameMenu.EnableMenu();
+            }
+            else if (!isInGame && inGameMenu != null)
+            {
+                Game1.menus.Remove(inGameMenu);
+                inGameMenu.DisableMenu();
+            }
+            MiniMap miniMap = (MiniMap)inGameMenu.elements[0];
+            miniMap.UpdateMiniMap(player);
+
+            Meter healthbar = (Meter)inGameMenu.elements[1];
+            healthbar.maxVal = player.maxHealth;
+            healthbar.Update(player.health);
+            
 
 
             Room room = LevelGenerator.PosToRoom(player.position);

@@ -17,8 +17,8 @@ namespace Monogame_Cross_Platform.Scripts.HUD
         internal float yOffset;
         private float absxOffset;
         private float absyOffset;
-        private float absHitBoxHeight;
-        private float absHitBoxWidth;
+        internal float absHitBoxHeight;
+        internal float absHitBoxWidth;
         internal float scale = 1;
 
         private MovementType movementType;
@@ -80,9 +80,6 @@ namespace Monogame_Cross_Platform.Scripts.HUD
 
                 }
             }
-
-
-
 
 
             xOffset = absxOffset * Settings.uiScaleX;

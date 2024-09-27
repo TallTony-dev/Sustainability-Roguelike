@@ -32,7 +32,6 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             (int newAbsTileX, int newAbsTileY) = TileMap.PosToAbsTileMapPos(entityNewPos); //new position
             int xTileDifference = Math.Abs(newAbsTileX - oldAbsTileX);
             int yTileDifference = Math.Abs(newAbsTileY - oldAbsTileY); //can be optimized
-
             bool isXModified = false;
             bool isYModified = false;
             for (int x = -1 - xTileDifference; x < 2 + xTileDifference; x++)

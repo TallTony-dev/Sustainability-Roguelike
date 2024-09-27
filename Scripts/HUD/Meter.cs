@@ -1,0 +1,42 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Monogame_Cross_Platform.Scripts.HUD
+{
+    internal class Meter : UiElement
+    {
+        public Meter(ushort frontTextureIndex, ushort backTextureIndex, int xOffset, int yOffset, Rectangle meterSize, bool isVertical, int maxVal, int minVal) : base(backTextureIndex, xOffset, yOffset, meterSize)
+        {
+            this.frontTextureIndex = frontTextureIndex;
+            this.isVertical = isVertical;
+            this.maxVal = maxVal;
+            this.minVal = minVal;
+            value = maxVal;
+        }
+        public ushort frontTextureIndex;
+        public int minVal;
+        public int maxVal;
+        public int value;
+        public bool isVertical;
+        public Rectangle drawingMask { get; private set; }
+        public void Update(int newValue)
+        {
+            if (value != newValue)
+            {
+                value = newValue;
+                float proportion = (float)value / (maxVal - minVal);
+                if (!isVertical)
+                    drawingMask = new Rectangle(0, 0, (int)Math.Round(absHitBoxWidth * proportion), (int)absHitBoxHeight);
+                else
+                    drawingMask = new Rectangle(0, 0, (int)absHitBoxWidth, (int)Math.Round(absHitBoxHeight * proportion));
+            }
+            
+        }
+
+
+
+    }
+}

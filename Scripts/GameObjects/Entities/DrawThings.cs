@@ -21,14 +21,6 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             spriteBatch = new SpriteBatch(Game1._graphics.GraphicsDevice);
             uiSpriteBatch = new SpriteBatch(Game1._graphics.GraphicsDevice);
         }
-
-        /// <summary>
-        /// Adds something to the draw buffer which is drawn after DrawBuffer is called.
-        /// </summary>
-        public void AddToDrawBuffer(Vector2 position, Texture2D texture, Rectangle rectangle)
-        {
-            spriteBatch.Draw(texture, position, rectangle, Color.White, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0f);
-        }
         /// <summary>
         /// Adds something to the draw buffer which is drawn after DrawBuffer is called. This overload includes a sourceRectangle for spritesheets.
         /// </summary>
@@ -49,18 +41,31 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             else
                 spriteBatch.Draw(texture, new Vector2(tileMapX * 32, tileMapY * 32), rectangle, Color.White, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0.04f);
         }
-        public void AddToUiBuffer(List<HUD.Menu> menus)
+        public void AddToUiBuffer(List<Menu> menus)
         {
-            foreach (HUD.Menu menu in menus)
+            foreach (Menu menu in menus)
             {
                 if (menu.isActive)
                 {
-                    foreach (HUD.UiElement element in menu.elements)
+                    foreach (UiElement element in menu.elements)
                     {
-                        if (element.isEnabled)
+                        if (!(element is Meter || element is MiniMap) && element.isEnabled)
                         {
                             (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(element.textureIndex);
                             uiSpriteBatch.Draw(texture, new Vector2(element.xOffset, element.yOffset), rectangle, Color.White, 0f, new Vector2(0,0), new Vector2(Settings.uiScaleX * element.scale, Settings.uiScaleY * element.scale), SpriteEffects.None, 0f);
+                        }
+                        else if (element is Meter && element.isEnabled)
+                        {
+                            Meter meter = (Meter)element;
+                            (Texture2D backTexture, Rectangle backRectangle) = ContentLoader.GetLoadedTileTexture(element.textureIndex);
+                            (Texture2D frontTexture, Rectangle frontRectangle) = ContentLoader.GetLoadedTileTexture(meter.frontTextureIndex);
+                            uiSpriteBatch.Draw(backTexture, new Vector2(element.xOffset, element.yOffset), backRectangle, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * element.scale, Settings.uiScaleY * element.scale), SpriteEffects.None, 0f);
+                            uiSpriteBatch.Draw(frontTexture, new Vector2(element.xOffset, element.yOffset), meter.drawingMask, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * element.scale, Settings.uiScaleY * element.scale), SpriteEffects.None, 0f);
+                        }
+                        else if (element is MiniMap && element.isEnabled)
+                        {
+                            MiniMap miniMap = (MiniMap)element;
+                            miniMap.DrawMiniMap(uiSpriteBatch);
                         }
                     }
                 }

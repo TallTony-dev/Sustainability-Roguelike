@@ -8,7 +8,8 @@ namespace Monogame_Cross_Platform.Scripts.HUD
 {
     internal class Menu
     {
-        public bool isActive { get; private set; } = true; //should be false eventually
+        public bool isActive { get; private set; } = false; //should be false eventually
+        public MenuType menuType;
         public List<UiElement> elements { get; private set; }
         public Menu(List<UiElement> elements)
         {
@@ -21,6 +22,7 @@ namespace Monogame_Cross_Platform.Scripts.HUD
         public Menu(MenuType menuType)
         {
             elements = new List<UiElement>();
+            this.menuType = menuType;
             if (menuType == MenuType.levelEditor)
             {
                 elements.Add(new Button(0, 0, 0, new Rectangle(0, 0, 32, 32)));
@@ -46,7 +48,9 @@ namespace Monogame_Cross_Platform.Scripts.HUD
             }
             if (menuType == MenuType.inGameUi)
             {
-                elements.Add(new Button(32, 256, 256, new Rectangle(0, 0, 32, 32)));
+                elements.Add(new MiniMap(32, 64, 256, new Rectangle(0, 0, 32, 32)));
+                elements.Add(new Meter(16, 32, 416, 256, new Rectangle(0, 0, 32, 32), false, 1, 0));
+                elements.First().scale = 2;
 
             }
             Game1.menus.Add(this);
@@ -55,7 +59,8 @@ namespace Monogame_Cross_Platform.Scripts.HUD
         {
             foreach (UiElement element in elements)
             {
-                element.Update();
+                if (!(element is Meter))
+                    element.Update();
             }
         }
         public void AddElement(UiElement elementToAdd)

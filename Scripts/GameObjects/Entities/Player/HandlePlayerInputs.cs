@@ -72,16 +72,16 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
         /// <summary>
         /// Gets a Vector2 of the location the player should be in, it also gets the inputs required for this function.
         /// </summary>
-        public Vector2 GetPlayerMovement (Vector2 playerPosition, GameTime gameTime, float playerSpeed)
+        public Vector2 GetPlayerMovement (Vector2 playerPosition, float playerSpeed)
         {
-            float updatedPlayerSpeed = (float)(playerSpeed * gameTime.ElapsedGameTime.TotalSeconds);
+            float updatedPlayerSpeed = (float)(playerSpeed * Game1.gameTime.ElapsedGameTime.TotalSeconds);
             Vector2 oldPlayerPos = playerPosition;
             var kstate = Keyboard.GetState();
             
             if (isDashing)
             {
                 float timeSinceDashed = (float)(Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenDashed);
-                playerPosition.X += dashDirection.X * updatedPlayerSpeed * ((1 / (timeSinceDashed + 0.15f) - 1.6f) / 1.5f);
+                playerPosition.X += dashDirection.X * updatedPlayerSpeed * ((1 / (timeSinceDashed + 0.15f) - 1.6f) / 1.5f); // divide by 0 error here???
                 playerPosition.Y += dashDirection.Y * updatedPlayerSpeed * ((1 / (timeSinceDashed + 0.15f) - 1.6f) / 1.5f);
                 if (timeSinceDashed > 0.5)
                 {
@@ -113,9 +113,14 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
 
                 if (!isDashing && kstate.IsKeyDown(Keys.Space) && Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenDashed > 0.6)
                 {
-                    dashDirection = Vector2.Normalize(new Vector2(playerPosition.X - oldPlayerPos.X, playerPosition.Y - oldPlayerPos.Y));
-                    isDashing = true;
-                    timeWhenDashed = Game1.gameTime.TotalGameTime.TotalSeconds;
+                    Vector2 movementDirection = new Vector2(playerPosition.X - oldPlayerPos.X, playerPosition.Y - oldPlayerPos.Y);
+
+                    if (movementDirection != Vector2.Zero)
+                    {
+                        dashDirection = Vector2.Normalize(movementDirection);
+                        isDashing = true;
+                        timeWhenDashed = Game1.gameTime.TotalGameTime.TotalSeconds;
+                    }
                 }
             }
             else
@@ -147,6 +152,8 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
                     timeWhenDashed = Game1.gameTime.TotalGameTime.TotalSeconds;
                 }
             }
+            if (playerPosition.X == float.NaN)
+                throw new FieldAccessException();
             return playerPosition;
         }
 

@@ -78,7 +78,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
             //TODO: rework this from abs movement to combo mode
             if (!isInComboMode && isEnabled)
             {
-                Vector2 playerNewPos = inputHandler.GetPlayerMovement(position, Game1.gameTime, entitySpeed);
+                Vector2 playerNewPos = inputHandler.GetPlayerMovement(position, entitySpeed);
                 if (!ignoresCollisions)
                 {
                     hitBox.UpdatePosition(playerNewPos.X, playerNewPos.Y);

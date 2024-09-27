@@ -17,9 +17,10 @@ namespace Monogame_Cross_Platform.Scripts.Level
         public bool isXAtArrayLimit = false;
         public bool isYAtArrayLimit = false;
 
-        public bool isARoom = false;
+        public ushort roomType = 0;
 
         public bool isOpen = false;
+        public bool wasActive = false;
 
         public int roomArrayX = 0;
         public int roomArrayY = 0;
@@ -34,7 +35,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
         {
             this.roomArrayX = roomArrayX;
             this.roomArrayY = roomArrayY;
-
+            roomType = roomIndex;
             //empty room
             if (roomIndex == 0)
             {
@@ -44,37 +45,31 @@ namespace Monogame_Cross_Platform.Scripts.Level
             else if (roomIndex == 1)
             {
                 roomIndex = 1;
-                isARoom = true;
             }
             //enemy
             else if (roomIndex == 2)
             {
                 roomIndex = (ushort)Game1.rand.Next(2, 13); //min is inclusive, max is exclusive, who knows why
-                isARoom = true;
             }
             //other
             else if (roomIndex == 3)
             {
                 roomIndex = (ushort)Game1.rand.Next(13, 18);
-                isARoom = true;
             }
             //treasure
             else if (roomIndex == 4)
             {
                 roomIndex = (ushort)Game1.rand.Next(18, 20);
-                isARoom = true;
             }
             //boss
             else if (roomIndex == 5)
             {
                 roomIndex = 20;
-                isARoom = true;
             }
             //exit
             else if (roomIndex == 6)
             {
                 roomIndex = 21;
-                isARoom = true;
             }
 
             this.levelType = levelType;
@@ -161,6 +156,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
             }
             CloseSides();
             LevelGenerator.SetTileMapToRoom(roomArrayX, roomArrayY);
+            wasActive = true;
         }
 
         public void Deactivate()
@@ -184,7 +180,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
 
         public void OpenSides()
         {
-            if (!isXAtArrayLimit && LevelGenerator.rooms[roomArrayX + 1, roomArrayY].isARoom)
+            if (!isXAtArrayLimit && LevelGenerator.rooms[roomArrayX + 1, roomArrayY].roomType != 0)
             {
                 if(levelType == 1)
                 {
@@ -192,7 +188,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                         SetTile(sqrtTileArrayLength - 1, (sqrtTileArrayLength - 1) / 2 + y - 1, 0, false, false);
                 }
             }
-            if (!isX0 && LevelGenerator.rooms[roomArrayX - 1, roomArrayY].isARoom)
+            if (!isX0 && LevelGenerator.rooms[roomArrayX - 1, roomArrayY].roomType != 0)
             {
                 if (levelType == 1)
                 {
@@ -200,7 +196,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                         SetTile(0, (sqrtTileArrayLength - 1) / 2 + y - 1, 0, false, false);
                 }
             }
-            if (!isY0 && LevelGenerator.rooms[roomArrayX, roomArrayY - 1].isARoom)
+            if (!isY0 && LevelGenerator.rooms[roomArrayX, roomArrayY - 1].roomType != 0)
             {
                 if (levelType == 1)
                 {
@@ -208,7 +204,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                         SetTile((sqrtTileArrayLength - 1) / 2 + x - 1, 0, 0, false, false);
                 }
             }
-            if (!isYAtArrayLimit && LevelGenerator.rooms[roomArrayX, roomArrayY + 1].isARoom)
+            if (!isYAtArrayLimit && LevelGenerator.rooms[roomArrayX, roomArrayY + 1].roomType != 0)
             {
                 if (levelType == 1)
                 {

@@ -14,6 +14,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
     internal abstract class Entity : GameObject
     {
         public int health;
+        public int maxHealth;
         public float entitySpeed { get; set; }
         internal bool isFlipped { get; set; }
         internal int movesLeft { get; set; } = 1; //Temp at 1
@@ -37,6 +38,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             this.hitBox = hitBox;
             this.aiType = aiType;
             this.health = health;
+            maxHealth = health;
         }
         public void Destroy()
         {

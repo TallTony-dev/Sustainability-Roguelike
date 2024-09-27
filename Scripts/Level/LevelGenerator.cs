@@ -188,26 +188,26 @@ namespace Monogame_Cross_Platform.Scripts.Level
                     bool isBottomARoom = false;
                     bool isTopARoom = false;
 
-                    if (!room.isXAtArrayLimit && rooms[x + 1, y].isARoom)
+                    if (!room.isXAtArrayLimit && rooms[x + 1, y].roomType != 0)
                     {
                         isRightARoom = true;
                     }
-                    if (!room.isX0 && rooms[x - 1, y].isARoom)
+                    if (!room.isX0 && rooms[x - 1, y].roomType != 0)
                     {
                         isLeftARoom = true;
                     }
-                    if (!room.isYAtArrayLimit && rooms[x, y + 1].isARoom)
+                    if (!room.isYAtArrayLimit && rooms[x, y + 1].roomType != 0)
                     {
                         isBottomARoom = true;
                     }
-                    if (!room.isY0 && rooms[x, y - 1].isARoom)
+                    if (!room.isY0 && rooms[x, y - 1].roomType != 0)
                     {
                         isTopARoom = true;
                     }
                     //TODO: Add level specific bridges here
-                    if (room.isARoom)
+                    if (room.roomType != 0)
                         room.OpenSides();
-                    if ((isRightARoom || isLeftARoom) && room.isARoom)
+                    if ((isRightARoom || isLeftARoom) && room.roomType != 0)
                     {
                         short bridgeSide = 0;
                         if (isRightARoom)
@@ -227,7 +227,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                             }
                         }
                     }
-                    if ((isTopARoom || isBottomARoom) && room.isARoom)
+                    if ((isTopARoom || isBottomARoom) && room.roomType != 0)
                     {
                         short bridgeSide = 0;
                         if (isBottomARoom)
