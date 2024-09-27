@@ -10,8 +10,9 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers.Camera
         public Matrix Transform { get; private set; }
         float xToMove = 0;
         float yToMove = 0;
+        float rotationToMove = 0;
         bool isFirstPass = true;
-        public List<(float deltaX, float deltaY, float timeRemaining)> cameraAnimationsToPlay = new List<(float deltaX, float deltaY, float timeRemaining)>();
+        public List<(float deltaX, float deltaY, float deltaRotation, float timeRemaining)> cameraAnimationsToPlay = new List<(float deltaX, float deltaY, float deltaRotation, float timeRemaining)>();
 
         private double timeWhenCameraLocked = 0;
         public static bool IsLocked = true;
@@ -24,7 +25,8 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers.Camera
                     var animation = cameraAnimationsToPlay[x];
                     xToMove += animation.deltaX * (1 / (float)(animation.timeRemaining - Game1.gameTime.ElapsedGameTime.TotalSeconds + 0.5)) / 10f;
                     yToMove += animation.deltaY * (1 / (float)(animation.timeRemaining - Game1.gameTime.ElapsedGameTime.TotalSeconds + 0.5)) / 10f;
-                    cameraAnimationsToPlay[x] = (animation.deltaX, animation.deltaY, animation.timeRemaining - (float)Game1.gameTime.ElapsedGameTime.TotalSeconds);
+                    rotationToMove += animation.deltaRotation * (1 / (float)(animation.timeRemaining - Game1.gameTime.ElapsedGameTime.TotalSeconds + 0.5)) / 10f;
+                    cameraAnimationsToPlay[x] = (animation.deltaX, animation.deltaY, animation.deltaRotation, animation.timeRemaining - (float)Game1.gameTime.ElapsedGameTime.TotalSeconds);
                     if (animation.timeRemaining < 0)
                         cameraAnimationsToPlay.RemoveRange(x, 1);
                 }
@@ -51,7 +53,8 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers.Camera
             }
             xToMove += (-target.position.X - xToMove)/5f;
             yToMove += (-target.position.Y - yToMove)/5f;
-            
+            rotationToMove += -rotationToMove / 5f;
+
             var position = Matrix.CreateTranslation(xToMove, yToMove, 0);
             var offset = Matrix.CreateTranslation(
                 (Settings.resolutionWidth / 2 / Settings.zoomLevel),
@@ -59,7 +62,9 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers.Camera
                 0);
             var zoom = Matrix.CreateScale(Settings.zoomLevel);
 
-            Transform = position * offset * (zoom);
+            var rotation = Matrix.CreateRotationZ(rotationToMove);
+
+            Transform = position * offset * zoom * rotation;
         }
         public void Follow(Vector2 target, Vector2 target2)
         {

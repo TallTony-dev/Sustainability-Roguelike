@@ -40,7 +40,8 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
                     Game1.activePlayerProjectiles.Add(new Projectile(aimAngle, projectileSpeed, damage, entityPos, textureIndex, lifespan, projWidth, projHeight, animIndex, weaponType));
                     float xTrans = (float)Math.Cos(aimAngle) * damage * projectileSpeed / 3000f;
                     float yTrans = (float)Math.Sin(aimAngle) * damage * projectileSpeed / 3000f;
-                    Game1.camera.cameraAnimationsToPlay.Add((xTrans, yTrans, 0.2f));
+                    float rotTrans = (float)Math.Cos(aimAngle) * damage * projectileSpeed / 3000000f;
+                    Game1.camera.cameraAnimationsToPlay.Add((xTrans, yTrans, rotTrans, 0.2f));
                 }
                 else
                 {
