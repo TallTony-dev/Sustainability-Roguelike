@@ -30,7 +30,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             spriteBatch.Draw(texture, entity.position, rectangle, Color.White, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, spriteEffect, 0.03f);
 
             (Texture2D weaponTexture, Rectangle weaponRectangle) = ContentLoader.GetLoadedTileTexture(entity.activeWeapon.textureIndex);
-            spriteBatch.Draw(weaponTexture, new Vector2(entity.position.X, entity.position.Y + 8), weaponRectangle, Color.White, entity.activeWeapon.aimAngle, new Vector2(rectangle.Width / 2, rectangle.Height / 2), new Vector2(0.5f, 0.5f), spriteEffect, 0.02f);
+            spriteBatch.Draw(weaponTexture, entity.activeWeapon.position, weaponRectangle, Color.White, entity.activeWeapon.rotation, new Vector2(weaponRectangle.Width / 2, weaponRectangle.Height / 2), new Vector2(0.5f, 0.5f), spriteEffect, 0.02f);
         }
         public void AddToDrawBuffer(Tile tile, int tileMapX, int tileMapY)
         {

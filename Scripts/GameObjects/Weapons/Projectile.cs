@@ -6,42 +6,39 @@ using System.Threading.Tasks;
 
 namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
 {
-    internal class Projectile
+    internal class Projectile : GameObject
     {
         string weaponType;
         public float travelAngle { get; private set; }
         private float speed { get; set; }
-        public Vector2 position { get; set; }
         private int damage;
-        public ushort textureIndex { get; private set; }
         private double lifespanRemaining;
         private float lifespan;
         public Hitboxes.Hitbox hitBox;
 
-        public bool isEnabled = true;
         private bool destroyed = false;
         private bool isReplica = false;
 
-        public AnimationHandler animationHandler;
-        public Projectile(float travelAngle, float speed, int damage, Vector2 startingPosition, ushort textureIndex, float lifespan, int hitBoxWidth, int hitBoxHeight, ushort ?animationIndex, string weaponType)
+        public Projectile(float travelAngle, float speed, int damage, Vector2 startingPosition, ushort textureIndex, float lifespan, int hitBoxWidth, int hitBoxHeight, ushort animationIndex, string weaponType) : base(animationIndex, Vector2.One)
         {
             this.travelAngle = travelAngle;
             this.speed = speed;
-            position = startingPosition;
             this.textureIndex = textureIndex;
             this.lifespan = lifespan;
             lifespanRemaining = lifespan;
             this.damage = damage;
             hitBox = new Hitboxes.Hitbox(startingPosition.X, startingPosition.Y,hitBoxWidth,hitBoxHeight);
-            if (animationIndex != null)
-                animationHandler = new AnimationHandler((ushort)animationIndex);
+            position = startingPosition;
+            animationHandler = new AnimationHandler(animationIndex);
             this.weaponType = weaponType;
+            isEnabled = true;
         }
 
         public void Update(bool isPlayerProjectile)
         {
             if (isEnabled)
             {
+                //UpdateAnimation();
                 float updatedProjectileSpeed = (float)(speed * Game1.gameTime.ElapsedGameTime.TotalSeconds);
                 float newXPos = position.X + (float)Math.Cos(travelAngle) * updatedProjectileSpeed;
                 float newYPos = position.Y + (float)Math.Sin(travelAngle) * updatedProjectileSpeed;
@@ -49,8 +46,6 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
                 hitBox.xPos = newXPos;
                 hitBox.yPos = newYPos;
                 lifespanRemaining -= Game1.gameTime.ElapsedGameTime.TotalSeconds;
-
-                textureIndex = animationHandler.Update();
 
                 if (!destroyed)
                 {
@@ -108,6 +103,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
 
         public void Destroy(bool isPlayerProj)
         {
+            isEnabled = false;
             if (weaponType == "ranged" || weaponType == "melee" || isReplica) 
             {
                 if (isPlayerProj)

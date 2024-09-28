@@ -63,13 +63,13 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                 if (movingSpeed > 0)
                 {
                     isMoving = true;
-                    animationHandler.SetAnimation(1);
+                    animationHandler.SetTextureAnimation(1);
                     animationHandler.SetAnimationSpeed(1, (int)(10000 / movingSpeed));
                 }
                 else
                 {
                     isMoving = false;
-                    animationHandler.SetAnimation(0);
+                    animationHandler.SetTextureAnimation(0);
                 }
 
             }
