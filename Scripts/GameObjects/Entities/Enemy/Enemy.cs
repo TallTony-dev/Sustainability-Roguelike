@@ -23,9 +23,9 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Enemy
             entitySpeed = Convert.ToInt32(enemyDataSplit[1]);
             SetAnimationData(Convert.ToUInt16(enemyDataSplit[2]));
             if (enemyDataSplit[3] == "melee")
-                activeWeapon = new Weapon((ushort)Game1.rand.Next(Weapon.meleeStartingIndex, Weapon.meleeEndIndex + 1));
+                activeWeapon = new Weapon((ushort)Game1.rand.Next(Weapon.meleeStartingIndex, Weapon.meleeEndIndex + 1), this);
             else if (enemyDataSplit[3] == "ranged")
-                activeWeapon = new Weapon((ushort)Game1.rand.Next(Weapon.rangedStartingIndex, Weapon.rangedEndIndex + 1));
+                activeWeapon = new Weapon((ushort)Game1.rand.Next(Weapon.rangedStartingIndex, Weapon.rangedEndIndex + 1), this);
             hitBox = new Hitboxes.Hitbox(startingPos.X, startingPos.Y, Convert.ToInt32(enemyDataSplit[4]), Convert.ToInt32(enemyDataSplit[5]));
 
         }

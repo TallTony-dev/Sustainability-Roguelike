@@ -15,17 +15,62 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
         public bool isInLevelEditorMode = false;
         public List<Weapon> weapons = new List<Weapon>();
         public short activeWeaponIndex = 0;
+        public int maxWeapons = 9;
         Vector2 entityToFollowPos;
 
          public Player(int health, float entitySpeed, Vector2 startingTile, Hitboxes.Hitbox hitBox, ushort textureIndex) : base(entitySpeed, startingTile, textureIndex, hitBox, EntityMovement.AIType.none, health)
         {
             isEnabled = true;
-            weapons.Add(new Weapon(0));
-            weapons.Add(new Weapon(1));
-            weapons.Add(new Weapon(2));
-            weapons.Add(new Weapon(3));
+            weapons.Add(new Weapon(0, this));
+            weapons.Add(new Weapon(1, this));
+            weapons.Add(new Weapon(2, this));
+            weapons.Add(new Weapon(3, this));
         }
 
+        double timeWhenPickedUpItem = 0;
+        public override void CheckRoom()
+        {
+            Level.Room room = Level.LevelGenerator.PosToRoom(position);
+            var kstate = Keyboard.GetState();
+            var gstate = GamePad.GetState(PlayerIndex.One);
+            bool hasPickedUp = false;
+
+            (int playerTileX, int playerTileY) = TileMap.PosToAbsTileMapPos(position);
+            for (int i = 0; i < room.gameObjects.Count; i++)
+            {
+                GameObject gameObject = room.gameObjects[i];
+                if ((kstate.IsKeyDown(Keys.E) || gstate.IsButtonDown(Buttons.B)) && weapons.Count < maxWeapons && gameObject is Weapon && Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenPickedUpItem > 0.2 && !hasPickedUp)
+                {
+                    Weapon weapon = (Weapon)gameObject;
+                    (int weaponTileX, int weaponTileY) = TileMap.PosToAbsTileMapPos(weapon.position);
+                    for (int x = -1; x < 1; x++)
+                    {
+                        for (int y = -1; y < 1; y++)
+                        {
+                            if (!hasPickedUp && playerTileX + x == weaponTileX && playerTileY + y == weaponTileY)
+                            {
+                                weapon.Pickup(this);
+                                hasPickedUp = true;
+                                timeWhenPickedUpItem = Game1.gameTime.TotalGameTime.TotalSeconds;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns false if not added, true if did add, wont be added if inventory is full
+        /// </summary>
+        public bool AddToInventory(Weapon weapon)
+        {
+            if (weapons.Count < maxWeapons)
+            {
+                weapons.Add(weapon);
+                return true;
+            }
+            else return false;
+        }
         public override void Update(Player player)
         {
             if (ContentManagers.Camera.Camera.IsLocked)
@@ -48,7 +93,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
             }
             if (isEnabled)
             {
-
+                CheckRoom();
                 TakeAction(player);
 
                 activeWeaponIndex = inputHandler.GetWeaponIndex(activeWeaponIndex, weapons.Count);

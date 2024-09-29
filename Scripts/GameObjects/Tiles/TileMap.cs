@@ -160,12 +160,16 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Tiles
             {
                 return true;
             }
-            foreach (Entity entity in Game1.currentGameObjects)
+            foreach (GameObject gameObject in Game1.currentGameObjects)
             {
-                (int entityX, int entityY) = PosToAbsTileMapPos(entity.position);
-                if (entity.isEnabled && (entityX, entityY) == (tileX, tileY))
+                if (gameObject is Entity)
                 {
-                    return true;
+                    Entity entity = (Entity)gameObject;
+                    (int entityX, int entityY) = PosToAbsTileMapPos(entity.position);
+                    if (entity.isEnabled && (entityX, entityY) == (tileX, tileY))
+                    {
+                        return true;
+                    }
                 }
             }
 

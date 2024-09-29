@@ -48,6 +48,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                     TileMap.SetPathfindingModeOfTileAtCoord(position.X + x * 16, position.Y + y * 16, false);
 
             Level.LevelGenerator.PosToRoom(position).gameObjects.Remove(this);
+            activeWeapon.Drop(position);
             Game1.currentGameObjects.Remove(this);
         }
         public virtual void Update(Player.Player player)
@@ -59,6 +60,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             if (isEnabled)
             {
                 TakeAction(player);
+                CheckRoom();
 
                 if (movingSpeed > 0)
                 {
@@ -72,6 +74,31 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                     animationHandler.SetTextureAnimation(0);
                 }
 
+            }
+        }
+        public virtual void CheckRoom()
+        {
+            Level.Room room = Level.LevelGenerator.PosToRoom(position);
+            (int entityTileX, int entityTileY) = TileMap.PosToAbsTileMapPos(position);
+            bool hasPickedUp = false;
+            foreach (GameObject gameObject in room.gameObjects)
+            {
+                if (activeWeapon == null && gameObject is Weapon && !hasPickedUp)
+                {
+                    Weapon weapon = (Weapon)gameObject;
+                    (int weaponTileX, int weaponTileY) = TileMap.PosToAbsTileMapPos(weapon.position);
+                    for (int x = -1; x < 1; x++)
+                    {
+                        for (int y = -1; y < 1; y++)
+                        {
+                            if (entityTileX + x == weaponTileX && entityTileY + y == weaponTileY)
+                            {
+                                weapon.Pickup(this);
+                                break;
+                            }
+                        }
+                    }
+                }
             }
         }
         public virtual void TakeAction(Player.Player playerToFollow)

@@ -26,7 +26,41 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
         private int projHeight;
 
         internal double timeWhenShot;
+        private Entity owner;
 
+        public void Drop(Vector2 pos)
+        {
+            position = pos;
+            var room = Level.LevelGenerator.PosToRoom(pos);
+            Game1.currentGameObjects.Add(this);
+            room.gameObjects.Add(this);
+
+            if (!(owner is Player))
+                owner.activeWeapon = null;
+            else
+            {
+                Player player = (Player)owner;
+                player.weapons.Remove(this);
+            }
+            rotation = 0;
+            owner = null;
+        }
+        public void Pickup(Entity newOwner)
+        {
+            var room = Level.LevelGenerator.PosToRoom(position);
+            room.gameObjects.Remove(this);
+            Game1.currentGameObjects.Remove(this);
+            owner = newOwner;
+            if (!(owner is Player))
+                newOwner.activeWeapon = this;
+            else
+            {
+                Player player = (Player)owner;
+                player.AddToInventory(this);
+            }
+
+
+        }
         public void Fire(Vector2 entityPos, bool isPlayer)
         {
             if (Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenShot > fireRate)
@@ -60,12 +94,16 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
         /// </summary>
         public void Update(Vector2 targetPos, Vector2 entityPos)
         {
-            float y = (targetPos.Y - entityPos.Y);
-            float x = (targetPos.X - entityPos.X);
-            if (Math.Abs(x) > 0 && Math.Abs(y) > 0)
-                rotation = (float)(Math.Atan2(y, x));
+            if (owner != null)
+            {
+                float y = (targetPos.Y - entityPos.Y);
+                float x = (targetPos.X - entityPos.X);
+                if (Math.Abs(x) > 0 && Math.Abs(y) > 0)
+                    rotation = (float)(Math.Atan2(y, x));
 
-            position = new Vector2(entityPos.X, entityPos.Y + 8);
+                position = new Vector2(entityPos.X, entityPos.Y + 8);
+            }
+
             UpdateAnimation();
             if (Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenShot > fireRate)
                 animationHandler.SetTextureAnimation(0);
@@ -76,16 +114,22 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
         /// </summary>
         public void Update(HandlePlayerInputs inputHandler, Vector2 playerPos)
         {
-            rotation = inputHandler.GetShootingAngle(playerPos);
-            position = new Vector2(playerPos.X, playerPos.Y + 8);
+            if (owner != null)
+            {
+                rotation = inputHandler.GetShootingAngle(playerPos);
+                position = new Vector2(playerPos.X, playerPos.Y + 8);
+            }
+            
             UpdateAnimation();
             if (Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenShot > fireRate)
                 animationHandler.SetTextureAnimation(0);
         }
 
-        public Weapon(ushort weaponIndex) : base(0,new Vector2(0,0))
+        public Weapon(ushort weaponIndex, Entity owner) : base(0,new Vector2(0,0))
         {
             string weaponData = File.ReadLines("Content/WeaponData.txt").Skip((weaponIndex) * 2).Take(1).First();
+            if (owner != null)
+                this.owner = owner;
 
             string[] tokens = weaponData.Split(",");
             weaponType = Convert.ToString(tokens[0]);

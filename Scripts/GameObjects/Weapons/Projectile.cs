@@ -63,24 +63,33 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
 
                     if (isPlayerProjectile)
                     {
-                        foreach (Entity entity in Game1.currentGameObjects)
+                        foreach (GameObject gameObject in Game1.currentGameObjects)
                         {
-                            if (!destroyed && entity.isEnabled && hitBox.Intersects(entity.hitBox) && !(entity is Player))
+                            if (gameObject is Entity)
                             {
-                                entity.health -= damage;
-                                destroyed = true;
+                                Entity entity = (Entity)gameObject;
+                                if (!destroyed && entity.isEnabled && hitBox.Intersects(entity.hitBox) && !(entity is Player))
+                                {
+                                    entity.health -= damage;
+                                    destroyed = true;
+                                }
                             }
                         }
                     }
                     else
                     {
-                        foreach (Entity entity in Game1.currentGameObjects)
+                        foreach (GameObject gameObject in Game1.currentGameObjects)
                         {
-                            if (!destroyed && entity is Player && entity.isEnabled && hitBox.Intersects(entity.hitBox))
+                            if (gameObject is Entity)
                             {
-                                entity.health -= damage;
-                                destroyed = true;
+                                Entity entity = (Entity)gameObject;
+                                if (!destroyed && entity is Player && entity.isEnabled && hitBox.Intersects(entity.hitBox))
+                                {
+                                    entity.health -= damage;
+                                    destroyed = true;
+                                }
                             }
+                            
                         }
                     }
 
