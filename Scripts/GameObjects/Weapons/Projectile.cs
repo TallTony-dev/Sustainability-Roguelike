@@ -19,11 +19,10 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
         private bool destroyed = false;
         private bool isReplica = false;
 
-        public Projectile(float travelAngle, float speed, int damage, Vector2 startingPosition, ushort textureIndex, float lifespan, int hitBoxWidth, int hitBoxHeight, ushort animationIndex, string weaponType) : base(animationIndex, Vector2.One)
+        public Projectile(float travelAngle, float speed, int damage, Vector2 startingPosition, float lifespan, int hitBoxWidth, int hitBoxHeight, ushort animationIndex, string weaponType) : base(animationIndex, Vector2.One)
         {
             this.travelAngle = travelAngle;
             this.speed = speed;
-            this.textureIndex = textureIndex;
             this.lifespan = lifespan;
             lifespanRemaining = lifespan;
             this.damage = damage;
@@ -32,13 +31,14 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
             animationHandler = new AnimationHandler(animationIndex);
             this.weaponType = weaponType;
             isEnabled = true;
+            UpdateAnimation();
         }
 
         public void Update(bool isPlayerProjectile)
         {
             if (isEnabled)
             {
-                //UpdateAnimation();
+                UpdateAnimation();
                 float updatedProjectileSpeed = (float)(speed * Game1.gameTime.ElapsedGameTime.TotalSeconds);
                 float newXPos = position.X + (float)Math.Cos(travelAngle) * updatedProjectileSpeed;
                 float newYPos = position.Y + (float)Math.Sin(travelAngle) * updatedProjectileSpeed;
@@ -124,7 +124,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
                     Game1.activePlayerProjectiles.Remove(this);
                     for (int i = 0; i < 6; i++)
                     {
-                        Game1.activePlayerProjectiles.Add(new Projectile(i * 45, speed / 1.3f, damage / 6, offsetPos, textureIndex, lifespan/1.5f, (int)hitBox.width - 10, (int)hitBox.height - 10, animationHandler.animationIndex, "6burst"));
+                        Game1.activePlayerProjectiles.Add(new Projectile(i * 45, speed / 1.3f, damage / 6, offsetPos, lifespan/1.5f, (int)hitBox.width - 10, (int)hitBox.height - 10, animationHandler.animationIndex, "6burst"));
                         Game1.activePlayerProjectiles.Last().isReplica = true;
                     }
                 }
@@ -133,7 +133,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
                     Game1.activeEnemyProjectiles.Remove(this);
                     for (int i = 0; i < 6; i++)
                     {
-                        Game1.activeEnemyProjectiles.Add(new Projectile(i * 45, speed / 1.3f, damage / 6, offsetPos, textureIndex, lifespan/1.5f, (int)hitBox.width - 10, (int)hitBox.height - 10, animationHandler.animationIndex, "6burst"));
+                        Game1.activeEnemyProjectiles.Add(new Projectile(i * 45, speed / 1.3f, damage / 6, offsetPos, lifespan/1.5f, (int)hitBox.width - 10, (int)hitBox.height - 10, animationHandler.animationIndex, "6burst"));
                         Game1.activeEnemyProjectiles.Last().isReplica = true;
                     }
                 }

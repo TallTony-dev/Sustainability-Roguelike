@@ -77,7 +77,8 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers.Camera
             }
             xToMove += ((-target.X / 2 - target2.X / 2) - xToMove)/5f;
             yToMove += ((-target.Y / 2 - target2.Y / 2) - yToMove)/5f;
-            
+            rotationToMove += -rotationToMove / 5f;
+
             var position = Matrix.CreateTranslation(xToMove, yToMove, 0);
             var offset = Matrix.CreateTranslation(
                 (Settings.resolutionWidth / 2 / Settings.zoomLevel),
@@ -85,9 +86,9 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers.Camera
                 0);
             var zoom = Matrix.CreateScale(Settings.zoomLevel);
 
-            Transform = position * offset * (zoom);
+            var rotation = Matrix.CreateRotationZ(rotationToMove);
+            Transform = position * offset * zoom * rotation;
 
-            Transform = position * offset * (zoom);
         }
     }
 }

@@ -1,0 +1,71 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Monogame_Cross_Platform.Scripts.HUD
+{
+    internal class Inventory : UiElement
+    {
+        int inventorySizeX;
+        int inventorySizeY;
+        int inventorySizeTotal { get => inventorySizeX * inventorySizeY; }
+        float borderSizePx;
+        float itemSpacingPx;
+        List<(ushort textureIndex, int durability)> items = new List<(ushort textureIndex, int durability)>();
+        int highlightedWeapon;
+        
+
+
+        public Inventory(ushort backTextureIndex, int xOffset, int yOffset, Rectangle inventoryTextureSize, int inventorySizeX, int inventorySizeY, float borderSizePx, float itemSpacingPx) : base(backTextureIndex, xOffset, yOffset, inventoryTextureSize)
+        {
+            this.inventorySizeX = inventorySizeX;
+            this.inventorySizeY = inventorySizeY;
+            this.borderSizePx = borderSizePx;
+            this.itemSpacingPx = itemSpacingPx;
+
+        }
+        public void Update<T>(List<T> items, int highlightedWeapon)
+        {
+            this.highlightedWeapon = highlightedWeapon;
+            if (items is List<Weapon>)
+            {
+                for (int x = 0; x < items.Count; x++)
+                {
+                    Weapon weapon = items[x] as Weapon;
+                    if (this.items.Count > x)
+                        this.items[x] = (weapon.textureIndex, weapon.durability);
+                    else
+                        this.items.Add((weapon.textureIndex, weapon.durability));
+                }
+            }
+            Update();
+        }
+        public void Draw(SpriteBatch uiSpriteBatch)
+        {
+            (Texture2D backTexture, Rectangle backRectangle) = ContentLoader.GetLoadedTileTexture(textureIndex); //temp scaling below
+            uiSpriteBatch.Draw(backTexture, new Vector2(xOffset, yOffset), backRectangle, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * scale * 6, Settings.uiScaleY * scale * 2), SpriteEffects.None, 0.1f);
+            for (int x = 0; x < inventorySizeX; x++)
+            {
+                for (int y = 0; y < inventorySizeY; y++)
+                {
+                    if ((items.Count > y * inventorySizeX + x))
+                    {
+                        (ushort itemTextureIndex, int itemDurability) = items[y * inventorySizeX + x];
+                        
+                        (Texture2D itemTexture, Rectangle itemRectangle) = ContentLoader.GetLoadedTileTexture(itemTextureIndex);
+                        Vector2 position = new Vector2(xOffset + borderSizePx + x * itemSpacingPx * scale, yOffset + borderSizePx + y * borderSizePx * scale);
+                        uiSpriteBatch.Draw(itemTexture, position, itemRectangle, Color.White, 0f, Vector2.Zero, new Vector2(Settings.uiScaleX * scale, Settings.uiScaleY * scale), SpriteEffects.None, 0f);
+                        if (y * inventorySizeX + x == highlightedWeapon)
+                        {
+                            (Texture2D borderTexture, Rectangle borderRectangle) = ContentLoader.GetLoadedTileTexture(57);
+                            uiSpriteBatch.Draw(borderTexture, position, borderRectangle, Color.White, 0f, Vector2.Zero, new Vector2(Settings.uiScaleX * scale, Settings.uiScaleY * scale), SpriteEffects.None, 0f);
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+}

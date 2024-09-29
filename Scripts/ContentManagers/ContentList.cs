@@ -17,7 +17,7 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
         private List<(string textureName, Rectangle sourceRect, ushort index)> CityTexturesToLoad = new List<(string, Rectangle, ushort)>() { };
 
         //Arrays of all textures to load, texturetype indicates how the texture should be loaded, 0 loads as a tileset (currently 4x4 like cooblestone texture, TODO: make type 1 load a spritesheet (figure out how)
-        private (string textureName, ushort startingIndex, byte textureType)[] AlwaysLoadedTextures = { ("cobblestone", 0, 0), ("cobblestone wall testing", 16, 0), ("cobblestoneRecolor", 32, 0)};
+        private (string textureName, ushort startingIndex, byte textureType)[] AlwaysLoadedTextures = { ("cobblestone", 0, 0), ("cobblestone wall testing", 16, 0), ("cobblestoneRecolor", 32, 0), ("projectileTesting", 48, 0)};
         private (string textureName, ushort startingIndex, byte textureType)[] HomeTextures = { };
         private (string textureName, ushort startingIndex, byte textureType)[] CityTextures = { };
 

@@ -33,9 +33,6 @@ namespace Monogame_Cross_Platform.Scripts.HUD
 
         public void DrawMiniMap(SpriteBatch uiSpriteBatch)
         {
-            scale = 8;
-
-
             (Texture2D backTexture, Rectangle backRectangle) = ContentLoader.GetLoadedTileTexture(textureIndex);
             (Texture2D entranceTexture, Rectangle entranceRectangle) = ContentLoader.GetLoadedTileTexture(entranceTextureIndex);
             (Texture2D enemyRoomTexture, Rectangle enemyRoomRectangle) = ContentLoader.GetLoadedTileTexture(enemyRoomTextureIndex);
@@ -46,13 +43,13 @@ namespace Monogame_Cross_Platform.Scripts.HUD
             (Texture2D bridgeTexture, Rectangle bridgeRectangle) = ContentLoader.GetLoadedTileTexture(bridgeTextureIndex);
 
             //draw background
-            uiSpriteBatch.Draw(backTexture, new Vector2(xOffset, yOffset), backRectangle, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * scale, Settings.uiScaleY * scale), SpriteEffects.None, 0f);
+            uiSpriteBatch.Draw(backTexture, new Vector2(xOffset, yOffset), backRectangle, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * scale, Settings.uiScaleY * scale), SpriteEffects.None, 0.1f);
 
             float deltaX = maxInitedX - minInitedX;
-           float deltaY = maxInitedY - minInitedY;
+            float deltaY = maxInitedY - minInitedY;
             int sqrtRoomsLength = (int)Math.Sqrt(knownRoomTypes.Length);
-            float usableWidthOverBackground = backRectangle.Width * Settings.uiScaleX * scale - borderDistance * 2;
-            float usableHeightOverBackground = backRectangle.Height * Settings.uiScaleY * scale - borderDistance * 2;
+            float usableWidthOverBackground = backRectangle.Width * scale * Settings.uiScaleX - borderDistance * 2;
+            float usableHeightOverBackground = backRectangle.Height * scale * Settings.uiScaleY - borderDistance * 2;
 
             for (var x = 0; x <= deltaX; x++)
             {
@@ -64,8 +61,8 @@ namespace Monogame_Cross_Platform.Scripts.HUD
 
                         if (roomType != 0)
                         {
-                            Vector2 placement = new Vector2(xOffset + usableWidthOverBackground/2 + ((usableWidthOverBackground) / (squareSize)) * (x - deltaX / 2), 
-                                                            yOffset + usableHeightOverBackground/2 + ((usableHeightOverBackground) / (squareSize)) * (y - deltaY / 2));
+                            Vector2 placement = new Vector2((xOffset + usableWidthOverBackground/2 + borderDistance + ((usableWidthOverBackground) / (squareSize)) * (x - deltaX / 2)), 
+                                                            (yOffset + usableHeightOverBackground/2 + borderDistance + ((usableHeightOverBackground) / (squareSize)) * (y - deltaY / 2)));
 
 
 
@@ -104,6 +101,7 @@ namespace Monogame_Cross_Platform.Scripts.HUD
                 }
             }
             CalculateSquareSize();
+            Update();
         }
         public void CalculateSquareSize()
         {

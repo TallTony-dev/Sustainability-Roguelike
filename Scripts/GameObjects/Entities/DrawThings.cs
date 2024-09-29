@@ -30,7 +30,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             spriteBatch.Draw(texture, entity.position, rectangle, Color.White, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, spriteEffect, 0.03f);
 
             (Texture2D weaponTexture, Rectangle weaponRectangle) = ContentLoader.GetLoadedTileTexture(entity.activeWeapon.textureIndex);
-            spriteBatch.Draw(weaponTexture, entity.activeWeapon.position, weaponRectangle, Color.White, entity.activeWeapon.rotation, new Vector2(weaponRectangle.Width / 2, weaponRectangle.Height / 2), new Vector2(0.5f, 0.5f), spriteEffect, 0.02f);
+            spriteBatch.Draw(weaponTexture, entity.activeWeapon.position, weaponRectangle, Color.White, entity.activeWeapon.rotation, new Vector2(weaponRectangle.Width / 2, weaponRectangle.Height / 2), Vector2.One, spriteEffect, 0.02f);
         }
         public void AddToDrawBuffer(Tile tile, int tileMapX, int tileMapY)
         {
@@ -49,7 +49,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                 {
                     foreach (UiElement element in menu.elements)
                     {
-                        if (!(element is Meter || element is MiniMap) && element.isEnabled)
+                        if (!(element is Meter || element is MiniMap || element is Inventory) && element.isEnabled)
                         {
                             (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(element.textureIndex);
                             uiSpriteBatch.Draw(texture, new Vector2(element.xOffset, element.yOffset), rectangle, Color.White, 0f, new Vector2(0,0), new Vector2(Settings.uiScaleX * element.scale, Settings.uiScaleY * element.scale), SpriteEffects.None, 0f);
@@ -59,13 +59,18 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                             Meter meter = (Meter)element;
                             (Texture2D backTexture, Rectangle backRectangle) = ContentLoader.GetLoadedTileTexture(element.textureIndex);
                             (Texture2D frontTexture, Rectangle frontRectangle) = ContentLoader.GetLoadedTileTexture(meter.frontTextureIndex);
-                            uiSpriteBatch.Draw(backTexture, new Vector2(element.xOffset, element.yOffset), backRectangle, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * element.scale, Settings.uiScaleY * element.scale), SpriteEffects.None, 0f);
-                            uiSpriteBatch.Draw(frontTexture, new Vector2(element.xOffset, element.yOffset), meter.drawingMask, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * element.scale, Settings.uiScaleY * element.scale), SpriteEffects.None, 0f);
+                            uiSpriteBatch.Draw(backTexture, new Vector2(element.xOffset * Settings.uiScaleX, element.yOffset * Settings.uiScaleY), backRectangle, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * meter.xScale, Settings.uiScaleY * meter.yScale), SpriteEffects.None, 0.1f);
+                            uiSpriteBatch.Draw(frontTexture, new Vector2(element.xOffset * Settings.uiScaleX, element.yOffset * Settings.uiScaleY), meter.drawingMask, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * meter.xScale, Settings.uiScaleY * meter.yScale), SpriteEffects.None, 0f);
                         }
                         else if (element is MiniMap && element.isEnabled)
                         {
                             MiniMap miniMap = (MiniMap)element;
                             miniMap.DrawMiniMap(uiSpriteBatch);
+                        }
+                        else if (element is Inventory)
+                        {
+                            Inventory inventory = (Inventory)element;
+                            inventory.Draw(uiSpriteBatch);
                         }
                     }
                 }

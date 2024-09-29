@@ -17,6 +17,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
         private ushort projectileAnimIndex;
         public int attackRange { get; set; }
         public float fireRate;
+        public int durability = 10;
 
         public float projectileSpeed { get; set; }
         public float lifespan { get; set; }
@@ -38,13 +39,13 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
                 float rotTrans = (float)Math.Cos(rotation) * damage * projectileSpeed / 3000000f;
                 if (isPlayer)
                 {
-                    Game1.activePlayerProjectiles.Add(new Projectile(rotation, projectileSpeed, damage, entityPos, textureIndex, lifespan, projWidth, projHeight, projectileAnimIndex, weaponType));
+                    Game1.activePlayerProjectiles.Add(new Projectile(rotation, projectileSpeed, damage, entityPos, lifespan, projWidth, projHeight, projectileAnimIndex, weaponType));
 
                     Game1.camera.cameraAnimationsToPlay.Add((xTrans, yTrans, rotTrans, 0.2f));
                 }
                 else
                 {
-                    Game1.activeEnemyProjectiles.Add(new Projectile(rotation, projectileSpeed, damage, entityPos, textureIndex, lifespan, projWidth, projHeight, projectileAnimIndex, weaponType));
+                    Game1.activeEnemyProjectiles.Add(new Projectile(rotation, projectileSpeed, damage, entityPos, lifespan, projWidth, projHeight, projectileAnimIndex, weaponType));
                 }
                 animationHandler.AddToMovementAnims(-xTrans * 5, -yTrans * 5, -rotTrans * 50, 0.2f);
 

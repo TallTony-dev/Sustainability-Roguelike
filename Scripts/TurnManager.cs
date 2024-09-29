@@ -36,7 +36,8 @@ namespace Monogame_Cross_Platform.Scripts
             healthbar.maxVal = player.maxHealth;
             healthbar.Update(player.health);
             
-
+            Inventory inventory = (Inventory)inGameMenu.elements[2];
+            inventory.Update(player.weapons, player.activeWeaponIndex);
 
             Room room = LevelGenerator.PosToRoom(player.position);
             if (!isInComboMode)
