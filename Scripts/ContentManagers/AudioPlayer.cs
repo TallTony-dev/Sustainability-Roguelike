@@ -71,7 +71,7 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
             float deltaX = listenerPos.X - emitterPos.X;
             float deltaY = listenerPos.Y - emitterPos.Y;
             Vector2 normalizedDeltaVals = Vector2.Normalize(new Vector2(deltaX, deltaY));
-            instance.Pan = normalizedDeltaVals.X;
+            instance.Pan = -normalizedDeltaVals.X;
 
             float overallMovement = 0;
             if (emitterNewPos != null)
