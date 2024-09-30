@@ -31,9 +31,14 @@ namespace Monogame_Cross_Platform.Scripts.HUD
             this.highlightedWeapon = highlightedWeapon;
             if (items is List<Weapon>)
             {
+                if (this.items.Count > items.Count)
+                {
+                    this.items.Clear();
+                }
                 for (int x = 0; x < items.Count; x++)
                 {
                     Weapon weapon = items[x] as Weapon;
+                    weapon.Update();
                     if (this.items.Count > x)
                         this.items[x] = (weapon.textureIndex, weapon.durability);
                     else

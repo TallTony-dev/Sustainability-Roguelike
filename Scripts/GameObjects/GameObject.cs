@@ -21,6 +21,9 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects
             animationHandler = new AnimationHandler(animationIndex);
             animationHandler.SetTextureAnimation(0);
         }
+        /// <summary>
+        /// If is enabled, updates the animation handler
+        /// </summary>
         public void UpdateAnimation()
         {
             if (isEnabled)

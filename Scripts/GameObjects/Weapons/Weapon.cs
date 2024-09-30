@@ -17,7 +17,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
         private ushort projectileAnimIndex;
         public int attackRange { get; set; }
         public float fireRate;
-        public int durability = 10;
+        public int durability;
 
         public float projectileSpeed { get; set; }
         public float lifespan { get; set; }
@@ -34,6 +34,8 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
             var room = Level.LevelGenerator.PosToRoom(pos);
             Game1.currentGameObjects.Add(this);
             room.gameObjects.Add(this);
+            animationHandler.SetTextureAnimation(0);
+            UpdateAnimation();
 
             if (!(owner is Player))
                 owner.activeWeapon = null;
@@ -58,9 +60,36 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
                 Player player = (Player)owner;
                 player.AddToInventory(this);
             }
-
+            isEnabled = true;
 
         }
+        public void Destroy()
+        {
+            if (owner != null)
+            {
+                if (owner is Player)
+                {
+                    Player player = (Player)owner;
+                    player.activeWeaponIndex--;
+                    player.weapons.Remove(this);
+                }
+                else
+                {
+                    owner.activeWeapon = null;
+                }
+            }
+            else
+            {
+                var room = Level.LevelGenerator.PosToRoom(position);
+                room.gameObjects.Remove(this);
+                Game1.currentGameObjects.Remove(this);
+            }
+        }
+
+
+
+
+
         public void Fire(Vector2 entityPos, bool isPlayer)
         {
             if (Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenShot > fireRate)
@@ -77,17 +106,35 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
 
                     Game1.camera.cameraAnimationsToPlay.Add((xTrans, yTrans, rotTrans, 0.2f));
                     Game1.audioPlayer.PlaySoundEffect(0);
+                    Player player = (Player)owner;
+                    if (player.activeWeaponIndex != 0)
+                        durability--;
                 }
                 else
                 {
                     Game1.activeEnemyProjectiles.Add(new Projectile(rotation, projectileSpeed, damage, entityPos, lifespan, projWidth, projHeight, projectileAnimIndex, weaponType));
                 }
-                animationHandler.AddToMovementAnims(-xTrans * 5, -yTrans * 5, -rotTrans * 50, 0.2f);
+                animationHandler.AddToMovementAnims(-xTrans * 5, -yTrans * 5, -rotTrans * 200, 0.2f);
 
                 timeWhenShot = Game1.gameTime.TotalGameTime.TotalSeconds;
                 animationHandler.SetTextureAnimation(1);
             }
             
+        }
+
+        /// <summary>
+        /// !!!!! ONLY UPDATES SOME SPECIFIC THINGS
+        /// </summary>
+        public void Update()
+        {
+            if (durability < 1)
+            {
+                Destroy();
+                return;
+            }
+            UpdateAnimation();
+            if (Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenShot > fireRate)
+                animationHandler.SetTextureAnimation(0);
         }
 
         /// <summary>
@@ -103,6 +150,11 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
                     rotation = (float)(Math.Atan2(y, x));
 
                 position = new Vector2(entityPos.X, entityPos.Y + 8);
+            }
+            if (durability < 1)
+            {
+                Destroy();
+                return;
             }
 
             UpdateAnimation();
@@ -120,7 +172,12 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
                 rotation = inputHandler.GetShootingAngle(playerPos);
                 position = new Vector2(playerPos.X, playerPos.Y + 8);
             }
-            
+            if (durability < 1)
+            {
+                Destroy();
+                return;
+            }
+
             UpdateAnimation();
             if (Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenShot > fireRate)
                 animationHandler.SetTextureAnimation(0);
@@ -135,7 +192,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
             string[] tokens = weaponData.Split(",");
             weaponType = Convert.ToString(tokens[0]);
             attackRange = Convert.ToInt32(tokens[1]);
-            textureIndex = Convert.ToUInt16(tokens[2]);
+            durability = Convert.ToUInt16(tokens[2]);
             projectileSpeed = Convert.ToSingle(tokens[3]);
             lifespan = Convert.ToSingle(tokens[4]);
             damage = Convert.ToInt32(tokens[5]);

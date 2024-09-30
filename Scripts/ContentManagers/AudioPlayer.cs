@@ -74,7 +74,6 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
             instance.Pan = normalizedDeltaVals.X;
 
             float overallMovement = 0;
-            float pitchChange = 0;
             if (emitterNewPos != null)
             {
                 float velocityTotalX = listenerVelocity.X - (emitterNewPos.Value.X - emitterPos.X);
@@ -86,7 +85,7 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
                 overallMovement = (normalizedDeltaVals.X * listenerVelocity.X + normalizedDeltaVals.Y * listenerVelocity.Y);
             }
 
-            pitchChange = overallMovement / 17;
+            float pitchChange = overallMovement / 17;
             if (pitchChange > -1 && pitchChange < 1)
                 instance.Pitch = pitchChange;
             else throw new ArgumentOutOfRangeException();
