@@ -43,9 +43,9 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
                 {
                     Weapon weapon = (Weapon)gameObject;
                     (int weaponTileX, int weaponTileY) = TileMap.PosToAbsTileMapPos(weapon.position);
-                    for (int x = -1; x < 1; x++)
+                    for (int x = -1; x < 2; x++)
                     {
-                        for (int y = -1; y < 1; y++)
+                        for (int y = -1; y < 2; y++)
                         {
                             if (!hasPickedUp && playerTileX + x == weaponTileX && playerTileY + y == weaponTileY)
                             {
@@ -75,6 +75,8 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
         {
             if (ContentManagers.Camera.Camera.IsLocked)
                 Game1.camera.Follow(this);
+
+            //follow nearest entity if unlocked
             else
             {
                 if (Level.LevelGenerator.PosToRoom(position).gameObjects.Count != 0)
@@ -140,6 +142,8 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
                     isMoving = true;
                 else
                     isMoving = false;
+
+                Game1.audioPlayer.UpdateListener(position, playerNewPos);
                 position = playerNewPos;
             }
             else if(isEnabled && movesLeft > 0)
@@ -155,6 +159,8 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
                     isMoving = true;
                 else
                     isMoving = false;
+
+                Game1.audioPlayer.UpdateListener(position, Vector2.Normalize(playerNewPos));
                 position = playerNewPos;
             }
         }

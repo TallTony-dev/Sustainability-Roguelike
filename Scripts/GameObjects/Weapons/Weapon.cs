@@ -76,6 +76,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
                     Game1.activePlayerProjectiles.Add(new Projectile(rotation, projectileSpeed, damage, entityPos, lifespan, projWidth, projHeight, projectileAnimIndex, weaponType));
 
                     Game1.camera.cameraAnimationsToPlay.Add((xTrans, yTrans, rotTrans, 0.2f));
+                    Game1.audioPlayer.PlaySoundEffect(0);
                 }
                 else
                 {

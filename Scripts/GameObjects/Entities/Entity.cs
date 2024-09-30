@@ -87,9 +87,9 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                 {
                     Weapon weapon = (Weapon)gameObject;
                     (int weaponTileX, int weaponTileY) = TileMap.PosToAbsTileMapPos(weapon.position);
-                    for (int x = -1; x < 1; x++)
+                    for (int x = -1; x < 2; x++)
                     {
-                        for (int y = -1; y < 1; y++)
+                        for (int y = -1; y < 2; y++)
                         {
                             if (entityTileX + x == weaponTileX && entityTileY + y == weaponTileY)
                             {

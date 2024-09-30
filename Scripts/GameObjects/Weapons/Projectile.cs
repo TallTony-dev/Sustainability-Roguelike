@@ -54,10 +54,14 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
                         for (int y = -1; y < 2; y++)
                         {
                             (int tileX, int tileY) = TileMap.PosToAbsTileMapPos(position);
-                            if (hitBox.Intersects(TileMap.GetTileBounds(tileX, tileY).Item2))
+                            if (!(tileX + x < 0 || tileX + x > 512 || tileY + y < 0 || tileY + y > 512))
                             {
-                                destroyed = true;
+                                if (hitBox.Intersects(TileMap.GetTileBounds(tileX + x, tileY + y).Item2))
+                                {
+                                    destroyed = true;
+                                }
                             }
+
                         }
                     }
 
@@ -126,7 +130,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
                 float xPos = position.X - (float)Math.Cos(travelAngle) * speed / 20;
                 float yPos = position.Y - (float)Math.Sin(travelAngle) * speed / 20;
                 Vector2 offsetPos = new Vector2(xPos, yPos);
-
+                Game1.audioPlayer.PlaySoundEffect2D(1, position);
                 //releases smaller and weaker projectiles upon destruction, make a different small texture for these projectiles
                 if (isPlayerProj)
                 {

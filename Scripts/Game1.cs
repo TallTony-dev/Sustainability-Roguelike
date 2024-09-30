@@ -1,9 +1,11 @@
 ﻿global using Microsoft.Xna.Framework;
 global using Microsoft.Xna.Framework.Graphics;
 global using Microsoft.Xna.Framework.Input;
+global using Microsoft.Xna.Framework.Audio;
 global using Monogame_Cross_Platform.Scripts.ContentManagers;
 global using Monogame_Cross_Platform.Scripts.GameObjects.Tiles;
 global using Monogame_Cross_Platform.Scripts.GameObjects;
+global using Microsoft.Xna.Framework.Media;
 global using System;
 global using Monogame_Cross_Platform.Scripts.GameObjects.Entities;
 global using Monogame_Cross_Platform.Scripts.HUD;
@@ -19,12 +21,12 @@ namespace Monogame_Cross_Platform.Scripts
     {
         public static GraphicsDeviceManager _graphics;
         public static Random rand = new Random();
-
-        ContentLoader contentLoader;
+        
+        public static ContentLoader contentLoader;
         DrawThings drawEntities;
         RenderTarget2D renderTarget;
         internal static ContentManagers.Camera.Camera camera = new ContentManagers.Camera.Camera();
-
+        public static AudioPlayer audioPlayer;
         LevelEditor levelEditor;
 
         public static GameTime gameTime;
@@ -55,6 +57,7 @@ namespace Monogame_Cross_Platform.Scripts
             contentLoader = new ContentLoader(this);
 
             LevelGenerator.GenerateLevel(1, 13); //TEMP
+            audioPlayer = new AudioPlayer(ContentLoader.audioLoaded);
 
             Settings.ApplySettingsToFile(); //TEMP
             Settings.InitializeSettings();
@@ -66,9 +69,15 @@ namespace Monogame_Cross_Platform.Scripts
             // TODO: use this.Content to load your game content here
             drawEntities = new DrawThings();
             contentLoader.LoadTextures("AlwaysLoaded");
+            contentLoader.LoadTextures("Audio");
 
             renderTarget = new RenderTarget2D(GraphicsDevice, Settings.resolutionWidth, Settings.resolutionHeight);
             font = Content.Load<SpriteFont>("Arial"); //Temp font
+
+
+
+
+
 
         }
 
@@ -90,7 +99,7 @@ namespace Monogame_Cross_Platform.Scripts
                 timeWhenPaused = gameTime.TotalGameTime.TotalSeconds;
             }
 
-
+            audioPlayer.Update();
             camera.Update();
             UpdateThings.UpdateLevel(levelEditor, player);
             UpdateThings.UpdateEntities(player);

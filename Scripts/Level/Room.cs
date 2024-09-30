@@ -130,18 +130,24 @@ namespace Monogame_Cross_Platform.Scripts.Level
         }
         public void Update(Player player)
         {
+            int enemies = 0; 
+            foreach (GameObject gameObject in gameObjects)
+            {
+                if (gameObject is Enemy)
+                    enemies++;
+            }
             if (isOpen)
             {
                 if (LevelGenerator.PosToRoom(player.position) == this && LevelGenerator.PosToTileOfRoom(player.position).Item1 < 17 && LevelGenerator.PosToTileOfRoom(player.position).Item2 < 17
                     && LevelGenerator.PosToTileOfRoom(player.position).Item1 > 1 && LevelGenerator.PosToTileOfRoom(player.position).Item2 > 1
-                    && !player.isInLevelEditorMode && gameObjects.Count > 0)
+                    && !player.isInLevelEditorMode && enemies > 0)
                 {
                     Activate();
                 }
             }
             else
             {
-                if (LevelGenerator.PosToRoom(player.position) != this || LevelGenerator.PosToTileOfRoom(player.position).Item1 > 18 || LevelGenerator.PosToTileOfRoom(player.position).Item2 > 18 || player.isInLevelEditorMode || gameObjects.Count == 0)
+                if (LevelGenerator.PosToRoom(player.position) != this || LevelGenerator.PosToTileOfRoom(player.position).Item1 > 18 || LevelGenerator.PosToTileOfRoom(player.position).Item2 > 18 || player.isInLevelEditorMode || enemies == 0)
                 {
                     Deactivate();
                 }

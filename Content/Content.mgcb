@@ -23,6 +23,18 @@
 /processorParam:TextureFormat=Compressed
 /build:Arial.spritefont
 
+#begin Audio/Explosion.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Explosion.wav
+
+#begin Audio/Laser_Shoot.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Laser_Shoot.wav
+
 #begin EnemyData.txt
 /copy:EnemyData.txt
 

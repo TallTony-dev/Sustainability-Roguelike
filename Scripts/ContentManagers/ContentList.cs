@@ -20,6 +20,7 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
         private (string textureName, ushort startingIndex, byte textureType)[] AlwaysLoadedTextures = { ("cobblestone", 0, 0), ("cobblestone wall testing", 16, 0), ("cobblestoneRecolor", 32, 0), ("projectileTesting", 48, 0)};
         private (string textureName, ushort startingIndex, byte textureType)[] HomeTextures = { };
         private (string textureName, ushort startingIndex, byte textureType)[] CityTextures = { };
+        private List<(string textureName, ushort index)> Audio = new List<(string textureName, ushort index)>() { ("Laser_Shoot", 0), ("Explosion", 1) };
 
         public List<(string textureName, Rectangle sourceRect, ushort index)> GetAlwaysLoadedTextures()
         {
@@ -38,11 +39,15 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
         public List<(string textureName, Rectangle sourceRect, ushort index)> GetCityTextures()
         {
             PrepTextureSet(CityTextures, CityTexturesToLoad);
+            //solo textures here
+
             return CityTexturesToLoad;
         }
-
-
-        public void PrepTextureSet((string textureName, ushort startingIndex, byte textureType)[] textureSetToLoad, List<(string textureName, Rectangle sourceRect, ushort index)> TextureListToLoad)
+        public List<(string textureName, ushort index)> GetAudio()
+        {
+            return (Audio);
+        }
+        private void PrepTextureSet((string textureName, ushort startingIndex, byte textureType)[] textureSetToLoad, List<(string textureName, Rectangle sourceRect, ushort index)> TextureListToLoad)
         {
             foreach ((string textureName, ushort startingIndex, ushort textureType) in textureSetToLoad)
             {

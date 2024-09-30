@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+
 using Microsoft.Xna.Framework.Content;
 using Monogame_Cross_Platform.Scripts.ContentManagers;
 using Monogame_Cross_Platform.Scripts;
@@ -11,9 +11,10 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
     /// <summary>
     /// Loads content from files.
     /// </summary>
-    internal class ContentLoader
+    public class ContentLoader
     {
-        public static (Texture2D, Rectangle)[] tileTexturesLoaded = new (Texture2D, Rectangle)[64]; //Change this array size to the max number of tile textures and allocate different ranges for different textures
+        private static (Texture2D, Rectangle)[] tileTexturesLoaded = new (Texture2D, Rectangle)[64]; //Change this array size to the max number of tile textures and allocate different ranges for different textures
+        public static SoundEffect[] audioLoaded { get; private set; } = new SoundEffect[2];//Change this array size to the max number of tile textures and allocate different ranges for different textures
         ContentList contentList = new ContentList();
         Game game;
         ContentManager alwaysLoadedcontentManager;
@@ -23,7 +24,6 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
             this.game = game;
             alwaysLoadedcontentManager = new ContentManager(game.Services);
         }
-        
         /// <summary>
         /// Loads textures from a given ContentList property given as a string
         /// </summary>
@@ -44,6 +44,13 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
                 {
                     tileTexturesLoaded[texture.Item3] = (game.Content.Load<Texture2D>("C:/Users/User/source/repos/Monogame Cross Platform/bin/Debug/net6.0/Content/Graphics/" + texture.Item1), texture.Item2);
                 }
+            else if (contentListToLoad == "Audio")
+            {
+                foreach ((string, ushort) audio in contentList.GetAudio())
+                {
+                    audioLoaded[audio.Item2] = game.Content.Load<SoundEffect>("C:/Users/User/source/repos/Monogame Cross Platform/bin/Debug/net6.0/Content/Audio/" + audio.Item1);
+                }
+            }
             else Console.WriteLine("Invalid string loaded check where you call LoadTextures as you are loading a non existant ContentList");
         }
 
@@ -58,6 +65,10 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
         public static (Texture2D, Rectangle) GetLoadedTileTexture(ushort index)
         {
             return tileTexturesLoaded[index];
+        }
+        public static SoundEffect GetLoadedSoundEffect(ushort index)
+        {
+            return audioLoaded[index];
         }
         public static Rectangle GetTextureRectangle(ushort index)
         {
