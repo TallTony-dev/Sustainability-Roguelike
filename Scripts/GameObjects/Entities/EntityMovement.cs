@@ -104,15 +104,6 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             return (float)Math.Sqrt(Math.Pow(point1.X - point2.X, 2) + Math.Pow(point1.Y - point2.Y, 2));
         }
 
-        public Vector2 GetAbsPathfindingMovement(int attackRange, Vector2 currentPos, float speed, AIType aiType, Player.Player playerToPathFindTo)
-        {
-            throw new NotImplementedException();
-
-
-
-            return new Vector2(0, 0);
-        }
-
 
         /// <summary>
         /// Pathfinds to a player

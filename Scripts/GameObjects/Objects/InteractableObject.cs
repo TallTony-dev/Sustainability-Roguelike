@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Monogame_Cross_Platform.Scripts.Hitboxes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,18 +7,12 @@ using System.Threading.Tasks;
 
 namespace Monogame_Cross_Platform.Scripts.GameObjects.Objects
 {
-    internal class InteractableObject : GameObject
+    internal abstract class InteractableObject : CollidableObject
     {
-        //double timeWhenPressed = 0;
-        //public void CheckIfPressed(Vector2 playerPos)
-        //{
-        //    if (Keyboard.GetState().IsKeyDown(Keys.E))
-        //    {
+        public abstract void Interact();
 
-        //    }
-        //}
 
-        public InteractableObject(ushort textureIndex, Vector2 startingPos) : base(textureIndex, startingPos)
+        public InteractableObject(ushort textureIndex, Vector2 startingPos, Vector2 hitboxSize) : base(textureIndex, startingPos, hitboxSize)
         {
 
         }

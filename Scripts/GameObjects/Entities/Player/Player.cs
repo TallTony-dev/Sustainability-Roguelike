@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Monogame_Cross_Platform.Scripts.GameObjects.Entities;
+using Monogame_Cross_Platform.Scripts.GameObjects.Objects;
 using Monogame_Cross_Platform.Scripts.Level;
 
 namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
@@ -28,31 +29,51 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
             weapons.Add(new Weapon(3, this));
         }
 
-        double timeWhenPickedUpItem = 0;
+        double timeWheninteracted = 0;
         public override void CheckRoom()
         {
             Level.Room room = Level.LevelGenerator.PosToRoom(position);
             var kstate = Keyboard.GetState();
             var gstate = GamePad.GetState(PlayerIndex.One);
-            bool hasPickedUp = false;
+            bool hasInteracted = false;
 
             (int playerTileX, int playerTileY) = TileMap.PosToAbsTileMapPos(position);
             for (int i = 0; i < room.gameObjects.Count; i++)
             {
                 GameObject gameObject = room.gameObjects[i];
-                if ((kstate.IsKeyDown(Keys.E) || gstate.IsButtonDown(Buttons.B)) && weapons.Count < maxWeapons && gameObject is Weapon && Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenPickedUpItem > 0.2 && !hasPickedUp)
+                if ((kstate.IsKeyDown(Keys.E) || gstate.IsButtonDown(Buttons.B)) && !hasInteracted && Game1.gameTime.TotalGameTime.TotalSeconds - timeWheninteracted > 0.2)
                 {
-                    Weapon weapon = (Weapon)gameObject;
-                    (int weaponTileX, int weaponTileY) = TileMap.PosToAbsTileMapPos(weapon.position);
-                    for (int x = -1; x < 2; x++)
+                    if (weapons.Count < maxWeapons && gameObject is Weapon)
                     {
-                        for (int y = -1; y < 2; y++)
+                        Weapon weapon = (Weapon)gameObject;
+                        (int weaponTileX, int weaponTileY) = TileMap.PosToAbsTileMapPos(weapon.position);
+                        for (int x = -1; x < 2; x++)
                         {
-                            if (!hasPickedUp && playerTileX + x == weaponTileX && playerTileY + y == weaponTileY)
+                            for (int y = -1; y < 2; y++)
                             {
-                                weapon.Pickup(this);
-                                hasPickedUp = true;
-                                timeWhenPickedUpItem = Game1.gameTime.TotalGameTime.TotalSeconds;
+                                if (!hasInteracted && playerTileX + x == weaponTileX && playerTileY + y == weaponTileY)
+                                {
+                                    weapon.Pickup(this);
+                                    hasInteracted = true;
+                                    timeWheninteracted = Game1.gameTime.TotalGameTime.TotalSeconds;
+                                }
+                            }
+                        }
+                    }
+                    if (gameObject is InteractableObject)
+                    {
+                        InteractableObject interactableObject = (InteractableObject)gameObject;
+                        (int interactableObjectTileX, int interactableObjectTileY) = TileMap.PosToAbsTileMapPos(interactableObject.position);
+                        for (int x = -1; x < 2; x++)
+                        {
+                            for (int y = -1; y < 2; y++)
+                            {
+                                if (!hasInteracted && playerTileX + x == interactableObjectTileX && playerTileY + y == interactableObjectTileY)
+                                {
+                                    interactableObject.Interact();
+                                    hasInteracted = true;
+                                    timeWheninteracted = Game1.gameTime.TotalGameTime.TotalSeconds;
+                                }
                             }
                         }
                     }
