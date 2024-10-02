@@ -48,7 +48,8 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                     TileMap.SetPathfindingModeOfTileAtCoord(position.X + x * 16, position.Y + y * 16, false);
 
             Level.LevelGenerator.PosToRoom(position).gameObjects.Remove(this);
-            activeWeapon.Drop(position);
+            if (activeWeapon != null)
+                activeWeapon.Drop(position);
             Game1.currentGameObjects.Remove(this);
         }
         public virtual void Update(Player.Player player)

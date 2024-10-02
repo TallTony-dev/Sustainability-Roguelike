@@ -32,7 +32,6 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
         {
             position = pos;
             var room = Level.LevelGenerator.PosToRoom(pos);
-            Game1.currentGameObjects.Add(this);
             room.gameObjects.Add(this);
             animationHandler.SetTextureAnimation(0);
             UpdateAnimation();
@@ -51,7 +50,6 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
         {
             var room = Level.LevelGenerator.PosToRoom(position);
             room.gameObjects.Remove(this);
-            Game1.currentGameObjects.Remove(this);
             owner = newOwner;
             if (!(owner is Player))
                 newOwner.activeWeapon = this;
@@ -63,7 +61,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
             isEnabled = true;
 
         }
-        public void Destroy()
+        public override void Destroy()
         {
             if (owner != null)
             {
@@ -82,8 +80,8 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
             {
                 var room = Level.LevelGenerator.PosToRoom(position);
                 room.gameObjects.Remove(this);
-                Game1.currentGameObjects.Remove(this);
             }
+            base.Destroy();
         }
 
 
@@ -102,7 +100,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
                 float rotTrans = (float)Math.Cos(rotation) * damage * projectileSpeed / 3000000f;
                 if (isPlayer)
                 {
-                    Game1.activePlayerProjectiles.Add(new Projectile(rotation, projectileSpeed, damage, entityPos, lifespan, projWidth, projHeight, projectileAnimIndex, weaponType));
+                    Game1.activePlayerProjectiles.Add(new Projectile(rotation, projectileSpeed, damage, entityPos, lifespan, projWidth, projHeight, projectileAnimIndex, weaponType, true));
 
                     Game1.camera.cameraAnimationsToPlay.Add((xTrans, yTrans, rotTrans, 0.2f));
                     Game1.audioPlayer.PlaySoundEffect(0);
@@ -112,7 +110,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
                 }
                 else
                 {
-                    Game1.activeEnemyProjectiles.Add(new Projectile(rotation, projectileSpeed, damage, entityPos, lifespan, projWidth, projHeight, projectileAnimIndex, weaponType));
+                    Game1.activeEnemyProjectiles.Add(new Projectile(rotation, projectileSpeed, damage, entityPos, lifespan, projWidth, projHeight, projectileAnimIndex, weaponType, false));
                 }
                 animationHandler.AddToMovementAnims(-xTrans * 5, -yTrans * 5, -rotTrans * 200, 0.2f);
 

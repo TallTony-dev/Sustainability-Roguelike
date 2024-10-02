@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Monogame_Cross_Platform.Scripts.GameObjects.Tiles;
 using System.Collections.Generic;
+using Monogame_Cross_Platform.Scripts.Hitboxes;
 
 namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
 {
@@ -43,6 +44,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                         (bool isBarrier, Hitboxes.Hitbox tileBounds) = TileMap.GetTileBounds(oldAbsTileX + x, oldAbsTileY + y); //checks min and max in here
                         if (isBarrier)
                         {
+                            //if bottom of entity old hitbox is below the top, and the top is above the bottom
                             if (x != 0 && !isXModified && entity.position.Y + entityHitBox.height / 2 > tileBounds.top && entity.position.Y - entityHitBox.height / 2 < tileBounds.bottom)
                             {
                                 //if new position is past hitbox, and if its old position wasn't past hitbox
@@ -57,6 +59,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                                     isXModified = true;
                                 }
                             }
+                            
 
                             if (y != 0 && !isYModified && entity.position.X + entityHitBox.width / 2 > tileBounds.left && entity.position.X - entityHitBox.width / 2 < tileBounds.right)
                             {
@@ -74,6 +77,16 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                         }
                     }
 
+                }
+            }
+            (int adjustedNewAbsTileX, int adjustedNewAbsTileY) = TileMap.PosToAbsTileMapPos(entityNewPos);
+            entityHitBox.UpdatePosition(entityNewPos.X, entityNewPos.Y);
+            for (int x = -1 - xTileDifference; x < 2 + xTileDifference; x++)
+            {
+                for (int y = -1 - yTileDifference; y < 2 + yTileDifference; y++)
+                {
+                    if (entityHitBox.Intersects(TileMap.GetTileBounds(adjustedNewAbsTileX + x, adjustedNewAbsTileY + y).Item2))
+                        entityNewPos = entity.position;
                 }
             }
             return entityNewPos;

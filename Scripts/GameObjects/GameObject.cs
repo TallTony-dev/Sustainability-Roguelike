@@ -20,6 +20,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects
             textureIndex = 0;
             animationHandler = new AnimationHandler(animationIndex);
             animationHandler.SetTextureAnimation(0);
+            Game1.currentGameObjects.Add(this);
         }
         /// <summary>
         /// If is enabled, updates the animation handler
@@ -32,6 +33,12 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects
         public void SetAnimationData(ushort animationDatatxtIndex)
         {
             animationHandler.SetTextureAnimationData(animationDatatxtIndex);
+        }
+
+        
+        public virtual void Destroy()
+        {
+            Game1.currentGameObjects.Remove(this);
         }
     } 
 }

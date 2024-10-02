@@ -34,7 +34,7 @@ namespace Monogame_Cross_Platform.Scripts
         SpriteFont font; //Temp font
         public static string debugText = "test";
 
-        Player player = new Player(100, 250, new Vector2(28 * 5 + 9, 28 * 5 + 9),new Hitboxes.Hitbox(0,0,30,30), 0); //Put this in a better spot inside of an initialize level function within update or smth
+        Player player;
         internal static List<GameObject> currentGameObjects;
         internal static List<Menu> menus = new List<Menu>();
         internal static List<Projectile> activePlayerProjectiles = new List<Projectile>();
@@ -46,7 +46,7 @@ namespace Monogame_Cross_Platform.Scripts
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
 
-            currentGameObjects = new List<GameObject>() { player }; //should be handled elsewhere maybe
+            currentGameObjects = new List<GameObject>(); //should be handled elsewhere maybe
 
             levelEditor = new LevelEditor();
         }
@@ -58,7 +58,7 @@ namespace Monogame_Cross_Platform.Scripts
 
             LevelGenerator.GenerateLevel(1, 13); //TEMP
             audioPlayer = new AudioPlayer(ContentLoader.audioLoaded);
-
+            player = new Player(100, 250, new Vector2(28 * 5 + 9, 28 * 5 + 9), new Hitboxes.Hitbox(0, 0, 31, 31), 0); //Put this in a better spot inside of an initialize level function within update or smth
             Settings.ApplySettingsToFile(); //TEMP
             Settings.InitializeSettings();
             base.Initialize();

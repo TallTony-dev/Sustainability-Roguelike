@@ -18,8 +18,9 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
 
         private bool destroyed = false;
         private bool isReplica = false;
+        private bool isPlayer = false;
 
-        public Projectile(float travelAngle, float speed, int damage, Vector2 startingPosition, float lifespan, int hitBoxWidth, int hitBoxHeight, ushort animationIndex, string weaponType) : base(animationIndex, Vector2.One)
+        public Projectile(float travelAngle, float speed, int damage, Vector2 startingPosition, float lifespan, int hitBoxWidth, int hitBoxHeight, ushort animationIndex, string weaponType, bool isPlayer) : base(animationIndex, Vector2.One)
         {
             this.travelAngle = travelAngle;
             this.speed = speed;
@@ -31,6 +32,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
             animationHandler = new AnimationHandler(animationIndex);
             this.weaponType = weaponType;
             isEnabled = true;
+            this.isPlayer = isPlayer;
             UpdateAnimation();
         }
 
@@ -108,18 +110,19 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
                 {
                     if (destroyed)
                     {
-                        Destroy(isPlayerProjectile);
+                        Destroy();
                     }
                 }
             }
         }
 
-        public void Destroy(bool isPlayerProj)
+        public override void Destroy()
         {
             isEnabled = false;
+            base.Destroy();
             if (weaponType == "ranged" || weaponType == "melee" || isReplica) 
             {
-                if (isPlayerProj)
+                if (isPlayer)
                     Game1.activePlayerProjectiles.Remove(this);
                 else
                     Game1.activeEnemyProjectiles.Remove(this);
@@ -132,12 +135,12 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
                 Vector2 offsetPos = new Vector2(xPos, yPos);
                 Game1.audioPlayer.PlaySoundEffect2D(1, position);
                 //releases smaller and weaker projectiles upon destruction, make a different small texture for these projectiles
-                if (isPlayerProj)
+                if (isPlayer)
                 {
                     Game1.activePlayerProjectiles.Remove(this);
                     for (int i = 0; i < 6; i++)
                     {
-                        Game1.activePlayerProjectiles.Add(new Projectile(i * 45, speed / 1.3f, damage / 6, offsetPos, lifespan/1.5f, (int)hitBox.width - 10, (int)hitBox.height - 10, animationHandler.animationIndex, "6burst"));
+                        Game1.activePlayerProjectiles.Add(new Projectile(i * 45, speed / 1.3f, damage / 6, offsetPos, lifespan/1.5f, (int)hitBox.width - 10, (int)hitBox.height - 10, animationHandler.animationIndex, "6burst", true));
                         Game1.activePlayerProjectiles.Last().isReplica = true;
                     }
                 }
@@ -146,7 +149,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
                     Game1.activeEnemyProjectiles.Remove(this);
                     for (int i = 0; i < 6; i++)
                     {
-                        Game1.activeEnemyProjectiles.Add(new Projectile(i * 45, speed / 1.3f, damage / 6, offsetPos, lifespan/1.5f, (int)hitBox.width - 10, (int)hitBox.height - 10, animationHandler.animationIndex, "6burst"));
+                        Game1.activeEnemyProjectiles.Add(new Projectile(i * 45, speed / 1.3f, damage / 6, offsetPos, lifespan/1.5f, (int)hitBox.width - 10, (int)hitBox.height - 10, animationHandler.animationIndex, "6burst", false));
                         Game1.activeEnemyProjectiles.Last().isReplica = true;
                     }
                 }

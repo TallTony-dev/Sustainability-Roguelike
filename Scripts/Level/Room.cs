@@ -114,8 +114,8 @@ namespace Monogame_Cross_Platform.Scripts.Level
 
                     if (gameObjectType == "Enemy")
                     {
-                        this.gameObjects.Add(new Enemy(Convert.ToUInt16(gameObjectData[3]), position));
 
+                        this.gameObjects.Add(new Enemy(Convert.ToUInt16(gameObjectData[3]), position));
                     }
 
                 }
@@ -169,7 +169,10 @@ namespace Monogame_Cross_Platform.Scripts.Level
         {
             foreach (GameObject gameObject in gameObjects)
             {
-                gameObject.isEnabled = false;
+                if (gameObject is Entity)
+                {
+                    gameObject.isEnabled = false;
+                }
             }
             OpenSides();
             LevelGenerator.SetTileMapToRoom(roomArrayX, roomArrayY);

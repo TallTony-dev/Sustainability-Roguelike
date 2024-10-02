@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Monogame_Cross_Platform.Scripts.GameObjects.Entities;
+using Monogame_Cross_Platform.Scripts.Level;
 
 namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
 {
@@ -79,13 +80,18 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
             //follow nearest entity if unlocked
             else
             {
-                if (Level.LevelGenerator.PosToRoom(position).gameObjects.Count != 0)
+                Room room = LevelGenerator.PosToRoom(position);
+                if (room.gameObjects.Count != 0)
                 {
-                    foreach (Entity entity in Level.LevelGenerator.PosToRoom(position).gameObjects)
+                    for (int i = 0; i < room.gameObjects.Count; i++)
                     {
-                        if (Vector2.Distance(position, entity.position) < Vector2.Distance(position, entityToFollowPos))
+                        if (room.gameObjects[i] is Entity)
                         {
-                            entityToFollowPos = entity.position;
+                            Entity entity = (Entity)room.gameObjects[i];
+                            if (Vector2.Distance(position, entity.position) < Vector2.Distance(position, entityToFollowPos))
+                            {
+                                entityToFollowPos = entity.position;
+                            }
                         }
                     }
                     Game1.camera.Follow(position, entityToFollowPos);
@@ -101,6 +107,16 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
                 activeWeaponIndex = inputHandler.GetWeaponIndex(activeWeaponIndex, weapons.Count);
                 activeWeapon = weapons[activeWeaponIndex];
                 activeWeapon.Update(inputHandler, player.position);
+                foreach (Weapon weapon in weapons)
+                {
+                    if (weapon != activeWeapon)
+                    {
+                        weapon.isEnabled = false;
+                    }
+                    else
+                        weapon.isEnabled = true;
+                }
+
 
                 if (inputHandler.IsShooting())
                     activeWeapon.Fire(position, true);

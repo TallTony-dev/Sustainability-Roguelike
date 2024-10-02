@@ -29,11 +29,11 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(entity.textureIndex);
             spriteBatch.Draw(texture, entity.position, rectangle, Color.White, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, spriteEffect, 0.03f);
 
-            (Texture2D weaponTexture, Rectangle weaponRectangle) = ContentLoader.GetLoadedTileTexture(entity.activeWeapon.textureIndex);
-            if (entity.activeWeapon.rotation > 1.573 || entity.activeWeapon.rotation < -1.573)
-                spriteBatch.Draw(weaponTexture, entity.activeWeapon.position, weaponRectangle, Color.White, entity.activeWeapon.rotation, new Vector2(weaponRectangle.Width / 2, weaponRectangle.Height / 2), Vector2.One, SpriteEffects.FlipVertically, 0.02f);
-            else
-                spriteBatch.Draw(weaponTexture, entity.activeWeapon.position, weaponRectangle, Color.White, entity.activeWeapon.rotation, new Vector2(weaponRectangle.Width / 2, weaponRectangle.Height / 2), Vector2.One, SpriteEffects.None, 0.02f);
+            //(Texture2D weaponTexture, Rectangle weaponRectangle) = ContentLoader.GetLoadedTileTexture(entity.activeWeapon.textureIndex);
+            //if (entity.activeWeapon.rotation > 1.573 || entity.activeWeapon.rotation < -1.573)
+            //    spriteBatch.Draw(weaponTexture, entity.activeWeapon.position, weaponRectangle, Color.White, entity.activeWeapon.rotation, new Vector2(weaponRectangle.Width / 2, weaponRectangle.Height / 2), Vector2.One, SpriteEffects.FlipVertically, 0.02f);
+            //else
+            //    spriteBatch.Draw(weaponTexture, entity.activeWeapon.position, weaponRectangle, Color.White, entity.activeWeapon.rotation, new Vector2(weaponRectangle.Width / 2, weaponRectangle.Height / 2), Vector2.One, SpriteEffects.None, 0.02f);
         }
         public void AddToDrawBuffer(Tile tile, int tileMapX, int tileMapY)
         {
@@ -83,22 +83,37 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         {
             foreach (GameObject gameObject in gameObjectList)
             {
-                if (gameObject is Entity)
+                if (gameObject.isEnabled)
                 {
-                    Entity entity = (Entity)gameObject;
-                    if (entity.isFlipped == false)
-                        AddToDrawBuffer(entity, SpriteEffects.None);
+                    if (gameObject is Entity)
+                    {
+                        Entity entity = (Entity)gameObject;
+                        if (entity.isFlipped == false)
+                            AddToDrawBuffer(entity, SpriteEffects.None);
+                        else
+                            AddToDrawBuffer(entity, SpriteEffects.FlipHorizontally);
+                    }
+                    else if (gameObject is Weapon)
+                    {
+                        if (gameObject.rotation > 1.573 || gameObject.rotation < -1.573)
+                            AddToDrawBuffer(gameObject, SpriteEffects.FlipVertically);
+                        else
+                            AddToDrawBuffer(gameObject, SpriteEffects.None);
+                    }
                     else
-                        AddToDrawBuffer(entity, SpriteEffects.FlipHorizontally);
+                        AddToDrawBuffer(gameObject);
                 }
-                else
-                    AddToDrawBuffer(gameObject);
             }
         }
         public void AddToDrawBuffer(GameObject gameObject)
         {
             (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(gameObject.textureIndex);
             spriteBatch.Draw(texture, gameObject.position, rectangle, Color.White, gameObject.rotation, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0.02f);
+        }
+        public void AddToDrawBuffer(GameObject gameObject, SpriteEffects spriteEffect)
+        {
+            (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(gameObject.textureIndex);
+            spriteBatch.Draw(texture, gameObject.position, rectangle, Color.White, gameObject.rotation, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, spriteEffect, 0.02f);
         }
         public void AddToDrawBuffer(List<Projectile> gameObjectList)
         {

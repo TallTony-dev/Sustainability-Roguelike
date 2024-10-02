@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace Monogame_Cross_Platform.Scripts.GameObjects.Objects
 {
-    internal class Decoration : GameObject
+    internal class CollidableObject : GameObject
     {
-        public Decoration(ushort textureIndex, Vector2 startingPos) : base(textureIndex, startingPos)
+        public bool isBarrier = true;
+        public CollidableObject(ushort textureIndex, Vector2 startingPos) : base(textureIndex, startingPos)
         {
+
         }
     }
 }

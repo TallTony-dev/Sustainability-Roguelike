@@ -31,10 +31,15 @@ namespace Monogame_Cross_Platform.Scripts.Level
                     player.position = new Vector2(TileMap.PosToAbsTileMapPos(player.position).Item1 * 32, TileMap.PosToAbsTileMapPos(player.position).Item2 * 32);
                     player.isInLevelEditorMode = true;
                     player.isInComboMode = true;
-                    foreach (Entity entity in LevelGenerator.PosToRoom(player.position).gameObjects)
+                    Room room = LevelGenerator.PosToRoom(player.position);
+                    for (int i = 0; i < room.gameObjects.Count; i++)
                     {
-                        entity.isEnabled = false;
-                        entity.ignoresCollisions = true;
+                        if (room.gameObjects[i] is Entity)
+                        {
+                            Entity entity = (Entity)room.gameObjects[i];
+                            entity.isEnabled = false;
+                            entity.ignoresCollisions = true;
+                        }
                     }
                     player.isEnabled = true;
                     isInEditor = true;
@@ -44,10 +49,15 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 {
                     player.isInLevelEditorMode = false;
                     player.isInComboMode = false;
-                    foreach (Entity entity in LevelGenerator.PosToRoom(player.position).gameObjects)
+                    Room room = LevelGenerator.PosToRoom(player.position);
+                    for (int i = 0; i < room.gameObjects.Count; i++)
                     {
-                        entity.isEnabled = true;
-                        entity.ignoresCollisions = false;
+                        if (room.gameObjects[i] is Entity)
+                        {
+                            Entity entity = (Entity)room.gameObjects[i];
+                            entity.isEnabled = false;
+                            entity.ignoresCollisions = true;
+                        }
                     }
                     player.isEnabled = true;
                     isInEditor = false;
