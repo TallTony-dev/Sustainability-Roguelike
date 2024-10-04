@@ -5,7 +5,7 @@ global using Microsoft.Xna.Framework.Audio;
 global using Monogame_Cross_Platform.Scripts.ContentManagers;
 global using Monogame_Cross_Platform.Scripts.GameObjects.Tiles;
 global using Monogame_Cross_Platform.Scripts.GameObjects;
-global using Microsoft.Xna.Framework.Media;
+global using Monogame_Cross_Platform.Scripts.Particles;
 global using System;
 global using Monogame_Cross_Platform.Scripts.GameObjects.Entities;
 global using Monogame_Cross_Platform.Scripts.HUD;
@@ -39,6 +39,8 @@ namespace Monogame_Cross_Platform.Scripts
         internal static List<Menu> menus = new List<Menu>();
         internal static List<Projectile> activePlayerProjectiles = new List<Projectile>();
         internal static List<Projectile> activeEnemyProjectiles = new List<Projectile>();
+        internal static List<Particle> activeParticles = new List<Particle>();
+        internal static List<ParticleEmitter> activeParticleEmitters = new List<ParticleEmitter>();
 
         public Game1()
         {
