@@ -27,6 +27,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
             weapons.Add(new Weapon(1, this));
             weapons.Add(new Weapon(2, this));
             weapons.Add(new Weapon(3, this));
+            sweatParticles.isEnabled = false;
         }
 
         double timeWheninteracted = 0;

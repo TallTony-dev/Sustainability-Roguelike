@@ -29,11 +29,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(entity.textureIndex);
             spriteBatch.Draw(texture, entity.position, rectangle, Color.White, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, spriteEffect, 0.03f);
 
-            //(Texture2D weaponTexture, Rectangle weaponRectangle) = ContentLoader.GetLoadedTileTexture(entity.activeWeapon.textureIndex);
-            //if (entity.activeWeapon.rotation > 1.573 || entity.activeWeapon.rotation < -1.573)
-            //    spriteBatch.Draw(weaponTexture, entity.activeWeapon.position, weaponRectangle, Color.White, entity.activeWeapon.rotation, new Vector2(weaponRectangle.Width / 2, weaponRectangle.Height / 2), Vector2.One, SpriteEffects.FlipVertically, 0.02f);
-            //else
-            //    spriteBatch.Draw(weaponTexture, entity.activeWeapon.position, weaponRectangle, Color.White, entity.activeWeapon.rotation, new Vector2(weaponRectangle.Width / 2, weaponRectangle.Height / 2), Vector2.One, SpriteEffects.None, 0.02f);
+            
         }
         public void AddToDrawBuffer(Tile tile, int tileMapX, int tileMapY)
         {
@@ -80,7 +76,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             foreach(Particle particle in particleList)
             {
                 (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(particle.textureIndex);
-                spriteBatch.Draw(texture, particle.position, rectangle, Color.White, particle.rotation, new Vector2(rectangle.Width / 2, rectangle.Height / 2), particle.scale, SpriteEffects.None, 0.02f);
+                spriteBatch.Draw(texture, particle.position, rectangle, Color.White, particle.rotation, new Vector2(rectangle.Width / 2, rectangle.Height / 2), particle.scale, SpriteEffects.None, 0.01f);
             }
         }
         public void AddToDrawBuffer(List<GameObject> gameObjectList)

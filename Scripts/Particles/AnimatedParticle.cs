@@ -16,7 +16,7 @@ namespace Monogame_Cross_Platform.Scripts.Particles
             base.Update();
         }
 
-        public AnimatedParticle(Vector2 position, float velocity, float rotation, float scale, float speed, ushort animationIndex, float lifetime, float xAcceleration, float yAcceleration) : base(position, velocity, rotation, scale, 0, lifetime, xAcceleration, yAcceleration)
+        public AnimatedParticle(Vector2 position, float xvelocity, float yvelocity, float rotation, float scale, float speed, ushort animationIndex, float lifetime, float xAcceleration, float yAcceleration, float drawRotation, bool rotatesParticle) : base(position, xvelocity, yvelocity, rotation, scale, 0, lifetime, xAcceleration, yAcceleration, drawRotation, rotatesParticle)
         {
             animationHandler = new AnimationHandler(animationIndex);
         }

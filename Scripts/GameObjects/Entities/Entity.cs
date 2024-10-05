@@ -23,14 +23,15 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
 
         internal float movingSpeed;
         internal bool isMoving = false;
+        internal bool isScared = false;
 
         internal EntityMovement entityMovement;
         internal Hitbox hitBox;
         internal Weapon activeWeapon;
         internal EntityMovement.AIType aiType;
 
+        internal ParticleEmitter sweatParticles;
 
-        
         public Entity(float entitySpeed, Vector2 startingTile, ushort animationIndex, Hitbox hitBox, EntityMovement.AIType aiType, int health) : base(animationIndex, startingTile)
         {
             this.entitySpeed = entitySpeed;
@@ -39,8 +40,9 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             this.aiType = aiType;
             this.health = health;
             maxHealth = health;
+            sweatParticles = new ParticleEmitter(Vector2.One, 40, 180, 0.5f, 58, 0.4f, 0.2f, float.PositiveInfinity, 90, 0, 80, 0, true);
         }
-        public void Destroy()
+        public override void Destroy()
         {
             isEnabled = false;
             for (int x = -1; x < 2; x++)
@@ -51,6 +53,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             if (activeWeapon != null)
                 activeWeapon.Drop(position);
             Game1.currentGameObjects.Remove(this);
+            sweatParticles.Destroy();
         }
         public virtual void Update(Player.Player player)
         {
@@ -106,7 +109,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         {
             if (!isInComboMode)
             {
-                Vector2 entityNewPos = entityMovement.GetNormalPathfindingMovement(activeWeapon.attackRange, position, entitySpeed, aiType, playerToFollow);
+                (isScared, Vector2 entityNewPos) = entityMovement.GetNormalPathfindingMovement(activeWeapon.attackRange, position, entitySpeed, aiType, playerToFollow);
                 hitBox.UpdatePosition(entityNewPos.X, entityNewPos.Y);
 
                 activeWeapon.Update(playerToFollow.position, position);
@@ -117,6 +120,15 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                 else
                     isFlipped = false;
                 
+                sweatParticles.position = position;
+                sweatParticles.particlexVelocity = (entityNewPos - position).X * (float)Game1.gameTime.ElapsedGameTime.TotalSeconds * 1000;
+                if (isScared)
+                {
+                    sweatParticles.isEnabled = true;
+                }
+                else
+                    sweatParticles.isEnabled = false;
+
                 //checks if moving for animations
                 movingSpeed = (Math.Abs(entityNewPos.X - position.X) + Math.Abs(entityNewPos.Y - position.Y)) * Game1.gameTime.ElapsedGameTime.Milliseconds;
                 (int playerTileX, int playerTileY) = TileMap.PosToAbsTileMapPos(playerToFollow.position);

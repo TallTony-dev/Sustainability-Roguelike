@@ -108,13 +108,16 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         /// <summary>
         /// Pathfinds to a player
         /// </summary>
-        public Vector2 GetNormalPathfindingMovement(int attackRange, Vector2 currentPos, float speed, AIType aiType, Player.Player playerToPathFindTo)
+        public (bool isScared, Vector2 newPos) GetNormalPathfindingMovement(int attackRange, Vector2 currentPos, float speed, AIType aiType, Player.Player playerToPathFindTo)
         {
 
             (float playerTileX, float playerTileY) = TileMap.PosToTileMapPos(playerToPathFindTo.position);
             (float entityTileX, float entityTileY) = TileMap.PosToTileMapPos(currentPos);
             float distanceBetween = DistanceBetween(new Vector2(playerTileX, playerTileY), new Vector2(entityTileX, entityTileY));
+            bool isScared = false;
 
+            if (distanceBetween <= attackRange - 0.2)
+                isScared = true;
 
             if (distanceBetween >= attackRange + 1 || distanceBetween <= attackRange - 0.2 || TileMap.DoesRaycastCollide(playerTileX, playerTileY, entityTileX, entityTileY, 30, 30))
             {
@@ -156,7 +159,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
 
                 }
             } 
-            return currentPos;  
+            return (isScared, currentPos);  
         }
 
         private List<(int, int)> GetTileMapPointsToTravel(int attackRange, Vector2 currentPos, AIType aiType, Player.Player player)

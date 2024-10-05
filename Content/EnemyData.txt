@@ -1,4 +1,4 @@
-﻿40,160,0,ranged,32,32
+﻿40,80,0,ranged,32,32
 ^basic ranged thing, (Health, EntitySpeed, AnimationIndex, WeaponType HitboxWidth, HitboxHeight)
 60,96,1,melee,32,32
 ^basic melee thing, (Health, EntitySpeed, AnimationIndex, WeaponType HitboxWidth, HitboxHeight)
