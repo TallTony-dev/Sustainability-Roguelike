@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -18,7 +19,6 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
         public List<Weapon> weapons = new List<Weapon>();
         public short activeWeaponIndex = 0;
         public int maxWeapons = 9;
-        Vector2 entityToFollowPos;
 
          public Player(int health, float entitySpeed, Vector2 startingTile, Hitboxes.Hitbox hitBox, ushort textureIndex) : base(entitySpeed, startingTile, textureIndex, hitBox, EntityMovement.AIType.none, health)
         {
@@ -93,17 +93,26 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
             }
             else return false;
         }
+
+
+        Entity entityToFollow;
+        Vector2 entityToFollowPos;
         public override void Update(Player player)
         {
-            if (ContentManagers.Camera.Camera.IsLocked)
+            Room room = LevelGenerator.PosToRoom(new Vector2(position.X + 128, position.Y + 128));
+            if (ContentManagers.Camera.Camera.IsLocked || !room.gameObjects.Any(t => t is Entity))
                 Game1.camera.Follow(this);
 
             //follow nearest entity if unlocked
             else
             {
-                Room room = LevelGenerator.PosToRoom(position);
-                if (room.gameObjects.Count != 0)
+                if (entityToFollow != null && room.gameObjects.Contains(entityToFollow))
                 {
+                    Game1.camera.Follow(position, entityToFollow.position);
+                }
+                else if (room.gameObjects.Any(t => t is Entity))
+                {
+                    entityToFollowPos = new Vector2(-10000, -10000);
                     for (int i = 0; i < room.gameObjects.Count; i++)
                     {
                         if (room.gameObjects[i] is Entity)
@@ -111,6 +120,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
                             Entity entity = (Entity)room.gameObjects[i];
                             if (Vector2.Distance(position, entity.position) < Vector2.Distance(position, entityToFollowPos))
                             {
+                                entityToFollow = entity;
                                 entityToFollowPos = entity.position;
                             }
                         }

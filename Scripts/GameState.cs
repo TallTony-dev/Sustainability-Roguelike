@@ -10,7 +10,7 @@ namespace Monogame_Cross_Platform.Scripts
     /// <summary>
     /// State manager
     /// </summary>
-    internal static class TurnManager
+    internal static class GameState
     {
         internal static bool isInComboMode = false;
         internal static bool isPlayerTurn = true;

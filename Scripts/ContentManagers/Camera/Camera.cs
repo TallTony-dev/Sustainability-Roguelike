@@ -32,12 +32,12 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers.Camera
                 }
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Q) && !TurnManager.isPaused && Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenCameraLocked > 0.5 && !IsLocked)
+            if (Keyboard.GetState().IsKeyDown(Keys.Q) && !GameState.isPaused && Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenCameraLocked > 0.5 && !IsLocked)
             {
                 IsLocked = true;
                 timeWhenCameraLocked = Game1.gameTime.TotalGameTime.TotalSeconds;
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.Q) && !TurnManager.isPaused && Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenCameraLocked > 0.5 && IsLocked)
+            if (Keyboard.GetState().IsKeyDown(Keys.Q) && !GameState.isPaused && Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenCameraLocked > 0.5 && IsLocked)
             {
                 IsLocked = false;
                 timeWhenCameraLocked = Game1.gameTime.TotalGameTime.TotalSeconds;

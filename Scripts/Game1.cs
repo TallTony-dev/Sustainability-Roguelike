@@ -87,14 +87,14 @@ namespace Monogame_Cross_Platform.Scripts
                 Exit();
             gameTime = _gameTime;
             // TODO: Add your update logic here
-            if (Keyboard.GetState().IsKeyDown(Keys.Y) && !TurnManager.isPaused && gameTime.TotalGameTime.TotalSeconds - timeWhenPaused > 0.5)
+            if (Keyboard.GetState().IsKeyDown(Keys.Y) && !GameState.isPaused && gameTime.TotalGameTime.TotalSeconds - timeWhenPaused > 0.5)
             {
-                TurnManager.PauseGame(player);
+                GameState.PauseGame(player);
                 timeWhenPaused = gameTime.TotalGameTime.TotalSeconds;
             }
-            else if (Keyboard.GetState().IsKeyDown(Keys.Y) && TurnManager.isPaused && gameTime.TotalGameTime.TotalSeconds - timeWhenPaused > 0.5)
+            else if (Keyboard.GetState().IsKeyDown(Keys.Y) && GameState.isPaused && gameTime.TotalGameTime.TotalSeconds - timeWhenPaused > 0.5)
             {
-                TurnManager.ResumeGame(player);
+                GameState.ResumeGame(player);
                 timeWhenPaused = gameTime.TotalGameTime.TotalSeconds;
             }
 

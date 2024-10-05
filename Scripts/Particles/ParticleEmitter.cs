@@ -32,7 +32,7 @@ namespace Monogame_Cross_Platform.Scripts.Particles
                 {
                     for (int i = 0; i < timesToFire; i++)
                     {
-                        float angle = particleAngle + (random.NextSingle() - 0.5f) * spread / 57.295f;
+                        float angle = particleAngle + (random.NextSingle() - 0.5f) * spread / 57.295f; //converts radians to degrees and halves
                         Game1.activeParticles.Add(new Particle(position, particleVelocity, angle, particleScale, textureIndex, lifetime, xAcceleration, yAcceleration));
                     }
                     lastTimeShot = Game1.gameTime.TotalGameTime.TotalSeconds;
