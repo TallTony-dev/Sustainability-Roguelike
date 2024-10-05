@@ -124,7 +124,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
             base.Destroy();
             if (weaponType == "ranged" || weaponType == "melee" || isReplica) 
             {
-                Game1.activeParticleEmitters.Add(new ParticleEmitter(position, 80, travelAngle, 0.5f, 5, 0.1f, 0.01f, 0.1f, 2));
+                Game1.activeParticleEmitters.Add(new ParticleEmitter(position, 80, travelAngle, 0.5f, 5, 3f, 0.05f, 1f, 360, 0, 50f));
                 if (isPlayer)
                     Game1.activePlayerProjectiles.Remove(this);
                 else

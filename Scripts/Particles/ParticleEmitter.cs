@@ -18,10 +18,10 @@ namespace Monogame_Cross_Platform.Scripts.Particles
         double lastTimeShot;
         Random random;
         double expiryTime;
+        private float xAcceleration;
+        private float yAcceleration;
 
         float spread;
-        float minAngle { get => particleAngle - spread / 114.59f; }
-        float maxAngle { get => particleAngle + spread / 114.59f; }
 
         public void Update()
         {
@@ -32,15 +32,15 @@ namespace Monogame_Cross_Platform.Scripts.Particles
                 {
                     for (int i = 0; i < timesToFire; i++)
                     {
-                        float angle = particleAngle + (random.NextSingle() - 0.5f) * spread / 2;
-                        Game1.activeParticles.Add(new Particle(position, particleVelocity, angle, particleScale, textureIndex, lifetime));
+                        float angle = particleAngle + (random.NextSingle() - 0.5f) * spread / 57.295f;
+                        Game1.activeParticles.Add(new Particle(position, particleVelocity, angle, particleScale, textureIndex, lifetime, xAcceleration, yAcceleration));
                     }
                     lastTimeShot = Game1.gameTime.TotalGameTime.TotalSeconds;
                 }
             }
             else
             {
-
+                Destroy();
             }
             
         }
@@ -49,7 +49,7 @@ namespace Monogame_Cross_Platform.Scripts.Particles
             Game1.activeParticleEmitters.Remove(this);
         }
 
-        public ParticleEmitter(Vector2 position, float velocity, float angle, float scale, ushort textureIndex, float lifetime, float frequency, float emitterDuration, float spread) 
+        public ParticleEmitter(Vector2 position, float velocity, float angle, float scale, ushort textureIndex, float lifetime, float frequency, float emitterDuration, float spread, float xAccel, float yAccel) 
         { 
             this.position = position;
             particleVelocity = velocity;
@@ -62,6 +62,8 @@ namespace Monogame_Cross_Platform.Scripts.Particles
             lastTimeShot = Game1.gameTime.TotalGameTime.TotalSeconds;
             random = new Random();
             this.spread = spread;
+            yAcceleration = yAccel;
+            xAcceleration = xAccel;
         }
     }
 }
