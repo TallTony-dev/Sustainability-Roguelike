@@ -61,6 +61,7 @@ namespace Monogame_Cross_Platform.Scripts
             LevelGenerator.GenerateLevel(1, 13); //TEMP
             audioPlayer = new AudioPlayer(ContentLoader.audioLoaded);
             player = new Player(100, 250, new Vector2(28 * 5 + 9, 28 * 5 + 9), new Hitboxes.Hitbox(0, 0, 31, 31), 0); //Put this in a better spot inside of an initialize level function within update or smth
+
             Settings.ApplySettingsToFile(); //TEMP
             Settings.InitializeSettings();
             base.Initialize();
@@ -75,10 +76,6 @@ namespace Monogame_Cross_Platform.Scripts
 
             renderTarget = new RenderTarget2D(GraphicsDevice, Settings.resolutionWidth, Settings.resolutionHeight);
             font = Content.Load<SpriteFont>("Arial"); //Temp font
-
-
-
-
 
 
         }
@@ -132,8 +129,7 @@ namespace Monogame_Cross_Platform.Scripts
             }
             //Draws entities active in the currentEntities list
             drawEntities.AddToDrawBuffer(currentGameObjects);
-            drawEntities.AddToDrawBuffer(activeEnemyProjectiles);
-            drawEntities.AddToDrawBuffer(activePlayerProjectiles);
+            drawEntities.AddToDrawBuffer(activeParticles);
 
             drawEntities.DrawBuffer();
             GraphicsDevice.SetRenderTarget(null);

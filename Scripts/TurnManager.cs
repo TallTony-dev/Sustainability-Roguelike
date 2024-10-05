@@ -55,10 +55,6 @@ namespace Monogame_Cross_Platform.Scripts
         /// </summary>
         public static void PauseGame(Player player)
         {
-            foreach (GameObject gameObject in Game1.currentGameObjects)
-            {
-                gameObject.isEnabled = false;
-            }
             foreach (Projectile projectile in Game1.activeEnemyProjectiles)
             {
                 projectile.isEnabled = false;
@@ -66,6 +62,10 @@ namespace Monogame_Cross_Platform.Scripts
             foreach (Projectile projectile in Game1.activePlayerProjectiles)
             {
                 projectile.isEnabled = false;
+            }
+            foreach (GameObject gameObject in LevelGenerator.PosToRoom(player.position).gameObjects)
+            {
+                gameObject.isEnabled = false;
             }
             player.isEnabled = false;
             isPaused = true;
@@ -87,6 +87,7 @@ namespace Monogame_Cross_Platform.Scripts
             {
                 gameObject.isEnabled = true;
             }
+
             player.isEnabled = true;
             isPaused = false;
         }

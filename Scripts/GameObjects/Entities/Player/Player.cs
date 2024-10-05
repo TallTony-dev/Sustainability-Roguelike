@@ -130,12 +130,13 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
                 activeWeapon.Update(inputHandler, player.position);
                 foreach (Weapon weapon in weapons)
                 {
+                    weapon.Update();
                     if (weapon != activeWeapon)
                     {
-                        weapon.isEnabled = false;
+                        weapon.isDrawn = false;
                     }
                     else
-                        weapon.isEnabled = true;
+                        weapon.isDrawn = true;
                 }
 
 

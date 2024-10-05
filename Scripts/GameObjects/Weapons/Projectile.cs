@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
         public Projectile(float travelAngle, float speed, int damage, Vector2 startingPosition, float lifespan, int hitBoxWidth, int hitBoxHeight, ushort animationIndex, string weaponType, bool isPlayer) : base(animationIndex, Vector2.One)
         {
             this.travelAngle = travelAngle;
+            rotation = travelAngle;
             this.speed = speed;
             this.lifespan = lifespan;
             lifespanRemaining = lifespan;
@@ -122,6 +124,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
             base.Destroy();
             if (weaponType == "ranged" || weaponType == "melee" || isReplica) 
             {
+                Game1.activeParticleEmitters.Add(new ParticleEmitter(position, 80, travelAngle, 0.5f, 5, 0.1f, 0.01f, 0.1f, 2));
                 if (isPlayer)
                     Game1.activePlayerProjectiles.Remove(this);
                 else

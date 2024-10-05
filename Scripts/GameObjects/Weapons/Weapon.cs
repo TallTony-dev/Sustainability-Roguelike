@@ -58,7 +58,6 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
                 Player player = (Player)owner;
                 player.AddToInventory(this);
             }
-            isEnabled = true;
 
         }
         public override void Destroy()

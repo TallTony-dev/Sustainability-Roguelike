@@ -37,7 +37,20 @@ namespace Monogame_Cross_Platform.Scripts
                     Game1.activeEnemyProjectiles[x].Update(false);
                 }
             }
-                
+            if (Game1.activeParticleEmitters.Count > 0)
+            {
+                for (int x = Game1.activeParticleEmitters.Count - 1; x > -1; x--)
+                {
+                    Game1.activeParticleEmitters[x].Update();
+                }
+            }
+            if (Game1.activeParticles.Count > 0)
+            {
+                for (int x = Game1.activeParticles.Count - 1; x > -1; x--)
+                {
+                    Game1.activeParticles[x].Update();
+                }
+            }
             for (int x = 0; x < Math.Sqrt(LevelGenerator.rooms.Length); x++)
             {
                 for (int y = 0; y < Math.Sqrt(LevelGenerator.rooms.Length); y++)

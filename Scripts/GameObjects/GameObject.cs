@@ -13,6 +13,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects
         internal AnimationHandler animationHandler;
         public Vector2 position { get; internal set; }
         public float rotation = 0f;
+        public bool isDrawn = true;
         public bool isEnabled = false;
         public GameObject(ushort animationIndex, Vector2 startingTile)
         {
