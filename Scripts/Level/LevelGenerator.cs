@@ -11,10 +11,18 @@ namespace Monogame_Cross_Platform.Scripts.Level
     {
         public static Room[,] rooms = new Room[11,11]; //must be square (odd preferred)
         static short sqrtRoomsLength = 11;
+        static ushort levelNumber = 0;
+
+        public static void GenerateNextLevel()
+        {
+            GenerateLevel((ushort)(levelNumber + 1), 12);
+        }
+
+
         /// <summary>
         /// Edits the static class tilemap to fit the current level selected by param levelNumber
         /// </summary>
-        public static void GenerateLevel(byte levelType, int levelLength)
+        public static void GenerateLevel(ushort levelType, int levelLength)
         {
             short sqrtRoomsLength = (short)Math.Sqrt(rooms.Length);
             (int index, ushort distance)[,] roomIndices = new (int, ushort)[sqrtRoomsLength,sqrtRoomsLength];
@@ -251,6 +259,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
             }
             SetTileMapToRooms();
             TileMap.SettleTileMap();
+            levelNumber = levelType;
         }
 
         public static void SetTileMapToRooms()

@@ -54,6 +54,13 @@ namespace Monogame_Cross_Platform.Scripts.HUD
             }
             Game1.menus.Add(this);
         }
+        public void WipeLeft()
+        {
+            foreach (UiElement element in elements)
+            {
+                element.MoveTo(-1920, (int)element.yOffset, 1f, 100, UiElement.MovementType.bounce);
+            }
+        }
         public void UpdateElements()
         {
             foreach (UiElement element in elements)

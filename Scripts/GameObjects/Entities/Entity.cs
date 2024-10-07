@@ -143,10 +143,5 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
 
             }
         }
-        public int GetMovesPerTurn()
-        {
-            //for every 16 gets one more move per turn, meaning 1 tile/sec is 2 moves per turn, might wanna change
-            return (int)(entitySpeed / 16);
-        }
     }
 }

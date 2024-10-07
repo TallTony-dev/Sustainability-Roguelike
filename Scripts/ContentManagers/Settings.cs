@@ -39,7 +39,7 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
             }
             if (settingsMenu.IsButtonPressed(3))
             {
-                settingsMenu.elements[3].MoveTo(400, 400, 2, 100, UiElement.MovementType.linear);
+                settingsMenu.elements[3].MoveTo(1824, 500, 3, 10, UiElement.MovementType.bounce);
             }
         }
         public static void ApplySettingsToFile()
