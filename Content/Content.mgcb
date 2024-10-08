@@ -38,18 +38,6 @@
 #begin EnemyData.txt
 /copy:EnemyData.txt
 
-#begin Graphics/ball.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Graphics/ball.png
-
 #begin Graphics/cobblestone wall testing.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -85,6 +73,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Graphics/cobblestoneRecolor.png
+
+#begin Graphics/Minimapbg.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Minimapbg.png
 
 #begin Graphics/projectileTesting.png
 /importer:TextureImporter

@@ -88,7 +88,7 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
             float pitchChange = overallMovement / 20;
             if (pitchChange > -1 && pitchChange < 1)
                 instance.Pitch = pitchChange;
-            else throw new ArgumentOutOfRangeException();
+            else instance.Pitch = Math.Sign(pitchChange);
 
             return instance;
         }

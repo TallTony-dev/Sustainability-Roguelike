@@ -27,7 +27,7 @@ namespace Monogame_Cross_Platform.Scripts
         RenderTarget2D renderTarget;
         internal static ContentManagers.Camera.Camera camera = new ContentManagers.Camera.Camera();
         public static AudioPlayer audioPlayer;
-        LevelEditor levelEditor;
+        public static LevelEditor levelEditor;
 
         public static GameTime gameTime;
 
@@ -42,6 +42,7 @@ namespace Monogame_Cross_Platform.Scripts
         internal static List<Particle> activeParticles = new List<Particle>();
         internal static List<ParticleEmitter> activeParticleEmitters = new List<ParticleEmitter>();
 
+        static bool toExit = false;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -73,6 +74,7 @@ namespace Monogame_Cross_Platform.Scripts
             drawEntities = new DrawThings();
             contentLoader.LoadTextures("AlwaysLoaded");
             contentLoader.LoadTextures("Audio");
+            contentLoader.LoadTextures("OtherTextures");
 
             renderTarget = new RenderTarget2D(GraphicsDevice, Settings.resolutionWidth, Settings.resolutionHeight);
             font = Content.Load<SpriteFont>("Arial"); //Temp font
@@ -80,28 +82,17 @@ namespace Monogame_Cross_Platform.Scripts
 
         }
 
-        double timeWhenPaused = 0;
         protected override void Update(GameTime _gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (toExit)
                 Exit();
             gameTime = _gameTime;
             // TODO: Add your update logic here
-            if (Keyboard.GetState().IsKeyDown(Keys.Y) && !GameState.isPaused && gameTime.TotalGameTime.TotalSeconds - timeWhenPaused > 0.5)
-            {
-                GameState.PauseGame(player);
-                timeWhenPaused = gameTime.TotalGameTime.TotalSeconds;
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.Y) && GameState.isPaused && gameTime.TotalGameTime.TotalSeconds - timeWhenPaused > 0.5)
-            {
-                GameState.ResumeGame(player);
-                timeWhenPaused = gameTime.TotalGameTime.TotalSeconds;
-            }
-
             audioPlayer.Update();
             camera.Update();
-            UpdateThings.UpdateLevel(levelEditor, player);
-            UpdateThings.UpdateEntities(player);
+
+            UpdateThings.UpdateAlwaysUpdateThings();
+            GameState.Update(player);
 
             debugText = player.health.ToString(); //TEMP
 
@@ -119,18 +110,19 @@ namespace Monogame_Cross_Platform.Scripts
             drawEntities.BeginBuffer(camera);
 
             //Draws Tiles onto map rendering only the area visible to player
-            for (int x = (int)(player.position.X - _graphics.PreferredBackBufferWidth) / 32; x < (player.position.X + _graphics.PreferredBackBufferWidth) / 32; x++)
+            if (GameState.isInGame)
             {
-                for (int y = (int)(player.position.Y - _graphics.PreferredBackBufferHeight) / 32; y < (player.position.Y + _graphics.PreferredBackBufferHeight) / 32; y++)
+                for (int x = (int)(player.position.X - _graphics.PreferredBackBufferWidth) / 32; x < (player.position.X + _graphics.PreferredBackBufferWidth) / 32; x++)
                 {
-                    if (x>=0 && y>=0 && x<=512 && y<=512)
-                    drawEntities.AddToDrawBuffer(TileMap.tileMap[x, y], x, y);
+                    for (int y = (int)(player.position.Y - _graphics.PreferredBackBufferHeight) / 32; y < (player.position.Y + _graphics.PreferredBackBufferHeight) / 32; y++)
+                    {
+                        if (x >= 0 && y >= 0 && x <= 512 && y <= 512)
+                            drawEntities.AddToDrawBuffer(TileMap.tileMap[x, y], x, y);
+                    }
                 }
+                drawEntities.AddToDrawBuffer(currentGameObjects);
+                drawEntities.AddToDrawBuffer(activeParticles);
             }
-            //Draws entities active in the currentEntities list
-            drawEntities.AddToDrawBuffer(currentGameObjects);
-            drawEntities.AddToDrawBuffer(activeParticles);
-
             drawEntities.DrawBuffer();
             GraphicsDevice.SetRenderTarget(null);
 
@@ -145,6 +137,10 @@ namespace Monogame_Cross_Platform.Scripts
             drawEntities.DrawUiBuffer();
 
             base.Draw(gameTime);
+        }
+        public static void ExitGame()
+        {
+            toExit = true;
         }
     }
 }

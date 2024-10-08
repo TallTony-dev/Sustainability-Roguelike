@@ -58,8 +58,8 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
             Game1._graphics.PreferredBackBufferHeight = resolutionHeight;
             Game1._graphics.ApplyChanges();
 
-            uiScaleX = 1 * ((float)resolutionWidth / 1920);
-            uiScaleY = 1 * ((float)resolutionHeight / 1080);
+            uiScaleX = 1 * ((float)resolutionWidth / 480);
+            uiScaleY = 1 * ((float)resolutionHeight / 270);
         }
         public static void UpdateZoom()
         {

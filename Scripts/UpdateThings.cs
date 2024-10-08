@@ -14,15 +14,18 @@ namespace Monogame_Cross_Platform.Scripts
     /// </summary>
     internal static class UpdateThings
     {
-        public static void UpdateLevel(LevelEditor levelEditor, Player player)
+        public static void UpdateAlwaysUpdateThings()
         {
-            GameState.Update(player);
-            levelEditor.Update(player);
             Settings.Update();
             foreach (Menu menu in Game1.menus)
             {
                 menu.UpdateElements();
             }
+        }
+        public static void UpdateLevel(LevelEditor levelEditor, Player player)
+        {
+            levelEditor.Update(player);
+
             if (Game1.activePlayerProjectiles.Count > 0)
             {
                 for (int x = Game1.activePlayerProjectiles.Count - 1; x > -1; x--)

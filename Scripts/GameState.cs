@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 using Monogame_Cross_Platform.Scripts.Level;
 
 namespace Monogame_Cross_Platform.Scripts
@@ -14,20 +15,77 @@ namespace Monogame_Cross_Platform.Scripts
     {
         internal static bool isInComboMode = false;
         internal static bool isPlayerTurn = true;
-        internal static bool isInGame = true;
-        public static bool isPaused = false;
+        internal static bool isInGame = false;
+        public static bool isPaused = true;
         public static Menu inGameMenu = new Menu(Menu.MenuType.inGameUi);
+        public static Menu mainMenu = new Menu(Menu.MenuType.opening);
+        public static Menu pauseMenu = new Menu(Menu.MenuType.pauseMenu);
 
+        private static double timeWhenPaused = 0;
         public static void Update(Player player)
         {
-            if (isInGame && !inGameMenu.isActive)
+            if (isInGame)
             {
-                inGameMenu.EnableMenu();
+                if (!inGameMenu.isActive)
+                {
+                    inGameMenu.EnableMenu();
+                }
+                if (mainMenu.isActive)
+                    mainMenu.DisableMenu();
+
+                if (!isPaused)
+                {
+                    if (Keyboard.GetState().IsKeyDown(Keys.Escape) && !isPaused && Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenPaused > 0.5)
+                    {
+                        PauseGame(player);
+                        timeWhenPaused = Game1.gameTime.TotalGameTime.TotalSeconds;
+                    }
+
+                }
+
+                if (isPaused)
+                {
+                    if (!pauseMenu.isActive)
+                        pauseMenu.EnableMenu();
+                    if (Keyboard.GetState().IsKeyDown(Keys.Escape) && isPaused && Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenPaused > 0.5)
+                    {
+                        ResumeGame(player);
+                        timeWhenPaused = Game1.gameTime.TotalGameTime.TotalSeconds;
+                        pauseMenu.DisableMenu();
+                    }
+                    if (pauseMenu.IsButtonPressed(0))
+                    {
+                        isInGame = false;
+                        pauseMenu.DisableMenu();
+                    }
+                    if (pauseMenu.IsButtonPressed(1))
+                    {
+                        ResumeGame(player);
+                        pauseMenu.DisableMenu();
+                    }
+                }
+
+                UpdateThings.UpdateLevel(Game1.levelEditor, player);
+                UpdateThings.UpdateEntities(player);
             }
-            else if (!isInGame && inGameMenu != null)
+            else if (!isInGame)
             {
-                Game1.menus.Remove(inGameMenu);
-                inGameMenu.DisableMenu();
+                if (inGameMenu.isActive)
+                {
+                    inGameMenu.DisableMenu();
+                }
+                if (!mainMenu.isActive)
+                    mainMenu.EnableMenu();
+
+                if (mainMenu.IsButtonPressed(0))
+                {
+                    isInGame = true;
+                    ResumeGame(player);
+                }
+                if (mainMenu.IsButtonPressed(1))
+                {
+                    Game1.ExitGame();
+                }
             }
             MiniMap miniMap = (MiniMap)inGameMenu.elements[0];
             miniMap.UpdateMiniMap(player);

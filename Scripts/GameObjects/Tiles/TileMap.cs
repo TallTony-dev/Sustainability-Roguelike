@@ -8,7 +8,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Tiles
     internal static class TileMap
     {
         public static Tile[,] tileMap = new Tile[512,512];
-        public static Tile backgroundTile { get; private set; } = new Tile(0, false, false);
+        public static Tile backgroundTile { get; private set; } = new Tile(0, false, false, 0);
 
         /// <summary>
         /// Takes a posiiton of an entity and converts it to a position on the tilemap, centers the position assuming 32x32 texture

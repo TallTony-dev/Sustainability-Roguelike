@@ -16,6 +16,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
         ushort selectedTextureIndex = 0;
         bool selectedIsBarrier = false;
         bool selectedBreakable = false;
+        ushort selectedDecoIndex = 0;
 
         Menu editorMenu = new Menu(Menu.MenuType.levelEditor);
 
@@ -31,6 +32,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                     player.position = new Vector2(TileMap.PosToAbsTileMapPos(player.position).Item1 * 32, TileMap.PosToAbsTileMapPos(player.position).Item2 * 32);
                     player.isInLevelEditorMode = true;
                     player.isInComboMode = true;
+                    player.ignoresCollisions = true;
                     Room room = LevelGenerator.PosToRoom(player.position);
                     for (int i = 0; i < room.gameObjects.Count; i++)
                     {
@@ -70,12 +72,12 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 var kstate = Keyboard.GetState();
                 if (kstate.IsKeyDown(Keys.E) && Game1.gameTime.TotalGameTime.TotalSeconds - timeSinceTilePlaced > 0.3)
                 {
-                    LevelGenerator.ChangeTileAtPos(player.position, selectedTextureIndex, selectedIsBarrier, selectedBreakable);
+                    LevelGenerator.ChangeTileAtPos(player.position, selectedTextureIndex, selectedIsBarrier, selectedBreakable, selectedDecoIndex);
                     timeSinceTilePlaced = Game1.gameTime.TotalGameTime.TotalSeconds;
                 }
                 if (kstate.IsKeyDown(Keys.R) && Game1.gameTime.TotalGameTime.TotalSeconds - timeSinceTilePlaced > 0.3)
                 {
-                    LevelGenerator.Change3x3TilesAroundPos(player.position, selectedTextureIndex, selectedIsBarrier, selectedBreakable);
+                    LevelGenerator.Change3x3TilesAroundPos(player.position, selectedTextureIndex, selectedIsBarrier, selectedBreakable, selectedDecoIndex);
                     timeSinceTilePlaced = Game1.gameTime.TotalGameTime.TotalSeconds;
                 }
                 if (editorMenu.IsButtonPressed(0))
@@ -99,6 +101,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 if (editorMenu.IsButtonPressed(2))
                 {
                     selectedTextureIndex = 16;
+                    selectedDecoIndex = 1;
                 }
                 if (editorMenu.IsButtonPressed(3))
                 {

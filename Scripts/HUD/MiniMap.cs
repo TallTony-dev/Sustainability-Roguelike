@@ -19,8 +19,8 @@ namespace Monogame_Cross_Platform.Scripts.HUD
         public ushort exitTextureIndex = 37;
         public ushort bridgeTextureIndex = 16;
 
-        private float mapIconScale = 1f;
-        private int borderDistance = 16;
+        private float mapIconScale = 0.5f;
+        private int borderDistance = 8;
 
         int maxInitedX;
         int minInitedX;
@@ -33,7 +33,7 @@ namespace Monogame_Cross_Platform.Scripts.HUD
 
         public void DrawMiniMap(SpriteBatch uiSpriteBatch)
         {
-            (Texture2D backTexture, Rectangle backRectangle) = ContentLoader.GetLoadedTileTexture(textureIndex);
+            (Texture2D backTexture, Rectangle backRectangle) = ContentLoader.GetLoadedOtherTexture(textureIndex);
             (Texture2D entranceTexture, Rectangle entranceRectangle) = ContentLoader.GetLoadedTileTexture(entranceTextureIndex);
             (Texture2D enemyRoomTexture, Rectangle enemyRoomRectangle) = ContentLoader.GetLoadedTileTexture(enemyRoomTextureIndex);
             (Texture2D otherRoomTexture, Rectangle otherRoomRectangle) = ContentLoader.GetLoadedTileTexture(otherRoomTextureIndex);
