@@ -11,20 +11,22 @@ namespace Monogame_Cross_Platform.Scripts.HUD
         int inventorySizeX;
         int inventorySizeY;
         int inventorySizeTotal { get => inventorySizeX * inventorySizeY; }
-        float borderSizePx;
+        float xborderSizePx;
+        float yborderSizePx;
         float itemSpacingPx;
         List<(ushort textureIndex, int durability)> items = new List<(ushort textureIndex, int durability)>();
         int highlightedWeapon;
         
 
 
-        public Inventory(ushort backTextureIndex, int xOffset, int yOffset, Rectangle inventoryTextureSize, int inventorySizeX, int inventorySizeY, float borderSizePx, float itemSpacingPx) : base(backTextureIndex, xOffset, yOffset, inventoryTextureSize)
+        public Inventory(ushort backTextureIndex, int xOffset, int yOffset, Rectangle inventoryTextureSize, int inventorySizeX, int inventorySizeY, float xborderSizePx, float yborderSizePx, float itemSpacingPx) : base(backTextureIndex, xOffset, yOffset, inventoryTextureSize)
         {
             this.inventorySizeX = inventorySizeX;
             this.inventorySizeY = inventorySizeY;
-            this.borderSizePx = borderSizePx;
+            this.xborderSizePx = xborderSizePx;
+            this.yborderSizePx = yborderSizePx;
             this.itemSpacingPx = itemSpacingPx;
-
+            scale = 0.5f;
         }
         public void Update<T>(List<T> items, int highlightedWeapon)
         {
@@ -49,8 +51,8 @@ namespace Monogame_Cross_Platform.Scripts.HUD
         }
         public void Draw(SpriteBatch uiSpriteBatch)
         {
-            (Texture2D backTexture, Rectangle backRectangle) = ContentLoader.GetLoadedTileTexture(textureIndex); //TEMP scaling below
-            uiSpriteBatch.Draw(backTexture, new Vector2(xOffset, yOffset), backRectangle, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * scale * 6, Settings.uiScaleY * scale * 2), SpriteEffects.None, 0.1f);
+            (Texture2D backTexture, Rectangle backRectangle) = ContentLoader.GetLoadedOtherTexture(textureIndex); //TEMP scaling below
+            uiSpriteBatch.Draw(backTexture, new Vector2(xOffset, yOffset), null, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * scale, Settings.uiScaleY * scale), SpriteEffects.None, 0.1f);
             for (int x = 0; x < inventorySizeX; x++)
             {
                 for (int y = 0; y < inventorySizeY; y++)
@@ -60,7 +62,7 @@ namespace Monogame_Cross_Platform.Scripts.HUD
                         (ushort itemTextureIndex, int itemDurability) = items[y * inventorySizeX + x];
                         
                         (Texture2D itemTexture, Rectangle itemRectangle) = ContentLoader.GetLoadedTileTexture(itemTextureIndex);
-                        Vector2 position = new Vector2(xOffset + borderSizePx + x * itemSpacingPx * scale * Settings.uiScaleX, yOffset + borderSizePx + y * borderSizePx * scale * Settings.uiScaleY);
+                        Vector2 position = new Vector2(xOffset + xborderSizePx * scale * Settings.uiScaleX + x * itemSpacingPx * scale * Settings.uiScaleX, yOffset + yborderSizePx * scale * Settings.uiScaleX + y * itemSpacingPx * scale * Settings.uiScaleY);
                         uiSpriteBatch.Draw(itemTexture, position, itemRectangle, Color.White, 0f, Vector2.Zero, new Vector2(Settings.uiScaleX * scale, Settings.uiScaleY * scale), SpriteEffects.None, 0f);
                         if (y * inventorySizeX + x == highlightedWeapon)
                         {

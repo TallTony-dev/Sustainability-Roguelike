@@ -17,8 +17,8 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
         private List<(string textureName, Rectangle sourceRect, ushort index)> CityTexturesToLoad = new List<(string, Rectangle, ushort)>() { };
 
         //Arrays of all textures to load, texturetype indicates how the texture should be loaded, 0 loads as a tileset (currently 4x4 like cooblestone texture, TODO: make type 1 load a spritesheet (figure out how)
-        private (string textureName, ushort startingIndex, byte textureType)[] AlwaysLoadedTextures = { ("cobblestone", 0, 0), ("cobblestone wall testing", 16, 0), ("cobblestoneRecolor", 32, 0), ("projectileTesting", 48, 0)};
-        private (string textureName, ushort startingIndex, byte textureType)[] OtherTextures = { ("Minimapbg", 1, 1) };
+        private (string textureName, ushort startingIndex, byte textureType)[] AlwaysLoadedTextures = { ("cobblestone", 0, 0), ("cobblestone wall testing", 16, 0), ("cobblestoneRecolor", 32, 0), ("electricWeapon", 48, 0)};
+        private (string textureName, ushort startingIndex, byte textureType)[] OtherTextures = { ("minimapBG", 1, 1), ("hotBar", 2, 1)};
         private (string textureName, ushort startingIndex, byte textureType)[] CityTextures = { };
         private List<(string textureName, ushort index)> Audio = new List<(string textureName, ushort index)>() { ("Laser_Shoot", 0), ("Explosion", 1) };
 
@@ -63,7 +63,7 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
                 }
                 if (textureType == 1)
                 {
-                    TextureListToLoad.Add((textureName, new(0, 0, 96, 96), (ushort)(startingIndex)));
+                    TextureListToLoad.Add((textureName, Rectangle.Empty, (ushort)(startingIndex)));
                 }
             }
         }

@@ -10,6 +10,8 @@ namespace Monogame_Cross_Platform.Scripts.HUD
     {
         public MiniMap(ushort backgroundTextureIndex, int xOffset, int yOffset, Rectangle hitBox) : base(backgroundTextureIndex, xOffset, yOffset, hitBox)
         {
+            scale = 0.7f;
+            mapIconScale = 0.4f;
         }
         public ushort entranceTextureIndex = 32;
         public ushort enemyRoomTextureIndex = 33;
@@ -19,7 +21,7 @@ namespace Monogame_Cross_Platform.Scripts.HUD
         public ushort exitTextureIndex = 37;
         public ushort bridgeTextureIndex = 16;
 
-        private float mapIconScale = 0.5f;
+        private float mapIconScale;
         private int borderDistance = 8;
 
         int maxInitedX;
@@ -42,8 +44,9 @@ namespace Monogame_Cross_Platform.Scripts.HUD
             (Texture2D exitTexture, Rectangle exitRectangle) = ContentLoader.GetLoadedTileTexture(exitTextureIndex);
             (Texture2D bridgeTexture, Rectangle bridgeRectangle) = ContentLoader.GetLoadedTileTexture(bridgeTextureIndex);
 
+            backRectangle = new Rectangle(0,0, backTexture.Width, backTexture.Height);
             //draw background
-            uiSpriteBatch.Draw(backTexture, new Vector2(xOffset, yOffset), backRectangle, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * scale, Settings.uiScaleY * scale), SpriteEffects.None, 0.1f);
+            uiSpriteBatch.Draw(backTexture, new Vector2(xOffset, yOffset), null, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * scale, Settings.uiScaleY * scale), SpriteEffects.None, 0.1f);
 
             float deltaX = maxInitedX - minInitedX;
             float deltaY = maxInitedY - minInitedY;

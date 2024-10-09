@@ -46,7 +46,7 @@ namespace Monogame_Cross_Platform.Scripts.HUD
             {
                 elements.Add(new MiniMap(1, 0, 0, new Rectangle(0, 0, 32, 32)));
                 elements.Add(new Meter(16, 32, 120, 20, new Rectangle(0, 0, 32, 32), false, 1, 0));
-                elements.Add(new Inventory(16, 150, 238, new Rectangle(0, 0, 128, 32), 9, 1, 16, 32));
+                elements.Add(new Inventory(2, 100, 216, new Rectangle(0, 0, 128, 32), 8, 1, 14, 8, 33));
 
             }
             if (menuType == MenuType.opening)

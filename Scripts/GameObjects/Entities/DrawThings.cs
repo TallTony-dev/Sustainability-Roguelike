@@ -117,7 +117,10 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         public void AddToDrawBuffer(GameObject gameObject, SpriteEffects spriteEffect)
         {
             (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(gameObject.textureIndex);
-            spriteBatch.Draw(texture, gameObject.position, rectangle, Color.White, gameObject.rotation, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, spriteEffect, 0.02f);
+            if (rectangle != Rectangle.Empty)
+                spriteBatch.Draw(texture, gameObject.position, rectangle, Color.White, gameObject.rotation, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, spriteEffect, 0.02f);
+            else
+                spriteBatch.Draw(texture, gameObject.position, null, Color.White, gameObject.rotation, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, spriteEffect, 0.02f);
         }
 
         public void BeginUiBuffer() => uiSpriteBatch.Begin(SpriteSortMode.BackToFront, null, SamplerState.PointClamp);
