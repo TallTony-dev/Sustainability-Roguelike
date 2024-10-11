@@ -13,7 +13,7 @@ namespace Monogame_Cross_Platform.Scripts.HUD
             scale = 0.7f;
             mapIconScale = 0.4f;
         }
-        public ushort entranceTextureIndex = 32;
+        public ushort entranceTextureIndex = 30;
         public ushort enemyRoomTextureIndex = 33;
         public ushort otherRoomTextureIndex = 34;
         public ushort treasureRoomTextureIndex = 35;

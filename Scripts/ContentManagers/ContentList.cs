@@ -17,7 +17,7 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
         private List<(string textureName, Rectangle sourceRect, ushort index)> CityTexturesToLoad = new List<(string, Rectangle, ushort)>() { };
 
         //Arrays of all textures to load, texturetype indicates how the texture should be loaded, 0 loads as a tileset (currently 4x4 like cooblestone texture, TODO: make type 1 load a spritesheet (figure out how)
-        private (string textureName, ushort startingIndex, byte textureType)[] AlwaysLoadedTextures = { ("cobblestone", 0, 0), ("cobblestone wall testing", 16, 0), ("cobblestoneRecolor", 32, 0), ("electricWeapon", 48, 0)};
+        private (string textureName, ushort startingIndex, byte textureType)[] AlwaysLoadedTextures = { ("cobblestone", 0, 0), ("cobblestone wall testing", 30, 0), ("cobblestoneRecolor", 60, 0), ("electricWeapon", 90, 2)};
         private (string textureName, ushort startingIndex, byte textureType)[] OtherTextures = { ("minimapBG", 1, 1), ("hotBar", 2, 1)};
         private (string textureName, ushort startingIndex, byte textureType)[] CityTextures = { };
         private List<(string textureName, ushort index)> Audio = new List<(string textureName, ushort index)>() { ("Laser_Shoot", 0), ("Explosion", 1) };
@@ -25,21 +25,18 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
         public List<(string textureName, Rectangle sourceRect, ushort index)> GetAlwaysLoadedTextures()
         {
             PrepTextureSet(AlwaysLoadedTextures, AlwaysLoadedToLoad);
-            //add any solo textures here
 
             return AlwaysLoadedToLoad; 
         }
         public List<(string textureName, Rectangle sourceRect, ushort index)> GetOtherTextures()
         {
             PrepTextureSet(OtherTextures, OtherTexturesToLoad);
-            //add any solo textures here
 
             return OtherTexturesToLoad;
         }
         public List<(string textureName, Rectangle sourceRect, ushort index)> GetCityTextures()
         {
             PrepTextureSet(CityTextures, CityTexturesToLoad);
-            //solo textures here
 
             return CityTexturesToLoad;
         }
@@ -60,10 +57,27 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
                             TextureListToLoad.Add((textureName, new(x * 32, y * 32, 32, 32), (ushort)(startingIndex + (y * 4) + x)));
                         }
                     }
+                    for (ushort y = 0; y < 2; y++) //selects row
+                    {
+                        for (ushort x = 0; x < 2; x++) //selects column
+                        {
+                            TextureListToLoad.Add((textureName, new(x * 32 + 128, y * 32, 32, 32), (ushort)(startingIndex + (y * 2) + x + 16)));
+                        }
+                    }
                 }
                 if (textureType == 1)
                 {
                     TextureListToLoad.Add((textureName, Rectangle.Empty, (ushort)(startingIndex)));
+                }
+                if (textureType == 2)
+                {
+                    for (ushort y = 0; y < 4; y++) //selects row
+                    {
+                        for (ushort x = 0; x < 4; x++) //selects column
+                        {
+                            TextureListToLoad.Add((textureName, new(x * 32, y * 32, 32, 32), (ushort)(startingIndex + (y * 4) + x)));
+                        }
+                    }
                 }
             }
         }

@@ -229,13 +229,13 @@ namespace Monogame_Cross_Platform.Scripts.Level
             if (levelType == 1)
             {
                 for (var y = 0; y < 3; y++)
-                    tileArray[sqrtTileArrayLength - 1, (sqrtTileArrayLength - 1) / 2 + y - 1] = new Tile(16, true, false, 0);
+                    tileArray[sqrtTileArrayLength - 1, (sqrtTileArrayLength - 1) / 2 + y - 1] = new Tile(30, true, false, 0);
                 for (var y = 0; y < 3; y++)
-                    tileArray[0, (sqrtTileArrayLength - 1) / 2 + y - 1] = new Tile(16, true, false, 0);
+                    tileArray[0, (sqrtTileArrayLength - 1) / 2 + y - 1] = new Tile(30, true, false, 0);
                 for (var x = 0; x < 3; x++)
-                    tileArray[(sqrtTileArrayLength - 1) / 2 + x - 1, 0] = new Tile(16, true, false, 0);
+                    tileArray[(sqrtTileArrayLength - 1) / 2 + x - 1, 0] = new Tile(30, true, false, 0);
                 for (var x = 0; x < 3; x++)
-                    tileArray[(sqrtTileArrayLength - 1) / 2 + x - 1, sqrtTileArrayLength - 1] = new Tile(16, true, false, 0);
+                    tileArray[(sqrtTileArrayLength - 1) / 2 + x - 1, sqrtTileArrayLength - 1] = new Tile(30, true, false, 0);
             }
             isOpen = false;
         }

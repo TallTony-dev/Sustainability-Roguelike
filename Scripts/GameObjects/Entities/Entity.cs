@@ -40,7 +40,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             this.aiType = aiType;
             this.health = health;
             maxHealth = health;
-            sweatParticles = new ParticleEmitter(Vector2.One, 40, 180, 0.5f, 58, 0.4f, 0.2f, float.PositiveInfinity, 90, 0, 80, 0, true);
+            sweatParticles = new ParticleEmitter(Vector2.One, 40, 180, 0.5f, 100, 0.4f, 0.2f, float.PositiveInfinity, 90, 0, 80, 0, true);
         }
         public override void Destroy()
         {

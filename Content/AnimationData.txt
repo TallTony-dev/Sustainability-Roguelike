@@ -1,10 +1,10 @@
-﻿300-5-1, 100-7-16
+﻿300-5-1, 100-7-10
 ^msPerFrame,frames,startingIndex
 300-5-32, 100-7-32
 ^thing
-20-4-48
+20-4-90
 ^melee projectileAnim
-130-4-48
+130-4-90
 ^ranged projectileAnim
-10000-1-52, 100-4-53
+10000-1-94, 100-4-95
 ^weapon anims

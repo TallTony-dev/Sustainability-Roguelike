@@ -66,7 +66,7 @@ namespace Monogame_Cross_Platform.Scripts.HUD
                         uiSpriteBatch.Draw(itemTexture, position, itemRectangle, Color.White, 0f, Vector2.Zero, new Vector2(Settings.uiScaleX * scale, Settings.uiScaleY * scale), SpriteEffects.None, 0f);
                         if (y * inventorySizeX + x == highlightedWeapon)
                         {
-                            (Texture2D borderTexture, Rectangle borderRectangle) = ContentLoader.GetLoadedTileTexture(57);
+                            (Texture2D borderTexture, Rectangle borderRectangle) = ContentLoader.GetLoadedTileTexture(99);
                             uiSpriteBatch.Draw(borderTexture, position, borderRectangle, Color.White, 0f, Vector2.Zero, new Vector2(Settings.uiScaleX * scale, Settings.uiScaleY * scale), SpriteEffects.None, 0f);
                         }
                     }
