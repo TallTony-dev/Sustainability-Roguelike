@@ -34,11 +34,22 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         public void AddToDrawBuffer(Tile tile, int tileMapX, int tileMapY)
         {
             (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(tile.textureIndex);
-            spriteBatch.Draw(texture, new Vector2(tileMapX * 32, tileMapY * 32), rectangle, Color.White, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0.04f);
+            float rot = 0f;
+            if ((tile.textureIndex + 20) % 30 == 0)
+            {
+                rot = tile.rotation * 1.57079f;
+            }
+            
+            spriteBatch.Draw(texture, new Vector2(tileMapX * 32, tileMapY * 32), rectangle, Color.White, rot, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0.04f);
 
             (Texture2D decoTexture, Rectangle decoRectangle) = ContentLoader.GetLoadedOtherTexture(tile.decorationIndex);
             if (decoTexture != null)
-                spriteBatch.Draw(decoTexture, new Vector2(tileMapX * 32, tileMapY * 32), decoRectangle, Color.White, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0.039f);
+            {
+                if (decoRectangle != Rectangle.Empty)
+                    spriteBatch.Draw(decoTexture, new Vector2(tileMapX * 32, tileMapY * 32), decoRectangle, Color.White, 0f, new Vector2(decoRectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0.039f);
+                else
+                    spriteBatch.Draw(decoTexture, new Vector2(tileMapX * 32, tileMapY * 32), null, Color.White, 0f, new Vector2(16, 16), Vector2.One, SpriteEffects.None, 0.039f);
+            }
         }
         public void AddToUiBuffer(List<Menu> menus)
         {

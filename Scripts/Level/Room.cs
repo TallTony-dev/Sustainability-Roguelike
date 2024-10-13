@@ -93,9 +93,10 @@ namespace Monogame_Cross_Platform.Scripts.Level
             {
                 for (int x = 0; x < sqrtTileArrayLength; x++)
                 {
-                    tileArray[x, y].textureIndex = Convert.ToUInt16(tokens[1 + (x * 3) + (y * sqrtTileArrayLength * 3)]);
-                    tileArray[x, y].isBarrier = Convert.ToBoolean(tokens[2 + (x * 3) + (y * sqrtTileArrayLength * 3)]);
-                    tileArray[x, y].breakable = Convert.ToBoolean(tokens[3 + (x * 3) + (y * sqrtTileArrayLength * 3)]);
+                    tileArray[x, y].textureIndex = Convert.ToUInt16(tokens[1 + (x * 4) + (y * sqrtTileArrayLength * 4)]);
+                    tileArray[x, y].isBarrier = Convert.ToBoolean(tokens[2 + (x * 4) + (y * sqrtTileArrayLength * 4)]);
+                    tileArray[x, y].breakable = Convert.ToBoolean(tokens[3 + (x * 4) + (y * sqrtTileArrayLength * 4)]);
+                    tileArray[x, y].decorationIndex = Convert.ToUInt16(tokens[4 + (x * 4) + (y * sqrtTileArrayLength * 4)]);
                 }
             }
 
@@ -229,13 +230,13 @@ namespace Monogame_Cross_Platform.Scripts.Level
             if (levelType == 1)
             {
                 for (var y = 0; y < 3; y++)
-                    tileArray[sqrtTileArrayLength - 1, (sqrtTileArrayLength - 1) / 2 + y - 1] = new Tile(30, true, false, 0);
+                    tileArray[sqrtTileArrayLength - 1, (sqrtTileArrayLength - 1) / 2 + y - 1] = new Tile(30, true, false, 0, tileArray[sqrtTileArrayLength - 1, (sqrtTileArrayLength - 1) / 2 + y - 1].rotation);
                 for (var y = 0; y < 3; y++)
-                    tileArray[0, (sqrtTileArrayLength - 1) / 2 + y - 1] = new Tile(30, true, false, 0);
+                    tileArray[0, (sqrtTileArrayLength - 1) / 2 + y - 1] = new Tile(30, true, false, 0, tileArray[0, (sqrtTileArrayLength - 1) / 2 + y - 1].rotation);
                 for (var x = 0; x < 3; x++)
-                    tileArray[(sqrtTileArrayLength - 1) / 2 + x - 1, 0] = new Tile(30, true, false, 0);
+                    tileArray[(sqrtTileArrayLength - 1) / 2 + x - 1, 0] = new Tile(30, true, false, 0, tileArray[(sqrtTileArrayLength - 1) / 2 + x - 1, 0].rotation);
                 for (var x = 0; x < 3; x++)
-                    tileArray[(sqrtTileArrayLength - 1) / 2 + x - 1, sqrtTileArrayLength - 1] = new Tile(30, true, false, 0);
+                    tileArray[(sqrtTileArrayLength - 1) / 2 + x - 1, sqrtTileArrayLength - 1] = new Tile(30, true, false, 0, tileArray[(sqrtTileArrayLength - 1) / 2 + x - 1, sqrtTileArrayLength - 1].rotation);
             }
             isOpen = false;
         }

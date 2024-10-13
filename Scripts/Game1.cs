@@ -62,6 +62,15 @@ namespace Monogame_Cross_Platform.Scripts
             LevelGenerator.GenerateLevel(1, 13); //TEMP
             audioPlayer = new AudioPlayer(ContentLoader.audioLoaded);
             player = new Player(100, 250, new Vector2(28 * 5 + 9, 28 * 5 + 9), new Hitboxes.Hitbox(0, 0, 31, 31), 0); //Put this in a better spot inside of an initialize level function within update or smth
+            for (int y = 0; y < 512; y++)
+            {
+                for (int x = 0; x < 512; x++)
+                {
+                    Random random = new Random();
+                    byte rand = (byte)random.Next(0, 4);
+                    TileMap.tileMap[x, y].rotation = rand;
+                }
+            }
 
             Settings.ApplySettingsToFile(); //TEMP
             Settings.InitializeSettings();

@@ -12,6 +12,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Tiles
         public bool isBeingPathfoundTo;
         public bool breakable;
         public ushort decorationIndex;
+        public byte rotation;
 
         public Tile(ushort textureIndex, bool isBarrier, bool breakable, byte decorationIndex)
         {
@@ -20,6 +21,16 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Tiles
             this.breakable = breakable;
             isBeingPathfoundTo = false;
             this.decorationIndex = decorationIndex;
+            rotation = 0;
+        }
+        public Tile(ushort textureIndex, bool isBarrier, bool breakable, byte decorationIndex, byte rotation)
+        {
+            this.textureIndex = textureIndex;
+            this.isBarrier = isBarrier;
+            this.breakable = breakable;
+            isBeingPathfoundTo = false;
+            this.decorationIndex = decorationIndex;
+            this.rotation = rotation;
         }
         public Tile()
         {
@@ -28,6 +39,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Tiles
             breakable = false;
             isBeingPathfoundTo = false;
             decorationIndex = 0;
+            rotation = 0;
         }
     }
 }

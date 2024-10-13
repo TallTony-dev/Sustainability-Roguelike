@@ -284,7 +284,9 @@ namespace Monogame_Cross_Platform.Scripts.Level
             {
                 for (var tileX = 0; tileX < room.sqrtTileArrayLength; tileX++)
                 {
-                    TileMap.tileMap[roomX * 28 + tileX, roomY * 28 + tileY] = room.tileArray[tileX, tileY];
+                    Tile tile = room.tileArray[tileX, tileY];
+                    tile.rotation = TileMap.tileMap[roomX * 28 + tileX, roomY * 28 + tileY].rotation;
+                    TileMap.tileMap[roomX * 28 + tileX, roomY * 28 + tileY] = tile;
                 }
             }
             TileMap.SettleTileMap(roomX * 28 - 1, roomY * 28 - 1, roomX * 28 + room.sqrtTileArrayLength + 1, roomY * 28 + room.sqrtTileArrayLength + 1);
@@ -351,7 +353,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 for (var tileX = 0; tileX < roomToWrite.sqrtTileArrayLength; tileX++)
                 {
                     Tile tile = roomToWrite.tileArray[tileX, tileY];
-                    writer.Write($",{16 * (int)(tile.textureIndex / 16)},{tile.isBarrier},{tile.breakable}");
+                    writer.Write($",{30 * (int)(tile.textureIndex / 30)},{tile.isBarrier},{tile.breakable},{tile.decorationIndex}");
                 }
             }
             writer.Write("\n");
