@@ -8,7 +8,6 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Tiles
     internal static class TileMap
     {
         public static Tile[,] tileMap = new Tile[512,512];
-        public static Tile backgroundTile { get; private set; } = new Tile(0, false, false, 0);
         public static int sqrtTileMapLength = (int)Math.Sqrt(tileMap.Length);
 
         /// <summary>
@@ -27,17 +26,18 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Tiles
             return new Vector2(x * 32, y * 32);
         }
 
-        public static void SetBackground(Tile tile)
+        public static void ResetTileMap(Tile tile)
         {
+            Random random = new Random();
             for (int y = 0; y < 512; y++)
             {
                 for (int x = 0; x < 512; x++)
                 {
-                    if (tileMap[x,y].Equals(backgroundTile)) //may be issue with this, espcially if the old tile is also used in a room somewhere
-                        tileMap[x, y] = tile;
+                    tileMap[x, y] = tile;
+                    byte rand = (byte)random.Next(0, 4);
+                    tileMap[x, y].rotation = rand;
                 }
             }
-            backgroundTile = tile;
         }
         public static void SettleTileMap()
         {

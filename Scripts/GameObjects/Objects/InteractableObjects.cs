@@ -11,11 +11,11 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Objects
     {
         public override void Interact()
         {
-
+            GameState.NextLevel();
         }
-        public Exit(ushort textureIndex, Vector2 startingPos, Vector2 hitboxSize) : base(textureIndex, startingPos, hitboxSize)
+        public Exit(ushort animIndex, Vector2 startingTile, Vector2 hitboxSize) : base(animIndex, startingTile, hitboxSize, false)
         {
-
+            isEnabled = true;
         }
     }
     
@@ -23,8 +23,17 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Objects
 
     internal abstract class InteractableObject : CollidableObject
     {
+        double timeWhenInteracted = 0;
         public abstract void Interact();
-        public InteractableObject(ushort textureIndex, Vector2 startingPos, Vector2 hitboxSize) : base(textureIndex, startingPos, hitboxSize)
+        public void Update(Hitbox playerHitbox)
+        {
+            if (isEnabled && hitBox.Intersects(playerHitbox) && (Keyboard.GetState().IsKeyDown(Keys.E) || GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.A)) && Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenInteracted > 0.3)
+            {
+                Interact();
+                timeWhenInteracted = Game1.gameTime.TotalGameTime.TotalSeconds;
+            }
+        }
+        public InteractableObject(ushort animIndex, Vector2 startingTile, Vector2 hitboxSize, bool isBarrier) : base(animIndex, startingTile, hitboxSize, isBarrier)
         {
 
         }

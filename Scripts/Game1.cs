@@ -34,7 +34,7 @@ namespace Monogame_Cross_Platform.Scripts
         SpriteFont font; //Temp font
         public static string debugText = "test";
 
-        Player player;
+        internal static Player player;
         internal static List<GameObject> currentGameObjects;
         internal static List<Menu> menus = new List<Menu>();
         internal static List<Projectile> activePlayerProjectiles = new List<Projectile>();
@@ -59,18 +59,10 @@ namespace Monogame_Cross_Platform.Scripts
             // TODO: Add your initialization logic here
             contentLoader = new ContentLoader(this);
 
-            LevelGenerator.GenerateLevel(1, 13); //TEMP
+            LevelGenerator.GenerateLevel(1, 5); //TEMP
             audioPlayer = new AudioPlayer(ContentLoader.audioLoaded);
-            player = new Player(100, 250, new Vector2(28 * 5 + 9, 28 * 5 + 9), new Hitboxes.Hitbox(0, 0, 31, 31), 0); //Put this in a better spot inside of an initialize level function within update or smth
-            for (int y = 0; y < 512; y++)
-            {
-                for (int x = 0; x < 512; x++)
-                {
-                    Random random = new Random();
-                    byte rand = (byte)random.Next(0, 4);
-                    TileMap.tileMap[x, y].rotation = rand;
-                }
-            }
+            player = new Player(100, 250, new Vector2(149, 149), new Hitboxes.Hitbox(0, 0, 31, 31), 0); //Put this in a better spot inside of an initialize level function within update or smth
+            
 
             Settings.ApplySettingsToFile(); //TEMP
             Settings.InitializeSettings();

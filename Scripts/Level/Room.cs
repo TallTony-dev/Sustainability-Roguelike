@@ -32,6 +32,10 @@ namespace Monogame_Cross_Platform.Scripts.Level
             tileArray[x,y].breakable = breakable;
             tileArray[x, y].decorationIndex = decorationIndex;
         }
+        public void SetTile(int x, int y, Tile tile)
+        {
+            tileArray[x, y] = tile;
+        }
         public Room(ushort levelType, ushort roomIndex, int roomArrayX, int roomArrayY)
         {
             this.roomArrayX = roomArrayX;
@@ -78,7 +82,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
             sqrtTileArrayLength = (int)Math.Sqrt(tileArray.Length);
             string roomData = "error";
             if (levelType > 0)
-                roomData = File.ReadLines("Content/RoomData.txt").Skip(roomIndex * 2 * levelType).Take(1).First(); //this skips the number indicated in roomindex * 2 so that comments can be added between lines in roomdata.txt
+                roomData = File.ReadLines("Content/RoomData.txt").Skip(roomIndex * 2 + (levelType - 1) * 46 + 2).Take(1).First(); //this skips the number indicated in roomindex * 2 so that comments can be added between lines in roomdata.txt
             else
             {
                 if (roomIndex == 0)
@@ -112,12 +116,17 @@ namespace Monogame_Cross_Platform.Scripts.Level
                     string gameObjectType = gameObjectData[0];
 
                     (int tileMapTileX, int tileMapTileY) = RoomTileToTileMap(Convert.ToInt32(gameObjectData[1]), Convert.ToInt32(gameObjectData[2]));
-                    Vector2 position = new Vector2(TileMap.TileMapPosToPos(tileMapTileX, tileMapTileY).X, TileMap.TileMapPosToPos(tileMapTileX, tileMapTileY).Y);
+
 
                     if (gameObjectType == "Enemy")
                     {
-
+                        Vector2 position = new Vector2(TileMap.TileMapPosToPos(tileMapTileX, tileMapTileY).X, TileMap.TileMapPosToPos(tileMapTileX, tileMapTileY).Y);
                         this.gameObjects.Add(new Enemy(Convert.ToUInt16(gameObjectData[3]), position));
+                    }
+                    if (gameObjectType == "Exit")
+                    {
+                        Vector2 position = new Vector2(tileMapTileX, tileMapTileY);
+                        this.gameObjects.Add(new GameObjects.Objects.Exit(Convert.ToUInt16(gameObjectData[3]), position, new Vector2(64,64)));
                     }
 
                 }
@@ -145,6 +154,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                     && !player.isInLevelEditorMode && enemies > 0)
                 {
                     Activate();
+                    EnableObjects();
                 }
             }
             else
@@ -152,22 +162,20 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 if (LevelGenerator.PosToRoom(player.position) != this || LevelGenerator.PosToTileOfRoom(player.position).Item1 > 18 || LevelGenerator.PosToTileOfRoom(player.position).Item2 > 18 || player.isInLevelEditorMode || enemies == 0)
                 {
                     Deactivate();
+                    DisableEntities();
                 }
             }
         }
 
-        public void Activate()
+        public void EnableObjects()
         {
-            foreach(GameObject gameObject in gameObjects)
+            foreach (GameObject gameObject in gameObjects)
             {
                 gameObject.isEnabled = true;
             }
-            CloseSides();
-            LevelGenerator.SetTileMapToRoom(roomArrayX, roomArrayY);
-            wasActive = true;
         }
 
-        public void Deactivate()
+        public void DisableEntities()
         {
             foreach (GameObject gameObject in gameObjects)
             {
@@ -176,6 +184,17 @@ namespace Monogame_Cross_Platform.Scripts.Level
                     gameObject.isEnabled = false;
                 }
             }
+        }
+
+        public void Activate()
+        {
+            CloseSides();
+            LevelGenerator.SetTileMapToRoom(roomArrayX, roomArrayY);
+            wasActive = true;
+        }
+
+        public void Deactivate()
+        {
             OpenSides();
             LevelGenerator.SetTileMapToRoom(roomArrayX, roomArrayY);
         }
@@ -191,53 +210,50 @@ namespace Monogame_Cross_Platform.Scripts.Level
 
         public void OpenSides()
         {
+            Tile openTile = new Tile();
+            if (levelType == 1)
+                openTile = new Tile(0, false, false, 0);
+            else if (levelType == 2)
+                openTile = new Tile(0, false, false, 0);
+
             if (!isXAtArrayLimit && LevelGenerator.rooms[roomArrayX + 1, roomArrayY].roomType != 0)
             {
-                if(levelType == 1)
-                {
-                    for (var y = 0; y < 3; y++)
-                        SetTile(sqrtTileArrayLength - 1, (sqrtTileArrayLength - 1) / 2 + y - 1, 0, false, false, 0);
-                }
+                for (var y = 0; y < 3; y++)
+                    SetTile(sqrtTileArrayLength - 1, (sqrtTileArrayLength - 1) / 2 + y - 1, openTile);
             }
             if (!isX0 && LevelGenerator.rooms[roomArrayX - 1, roomArrayY].roomType != 0)
             {
-                if (levelType == 1)
-                {
-                    for (var y = 0; y < 3; y++)
-                        SetTile(0, (sqrtTileArrayLength - 1) / 2 + y - 1, 0, false, false, 0);
-                }
+                for (var y = 0; y < 3; y++)
+                    SetTile(0, (sqrtTileArrayLength - 1) / 2 + y - 1, openTile);
             }
             if (!isY0 && LevelGenerator.rooms[roomArrayX, roomArrayY - 1].roomType != 0)
             {
-                if (levelType == 1)
-                {
-                    for (var x = 0; x < 3; x++)
-                        SetTile((sqrtTileArrayLength - 1) / 2 + x - 1, 0, 0, false, false, 0);
-                }
+                for (var x = 0; x < 3; x++)
+                    SetTile((sqrtTileArrayLength - 1) / 2 + x - 1, 0, openTile);
             }
             if (!isYAtArrayLimit && LevelGenerator.rooms[roomArrayX, roomArrayY + 1].roomType != 0)
             {
-                if (levelType == 1)
-                {
-                    for (var x = 0; x < 3; x++)
-                        SetTile((sqrtTileArrayLength - 1) / 2 + x - 1, sqrtTileArrayLength - 1, 0, false, false, 0);
-                }
+                for (var x = 0; x < 3; x++)
+                    SetTile((sqrtTileArrayLength - 1) / 2 + x - 1, sqrtTileArrayLength - 1, openTile);
             }
             isOpen = true;
         }
         public void CloseSides()
         {
+            Tile closedTile = new Tile();
             if (levelType == 1)
-            {
+                closedTile = new Tile(30, true, false, 0);
+            else if (levelType == 2)
+                closedTile = new Tile(30, true, false, 0);
+
                 for (var y = 0; y < 3; y++)
-                    tileArray[sqrtTileArrayLength - 1, (sqrtTileArrayLength - 1) / 2 + y - 1] = new Tile(30, true, false, 0, tileArray[sqrtTileArrayLength - 1, (sqrtTileArrayLength - 1) / 2 + y - 1].rotation);
+                    SetTile(sqrtTileArrayLength - 1, (sqrtTileArrayLength - 1) / 2 + y - 1, closedTile);
                 for (var y = 0; y < 3; y++)
-                    tileArray[0, (sqrtTileArrayLength - 1) / 2 + y - 1] = new Tile(30, true, false, 0, tileArray[0, (sqrtTileArrayLength - 1) / 2 + y - 1].rotation);
+                    SetTile(0, (sqrtTileArrayLength - 1) / 2 + y - 1, closedTile);
                 for (var x = 0; x < 3; x++)
-                    tileArray[(sqrtTileArrayLength - 1) / 2 + x - 1, 0] = new Tile(30, true, false, 0, tileArray[(sqrtTileArrayLength - 1) / 2 + x - 1, 0].rotation);
+                    SetTile((sqrtTileArrayLength - 1) / 2 + x - 1, 0, closedTile);
                 for (var x = 0; x < 3; x++)
-                    tileArray[(sqrtTileArrayLength - 1) / 2 + x - 1, sqrtTileArrayLength - 1] = new Tile(30, true, false, 0, tileArray[(sqrtTileArrayLength - 1) / 2 + x - 1, sqrtTileArrayLength - 1].rotation);
-            }
+                    SetTile((sqrtTileArrayLength - 1) / 2 + x - 1, sqrtTileArrayLength - 1, closedTile);
             isOpen = false;
         }
 

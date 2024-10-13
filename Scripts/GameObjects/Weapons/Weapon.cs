@@ -26,7 +26,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
         private int projHeight;
 
         internal double timeWhenShot;
-        private Entity owner;
+        public Entity owner;
 
         public void Drop(Vector2 pos)
         {

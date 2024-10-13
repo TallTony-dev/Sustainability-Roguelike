@@ -20,7 +20,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
         public short activeWeaponIndex = 0;
         public int maxWeapons = 9;
 
-         public Player(int health, float entitySpeed, Vector2 startingTile, Hitboxes.Hitbox hitBox, ushort textureIndex) : base(entitySpeed, startingTile, textureIndex, hitBox, EntityMovement.AIType.none, health)
+        public Player(int health, float entitySpeed, Vector2 startingTile, Hitboxes.Hitbox hitBox, ushort textureIndex) : base(entitySpeed, startingTile, textureIndex, hitBox, EntityMovement.AIType.none, health)
         {
             isEnabled = true;
             weapons.Add(new Weapon(0, this));
@@ -33,7 +33,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
         double timeWheninteracted = 0;
         public override void CheckRoom()
         {
-            Level.Room room = Level.LevelGenerator.PosToRoom(position);
+            Room room = LevelGenerator.PosToRoom(position);
             var kstate = Keyboard.GetState();
             var gstate = GamePad.GetState(PlayerIndex.One);
             bool hasInteracted = false;
@@ -42,7 +42,12 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
             for (int i = 0; i < room.gameObjects.Count; i++)
             {
                 GameObject gameObject = room.gameObjects[i];
-                if ((kstate.IsKeyDown(Keys.E) || gstate.IsButtonDown(Buttons.B)) && !hasInteracted && Game1.gameTime.TotalGameTime.TotalSeconds - timeWheninteracted > 0.2)
+                if (gameObject is InteractableObject)
+                {
+                    InteractableObject interactableObject = (InteractableObject)gameObject;
+                    interactableObject.Update(hitBox);
+                }
+                else if ((kstate.IsKeyDown(Keys.E) || gstate.IsButtonDown(Buttons.B)) && !hasInteracted && Game1.gameTime.TotalGameTime.TotalSeconds - timeWheninteracted > 0.2)
                 {
                     if (weapons.Count < maxWeapons && gameObject is Weapon)
                     {
@@ -55,23 +60,6 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
                                 if (!hasInteracted && playerTileX + x == weaponTileX && playerTileY + y == weaponTileY)
                                 {
                                     weapon.Pickup(this);
-                                    hasInteracted = true;
-                                    timeWheninteracted = Game1.gameTime.TotalGameTime.TotalSeconds;
-                                }
-                            }
-                        }
-                    }
-                    if (gameObject is InteractableObject)
-                    {
-                        InteractableObject interactableObject = (InteractableObject)gameObject;
-                        (int interactableObjectTileX, int interactableObjectTileY) = TileMap.PosToAbsTileMapPos(interactableObject.position);
-                        for (int x = -1; x < 2; x++)
-                        {
-                            for (int y = -1; y < 2; y++)
-                            {
-                                if (!hasInteracted && playerTileX + x == interactableObjectTileX && playerTileY + y == interactableObjectTileY)
-                                {
-                                    interactableObject.Interact();
                                     hasInteracted = true;
                                     timeWheninteracted = Game1.gameTime.TotalGameTime.TotalSeconds;
                                 }

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Monogame_Cross_Platform.Scripts.ContentManagers;
 using Monogame_Cross_Platform.Scripts.GameObjects.Entities;
+using Monogame_Cross_Platform.Scripts.GameObjects.Tiles;
 
 namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
 {
@@ -27,7 +28,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         public void AddToDrawBuffer(Entity entity, SpriteEffects spriteEffect)
         {
             (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(entity.textureIndex);
-            spriteBatch.Draw(texture, entity.position, rectangle, Color.White, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, spriteEffect, 0.03f);
+            spriteBatch.Draw(texture, entity.position, rectangle, Color.White, 0f, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, spriteEffect, 0.02f - 0.00000001f * entity.position.Y);
 
             
         }
@@ -41,14 +42,13 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             }
             
             spriteBatch.Draw(texture, new Vector2(tileMapX * 32, tileMapY * 32), rectangle, Color.White, rot, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0.04f);
-
-            (Texture2D decoTexture, Rectangle decoRectangle) = ContentLoader.GetLoadedOtherTexture(tile.decorationIndex);
-            if (decoTexture != null)
+            if (tile.decorationIndex != 0)
             {
+                (Texture2D decoTexture, Rectangle decoRectangle) = ContentLoader.GetLoadedOtherTexture(tile.decorationIndex);
                 if (decoRectangle != Rectangle.Empty)
                     spriteBatch.Draw(decoTexture, new Vector2(tileMapX * 32, tileMapY * 32), decoRectangle, Color.White, 0f, new Vector2(decoRectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0.039f);
                 else
-                    spriteBatch.Draw(decoTexture, new Vector2(tileMapX * 32, tileMapY * 32), null, Color.White, 0f, new Vector2(16, 16), Vector2.One, SpriteEffects.None, 0.039f);
+                    spriteBatch.Draw(decoTexture, new Vector2(tileMapX * 32, tileMapY * 32), null, Color.White, 0f, new Vector2(16, 16), Vector2.One, SpriteEffects.None, 0.02f - 0.00000001f * tileMapY * 32);
             }
         }
         public void AddToUiBuffer(List<Menu> menus)
@@ -115,6 +115,14 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                         else
                             AddToDrawBuffer(gameObject, SpriteEffects.None);
                     }
+                    else if (gameObject is Objects.Exit)
+                    {
+                        (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedOtherTexture(gameObject.textureIndex);
+                        if (rectangle != Rectangle.Empty)
+                            spriteBatch.Draw(texture, gameObject.position, rectangle, Color.White, gameObject.rotation, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0.02f - 0.00000001f * gameObject.position.Y);
+                        else
+                            spriteBatch.Draw(texture, gameObject.position, null, Color.White, gameObject.rotation, new Vector2(16, 16), Vector2.One, SpriteEffects.None, 0.02f - 0.00000001f * gameObject.position.Y);
+                    }
                     else
                         AddToDrawBuffer(gameObject);
                 }
@@ -123,15 +131,15 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         public void AddToDrawBuffer(GameObject gameObject)
         {
             (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(gameObject.textureIndex);
-            spriteBatch.Draw(texture, gameObject.position, rectangle, Color.White, gameObject.rotation, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0.02f);
+            spriteBatch.Draw(texture, gameObject.position, rectangle, Color.White, gameObject.rotation, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0.02f - 0.00000001f * gameObject.position.Y);
         }
         public void AddToDrawBuffer(GameObject gameObject, SpriteEffects spriteEffect)
         {
             (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(gameObject.textureIndex);
             if (rectangle != Rectangle.Empty)
-                spriteBatch.Draw(texture, gameObject.position, rectangle, Color.White, gameObject.rotation, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, spriteEffect, 0.02f);
+                spriteBatch.Draw(texture, gameObject.position, rectangle, Color.White, gameObject.rotation, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, spriteEffect, 0.02f - 0.00000001f * gameObject.position.Y);
             else
-                spriteBatch.Draw(texture, gameObject.position, null, Color.White, gameObject.rotation, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, spriteEffect, 0.02f);
+                spriteBatch.Draw(texture, gameObject.position, null, Color.White, gameObject.rotation, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, spriteEffect, 0.02f - 0.00000001f * gameObject.position.Y);
         }
 
         public void BeginUiBuffer() => uiSpriteBatch.Begin(SpriteSortMode.BackToFront, null, SamplerState.PointClamp);

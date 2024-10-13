@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -165,6 +166,7 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 }
             }
 
+
             for(var x = 0; x < sqrtRoomsLength; x++)
             {
                 for (var y = 0; y < sqrtRoomsLength; y++)
@@ -173,6 +175,11 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 }
             }
 
+
+            string levelData = File.ReadLines("Content/RoomData.txt").Skip((levelType - 1) * 46).Take(1).First();
+            string[] tokens = levelData.Split("-");
+
+            TileMap.ResetTileMap(new Tile(Convert.ToUInt16(tokens[0]), Convert.ToBoolean(tokens[1]), Convert.ToBoolean(tokens[2]), 0)); //make this tile be loaded from a new part of room data on a per level basis, also have random gameobjects be in that data bit too to vary background
 
 
             //Sets room properties that are about their position in the array, then sets the tilemap tiles to their tiles
@@ -234,6 +241,17 @@ namespace Monogame_Cross_Platform.Scripts.Level
                                 TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + ((room.sqrtTileArrayLength - 1) / 2) + 2] = new Tile(30, true, false, 0);
                             }
                         }
+                        if (levelType == 2)
+                        {
+                            for (var tilex = 0; tilex < 10; tilex++)
+                            {
+                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + ((room.sqrtTileArrayLength - 1) / 2) - 2] = new Tile(0, true, false, 0);
+                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + ((room.sqrtTileArrayLength - 1) / 2) - 1] = new Tile(60, false, false, 0);
+                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + (room.sqrtTileArrayLength - 1) / 2] = new Tile(60, false, false, 0);
+                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + ((room.sqrtTileArrayLength - 1) / 2) + 1] = new Tile(60, false, false, 0);
+                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + ((room.sqrtTileArrayLength - 1) / 2) + 2] = new Tile(0, true, false, 0);
+                            }
+                        }
                     }
                     if ((isTopARoom || isBottomARoom) && room.roomType != 0)
                     {
@@ -254,9 +272,23 @@ namespace Monogame_Cross_Platform.Scripts.Level
                                 TileMap.tileMap[28 * x + ((room.sqrtTileArrayLength - 1) / 2) + 2, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(30, true, false, 0);
                             }
                         }
+                        if (levelType == 2)
+                        {
+                            for (var tiley = 0; tiley < 10; tiley++)
+                            {
+                                TileMap.tileMap[28 * x + ((room.sqrtTileArrayLength - 1) / 2) - 2, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(0, true, false, 0);
+                                TileMap.tileMap[28 * x + ((room.sqrtTileArrayLength - 1) / 2) - 1, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(60, false, false, 0);
+                                TileMap.tileMap[28 * x + (room.sqrtTileArrayLength - 1) / 2, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(60, false, false, 0);
+                                TileMap.tileMap[28 * x + ((room.sqrtTileArrayLength - 1) / 2) + 1, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(60, false, false, 0);
+                                TileMap.tileMap[28 * x + ((room.sqrtTileArrayLength - 1) / 2) + 2, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(0, true, false, 0);
+                            }
+                        }
                     }
                 }
             }
+
+
+            
             SetTileMapToRooms();
             TileMap.SettleTileMap();
             levelNumber = levelType;

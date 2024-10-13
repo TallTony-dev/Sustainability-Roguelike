@@ -12,12 +12,13 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Objects
     /// </summary>
     internal class CollidableObject : GameObject
     {
-        public bool isBarrier = true;
-        //public Hitbox hitBox;
-        public CollidableObject(ushort textureIndex, Vector2 startingTile, Vector2 hitboxSize) : base(textureIndex, startingTile)
+        public bool isBarrier = false;
+        public Hitbox hitBox;
+        public CollidableObject(ushort animIndex, Vector2 startingTile, Vector2 hitboxSize, bool isBarrier) : base(animIndex, startingTile)
         {
             Vector2 pos = TileMap.TileMapPosToPos((int)startingTile.X, (int)startingTile.Y);
-            //this.hitBox = new Hitbox(pos.X - hitboxSize.X/2, pos.Y - hitboxSize.Y/2, hitboxSize.X, hitboxSize.Y);
+            hitBox = new Hitbox(pos.X - hitboxSize.X/2, pos.Y - hitboxSize.Y/2, hitboxSize.X, hitboxSize.Y);
+            this.isBarrier = isBarrier;
         }
     }
 }

@@ -108,6 +108,26 @@ namespace Monogame_Cross_Platform.Scripts
             }
 
         }
+        public static void NextLevel()
+        {
+            //run animation for player here
+            //have background be something temporary
+            Game1.player.position = new Vector2(4768, 4768);
+
+            for (int i = Game1.currentGameObjects.Count - 1; i >= 0; i--)
+            {
+                if (Game1.currentGameObjects[i] is Entity && !(Game1.currentGameObjects[i] is Player))
+                    Game1.currentGameObjects[i].Destroy();
+                else if (Game1.currentGameObjects[i] is Weapon)
+                {
+                    Weapon weapon = (Weapon)Game1.currentGameObjects[i];
+                    if (weapon.owner == null)
+                        weapon.Destroy();
+                }
+            }
+
+            LevelGenerator.GenerateNextLevel();
+        }
         /// <summary>
         /// Should pause all 'ingame' functions (movement, projectiles, etc) for pause menus and home menu
         /// </summary>
