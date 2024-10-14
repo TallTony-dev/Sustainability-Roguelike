@@ -234,22 +234,22 @@ namespace Monogame_Cross_Platform.Scripts.Level
                         {
                             for (var tilex = 0; tilex < 10; tilex++)
                             {
-                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + ((room.sqrtTileArrayLength - 1) / 2) - 2] = new Tile(30, true, false, 0);
-                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + ((room.sqrtTileArrayLength - 1) / 2) - 1] = new Tile(0, false, false, 0);
-                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + (room.sqrtTileArrayLength - 1) / 2] = new Tile(0, false, false, 0);
-                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + ((room.sqrtTileArrayLength - 1) / 2) + 1] = new Tile(0, false, false, 0);
-                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + ((room.sqrtTileArrayLength - 1) / 2) + 2] = new Tile(30, true, false, 0);
+                                TileMap.tileMap[28 * (x + 1) + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * (y + 1) + ((room.sqrtTileArrayLength - 1) / 2) - 2] = new Tile(30, true, false, 0);
+                                TileMap.tileMap[28 * (x + 1) + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * (y + 1) + ((room.sqrtTileArrayLength - 1) / 2) - 1] = new Tile(0, false, false, 0);
+                                TileMap.tileMap[28 * (x + 1) + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * (y + 1) + (room.sqrtTileArrayLength - 1) / 2] = new Tile(0, false, false, 0);
+                                TileMap.tileMap[28 * (x + 1) + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * (y + 1) + ((room.sqrtTileArrayLength - 1) / 2) + 1] = new Tile(0, false, false, 0);
+                                TileMap.tileMap[28 * (x + 1) + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * (y + 1) + ((room.sqrtTileArrayLength - 1) / 2) + 2] = new Tile(30, true, false, 0);
                             }
                         }
                         if (levelType == 2)
                         {
                             for (var tilex = 0; tilex < 10; tilex++)
                             {
-                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + ((room.sqrtTileArrayLength - 1) / 2) - 2] = new Tile(0, true, false, 0);
-                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + ((room.sqrtTileArrayLength - 1) / 2) - 1] = new Tile(60, false, false, 0);
-                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + (room.sqrtTileArrayLength - 1) / 2] = new Tile(60, false, false, 0);
-                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + ((room.sqrtTileArrayLength - 1) / 2) + 1] = new Tile(60, false, false, 0);
-                                TileMap.tileMap[28 * x + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * y + ((room.sqrtTileArrayLength - 1) / 2) + 2] = new Tile(0, true, false, 0);
+                                TileMap.tileMap[28 * (x + 1) + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * (y + 1) + ((room.sqrtTileArrayLength - 1) / 2) - 2] = new Tile(0, true, false, 0);
+                                TileMap.tileMap[28 * (x + 1) + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * (y + 1) + ((room.sqrtTileArrayLength - 1) / 2) - 1] = new Tile(60, false, false, 0);
+                                TileMap.tileMap[28 * (x + 1) + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * (y + 1) + (room.sqrtTileArrayLength - 1) / 2] = new Tile(60, false, false, 0);
+                                TileMap.tileMap[28 * (x + 1) + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * (y + 1) + ((room.sqrtTileArrayLength - 1) / 2) + 1] = new Tile(60, false, false, 0);
+                                TileMap.tileMap[28 * (x + 1) + tilex * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9, 28 * (y + 1) + ((room.sqrtTileArrayLength - 1) / 2) + 2] = new Tile(0, true, false, 0);
                             }
                         }
                     }
@@ -265,22 +265,22 @@ namespace Monogame_Cross_Platform.Scripts.Level
                         {
                             for (var tiley = 0; tiley < 10; tiley++)
                             {
-                                TileMap.tileMap[28 * x + ((room.sqrtTileArrayLength - 1) / 2) - 2, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(30, true, false, 0);
-                                TileMap.tileMap[28 * x + ((room.sqrtTileArrayLength - 1) / 2) - 1, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(0, false, false, 0);
-                                TileMap.tileMap[28 * x + (room.sqrtTileArrayLength - 1) / 2, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(0, false, false, 0);
-                                TileMap.tileMap[28 * x + ((room.sqrtTileArrayLength - 1) / 2) + 1, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(0, false, false, 0);
-                                TileMap.tileMap[28 * x + ((room.sqrtTileArrayLength - 1) / 2) + 2, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(30, true, false, 0);
+                                TileMap.tileMap[28 * (x + 1) + ((room.sqrtTileArrayLength - 1) / 2) - 2, 28 * (y + 1) + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(30, true, false, 0);
+                                TileMap.tileMap[28 * (x + 1) + ((room.sqrtTileArrayLength - 1) / 2) - 1, 28 * (y + 1) + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(0, false, false, 0);
+                                TileMap.tileMap[28 * (x + 1) + (room.sqrtTileArrayLength - 1) / 2, 28 * (y + 1) + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(0, false, false, 0);
+                                TileMap.tileMap[28 * (x + 1) + ((room.sqrtTileArrayLength - 1) / 2) + 1, 28 * (y + 1) + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(0, false, false, 0);
+                                TileMap.tileMap[28 * (x + 1) + ((room.sqrtTileArrayLength - 1) / 2) + 2, 28 * (y + 1) + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(30, true, false, 0);
                             }
                         }
                         if (levelType == 2)
                         {
                             for (var tiley = 0; tiley < 10; tiley++)
                             {
-                                TileMap.tileMap[28 * x + ((room.sqrtTileArrayLength - 1) / 2) - 2, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(0, true, false, 0);
-                                TileMap.tileMap[28 * x + ((room.sqrtTileArrayLength - 1) / 2) - 1, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(60, false, false, 0);
-                                TileMap.tileMap[28 * x + (room.sqrtTileArrayLength - 1) / 2, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(60, false, false, 0);
-                                TileMap.tileMap[28 * x + ((room.sqrtTileArrayLength - 1) / 2) + 1, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(60, false, false, 0);
-                                TileMap.tileMap[28 * x + ((room.sqrtTileArrayLength - 1) / 2) + 2, 28 * y + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(0, true, false, 0);
+                                TileMap.tileMap[28 * (x + 1) + ((room.sqrtTileArrayLength - 1) / 2) - 2, 28 * (y + 1) + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(0, true, false, 0);
+                                TileMap.tileMap[28 * (x + 1) + ((room.sqrtTileArrayLength - 1) / 2) - 1, 28 * (y + 1) + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(60, false, false, 0);
+                                TileMap.tileMap[28 * (x + 1) + (room.sqrtTileArrayLength - 1) / 2, 28 * (y + 1) + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(60, false, false, 0);
+                                TileMap.tileMap[28 * (x + 1) + ((room.sqrtTileArrayLength - 1) / 2) + 1, 28 * (y + 1) + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(60, false, false, 0);
+                                TileMap.tileMap[28 * (x + 1)+ ((room.sqrtTileArrayLength - 1) / 2) + 2, 28 * (y + 1) + tiley * bridgeSide + bridgeSide * ((room.sqrtTileArrayLength - 1) / 2) + 9] = new Tile(0, true, false, 0);
                             }
                         }
                     }
@@ -318,21 +318,23 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 {
                     Tile tile = room.tileArray[tileX, tileY];
                     tile.rotation = TileMap.tileMap[roomX * 28 + tileX, roomY * 28 + tileY].rotation;
-                    TileMap.tileMap[roomX * 28 + tileX, roomY * 28 + tileY] = tile;
+                    TileMap.tileMap[(roomX + 1) * 28 + tileX, (roomY + 1) * 28 + tileY] = tile;
                 }
             }
-            TileMap.SettleTileMap(roomX * 28 - 1, roomY * 28 - 1, roomX * 28 + room.sqrtTileArrayLength + 1, roomY * 28 + room.sqrtTileArrayLength + 1);
+            TileMap.SettleTileMap((roomX + 1) * 28 - 1, (roomY + 1) * 28 - 1, (roomX + 1) * 28 + room.sqrtTileArrayLength + 1, (roomY + 1) * 28 + room.sqrtTileArrayLength + 1);
         }
 
         public static Room PosToRoom(Vector2 position)
         {
             (int x, int y) tileMapPos = TileMap.PosToAbsTileMapPos(position);
-            return rooms[tileMapPos.x / 28, tileMapPos.y / 28];
+            if (tileMapPos.x / 28 - 1 > -1 && tileMapPos.y / 28 - 1 > -1)
+                return rooms[tileMapPos.x / 28 - 1, tileMapPos.y / 28 - 1];
+            else return rooms[0,0];
         }
         public static (int x, int y) PosToRoomIndex(Vector2 position)
         {
             (int x, int y) tileMapPos = TileMap.PosToAbsTileMapPos(position);
-            return (tileMapPos.x / 28, tileMapPos.y / 28);
+            return (tileMapPos.x / 28 - 1, tileMapPos.y / 28 - 1);
         }
         public static (int, int) PosToTileOfRoom(Vector2 position)
         {

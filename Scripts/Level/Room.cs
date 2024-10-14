@@ -206,11 +206,11 @@ namespace Monogame_Cross_Platform.Scripts.Level
 
         public (int x, int y) TileMapToRoomTile(int tileX, int tileY)
         {
-            return (tileX % (roomArrayX * 28), tileY % (roomArrayY * 28));
+            return (tileX % ((roomArrayX + 1) * 28), tileY % ((roomArrayY + 1) * 28));
         }
         public (int x, int y) RoomTileToTileMap(int roomTileX, int roomTileY)
         {
-            return (roomArrayX * 28 + roomTileX, roomArrayY * 28 + roomTileY);
+            return ((roomArrayX + 1) * 28 + roomTileX, (roomArrayY + 1) * 28 + roomTileY);
         }
 
         public void OpenSides()
