@@ -59,6 +59,14 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
         {
             game.Content.Unload();
         }
+        public static Rectangle GetTileTextureRectangle(ushort index)
+        {
+            return tileTexturesLoaded[index].Item2;
+        }
+        public static Rectangle GetOtherTextureRectangle(ushort index)
+        {
+            return otherTexturesLoaded[index].Item2;
+        }
 
         /// <summary>
         /// Gets a Texture2D of a specific index from loaded textures, BE SURE TO CALL LOADTEXTURES BEFORE CALLING THIS OR ELSE WILL RETURN BAD THINGS (idek what it would be lmao but nasty ass numbers)

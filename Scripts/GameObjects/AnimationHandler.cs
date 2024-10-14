@@ -9,6 +9,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects
         private int currentAnimationIndex = 0;
         private double timeWhenStartedAnim = 0;
         public ushort animationIndex;
+        public ushort currentTextureIndex;
 
         float xToMove = 0;
         float yToMove = 0;
@@ -29,6 +30,14 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects
             }
             if (Game1.gameTime != null)
                 timeWhenStartedAnim = Game1.gameTime.TotalGameTime.TotalMilliseconds;
+        }
+        /// <summary>
+        /// Returns in format width, height
+        /// </summary>
+        public Vector2 GetRectangleSize()
+        {
+            Rectangle rect = ContentLoader.GetTileTextureRectangle(currentTextureIndex);
+            return new Vector2(rect.Width, rect.Height);
         }
         public void SetAnimationSpeed(int animationIndex, int newMSPerFrame)
         {
@@ -93,7 +102,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects
             xToMove = 0;
             yToMove = 0;
             rotationToMove = 0;
-
+            currentTextureIndex = (ushort)(currentFrame + textureAnimations[currentAnimationIndex].startingIndex);
             return ((ushort)(currentFrame + textureAnimations[currentAnimationIndex].startingIndex), position, rotation);
         }
     }

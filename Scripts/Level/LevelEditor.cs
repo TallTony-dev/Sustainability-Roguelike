@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework.Input;
 using Monogame_Cross_Platform.Scripts.ContentManagers;
 using Monogame_Cross_Platform.Scripts.GameObjects.Tiles;
 using Monogame_Cross_Platform.Scripts.GameObjects.Entities;
+using Monogame_Cross_Platform.Scripts.GameObjects.Entities.Enemy;
+using Monogame_Cross_Platform.Scripts.GameObjects.Objects;
 
 namespace Monogame_Cross_Platform.Scripts.Level
 {
@@ -70,16 +72,27 @@ namespace Monogame_Cross_Platform.Scripts.Level
             if (isInEditor)
             {
                 var kstate = Keyboard.GetState();
-                if (kstate.IsKeyDown(Keys.E) && Game1.gameTime.TotalGameTime.TotalSeconds - timeSinceTilePlaced > 0.3)
+                if (kstate.IsKeyDown(Keys.E) && Game1.gameTime.TotalGameTime.TotalSeconds - timeSinceTilePlaced > 0.2)
                 {
                     LevelGenerator.ChangeTileAtPos(player.position, selectedTextureIndex, selectedIsBarrier, selectedBreakable, selectedDecoIndex);
                     timeSinceTilePlaced = Game1.gameTime.TotalGameTime.TotalSeconds;
                 }
-                if (kstate.IsKeyDown(Keys.R) && Game1.gameTime.TotalGameTime.TotalSeconds - timeSinceTilePlaced > 0.3)
+                if (kstate.IsKeyDown(Keys.R) && Game1.gameTime.TotalGameTime.TotalSeconds - timeSinceTilePlaced > 0.2)
                 {
                     LevelGenerator.Change3x3TilesAroundPos(player.position, selectedTextureIndex, selectedIsBarrier, selectedBreakable, selectedDecoIndex);
                     timeSinceTilePlaced = Game1.gameTime.TotalGameTime.TotalSeconds;
                 }
+
+
+                if (kstate.IsKeyDown(Keys.B) && Game1.gameTime.TotalGameTime.TotalSeconds - timeSinceTilePlaced > 0.3)
+                {
+                    Room room = LevelGenerator.PosToRoom(player.position);
+                    BreakableObject breakableObject = new BreakableObject(6, new Vector2(TileMap.PosToAbsTileMapPos(player.position).Item1, TileMap.PosToAbsTileMapPos(player.position).Item2));
+                    breakableObject.isEnabled = true;
+                    room.gameObjects.Add(breakableObject);
+                    timeSinceTilePlaced = Game1.gameTime.TotalGameTime.TotalSeconds;
+                }
+
                 if (editorMenu.IsButtonPressed(0))
                 {
                     Room room = LevelGenerator.PosToRoom(player.position);

@@ -121,7 +121,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                     isFlipped = false;
                 
                 sweatParticles.position = position;
-                sweatParticles.particlexVelocity = (entityNewPos - position).X * (float)Game1.gameTime.ElapsedGameTime.TotalSeconds * 1000;
+                sweatParticles.particleAngle += (entityNewPos - position).X * (float)Game1.gameTime.ElapsedGameTime.TotalSeconds * 1000;
                 if (isScared)
                 {
                     sweatParticles.isEnabled = true;

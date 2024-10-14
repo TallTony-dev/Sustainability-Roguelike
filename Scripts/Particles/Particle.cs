@@ -8,6 +8,9 @@ namespace Monogame_Cross_Platform.Scripts.Particles
 {
     internal class Particle
     {
+        static float xDrag = 50;
+        static float yDrag = 30;
+
         internal Vector2 position;
         internal float xVelocity;
         internal float yVelocity;
@@ -19,7 +22,8 @@ namespace Monogame_Cross_Platform.Scripts.Particles
         private float xAcceleration;
         private float yAcceleration;
         bool rotatesParticle;
-        public Particle(Vector2 position, float xvelocity, float yvelocity, float rotation, float scale, ushort textureIndex, float lifetime, float xAcceleration, float yAcceleration, float drawRotation, bool rotatesParticle)
+        float? ySettlingPoint;
+        public Particle(Vector2 position, float xvelocity, float yvelocity, float rotation, float scale, ushort textureIndex, float lifetime, float xAcceleration, float yAcceleration, float drawRotation, bool rotatesParticle, float? ySettlingPoint)
         {
             this.position = position;
             this.rotation = drawRotation;
@@ -33,6 +37,7 @@ namespace Monogame_Cross_Platform.Scripts.Particles
             xVelocity = xvelocity;
             yVelocity = yvelocity;
             this.rotatesParticle = rotatesParticle;
+            this.ySettlingPoint = ySettlingPoint;
         }
         public void Destroy()
         {
@@ -42,9 +47,39 @@ namespace Monogame_Cross_Platform.Scripts.Particles
         {
             float elapsedTime = (float)Game1.gameTime.ElapsedGameTime.TotalSeconds;
             xVelocity += elapsedTime * xAcceleration;
-            yVelocity += elapsedTime * yAcceleration; 
+            yVelocity += elapsedTime * yAcceleration;
+            if (Math.Abs(xVelocity) != 0)
+            {
+                if (Math.Abs(xVelocity) - elapsedTime * xDrag > 0)
+                    xVelocity -= elapsedTime * xDrag * Math.Sign(xVelocity);
+                else
+                    xVelocity = 0;
+            }
+            if (Math.Abs(yVelocity) != 0)
+            {
+                if (Math.Abs(yVelocity) - elapsedTime * yDrag > 0)
+                    yVelocity -= elapsedTime * yDrag * Math.Sign(yVelocity);
+                else
+                    yVelocity = 0;
+            }
+
             position.X += elapsedTime * xVelocity;
-            position.Y += elapsedTime * yVelocity;
+            if (ySettlingPoint != null)
+            {
+                if (position.Y + elapsedTime * yVelocity < ySettlingPoint)
+                {
+                    position.Y += elapsedTime * yVelocity;
+                }
+                else
+                {
+                    position.Y = (float)ySettlingPoint;
+
+                }
+            }
+            else
+                position.Y += elapsedTime * yVelocity;
+
+
             if (rotatesParticle)
             {
                 rotation = (float)Math.Atan2(yVelocity, xVelocity) - 1.5708f;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Monogame_Cross_Platform.Scripts.Level;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -40,6 +41,11 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects
         public virtual void Destroy()
         {
             Game1.currentGameObjects.Remove(this);
+            Room room = LevelGenerator.PosToRoom(position);
+            if (room.gameObjects.Contains(this))
+            {
+                room.gameObjects.Remove(this);
+            }
         }
     } 
 }

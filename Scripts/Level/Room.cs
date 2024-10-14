@@ -126,7 +126,12 @@ namespace Monogame_Cross_Platform.Scripts.Level
                     if (gameObjectType == "Exit")
                     {
                         Vector2 position = new Vector2(tileMapTileX, tileMapTileY);
-                        this.gameObjects.Add(new GameObjects.Objects.Exit(Convert.ToUInt16(gameObjectData[3]), position, new Vector2(64,64)));
+                        this.gameObjects.Add(new GameObjects.Objects.Exit(Convert.ToUInt16(gameObjectData[3]), position, new Vector2(128,128)));
+                    }
+                    if (gameObjectType == "BreakableObject")
+                    {
+                        Vector2 position = new Vector2(tileMapTileX, tileMapTileY);
+                        this.gameObjects.Add(new GameObjects.Objects.BreakableObject(Convert.ToUInt16(gameObjectData[3]), position));
                     }
 
                 }

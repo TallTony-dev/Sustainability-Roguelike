@@ -1,4 +1,6 @@
-﻿using Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player;
+﻿using Monogame_Cross_Platform.Scripts.GameObjects.Entities;
+using Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player;
+using Monogame_Cross_Platform.Scripts.GameObjects.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,35 +71,31 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
                         }
                     }
 
-                    if (isPlayerProjectile)
+                    for (int i = Game1.currentGameObjects.Count - 1; i >= 0; i--)
                     {
-                        foreach (GameObject gameObject in Game1.currentGameObjects)
+                        GameObject gameObject = Game1.currentGameObjects[i];
+                        if (gameObject is Entity)
                         {
-                            if (gameObject is Entity)
+                            Entity entity = (Entity)gameObject;
+                            if (isPlayerProjectile && !destroyed && entity.isEnabled && hitBox.Intersects(entity.hitBox) && !(entity is Player))
                             {
-                                Entity entity = (Entity)gameObject;
-                                if (!destroyed && entity.isEnabled && hitBox.Intersects(entity.hitBox) && !(entity is Player))
-                                {
-                                    entity.health -= damage;
-                                    destroyed = true;
-                                }
+                                entity.health -= damage;
+                                destroyed = true;
+                            }
+                            if (!isPlayerProjectile && !destroyed && entity is Player && entity.isEnabled && hitBox.Intersects(entity.hitBox))
+                            {
+                                entity.health -= damage;
+                                destroyed = true;
                             }
                         }
-                    }
-                    else
-                    {
-                        foreach (GameObject gameObject in Game1.currentGameObjects)
+                        else if (gameObject is BreakableObject)
                         {
-                            if (gameObject is Entity)
+                            BreakableObject breakableObject = (BreakableObject)gameObject;
+                            if ( !destroyed && breakableObject.isEnabled && hitBox.Intersects(breakableObject.Hitbox))
                             {
-                                Entity entity = (Entity)gameObject;
-                                if (!destroyed && entity is Player && entity.isEnabled && hitBox.Intersects(entity.hitBox))
-                                {
-                                    entity.health -= damage;
-                                    destroyed = true;
-                                }
+                                destroyed = true;
+                                breakableObject.Break();
                             }
-                            
                         }
                     }
 
