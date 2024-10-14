@@ -18,7 +18,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
         public bool isInLevelEditorMode = false;
         public List<Weapon> weapons = new List<Weapon>();
         public short activeWeaponIndex = 0;
-        public int maxWeapons = 9;
+        public int maxWeapons = 8;
 
         public Player(int health, float entitySpeed, Vector2 startingTile, Hitboxes.Hitbox hitBox, ushort textureIndex) : base(entitySpeed, startingTile, textureIndex, hitBox, EntityMovement.AIType.none, health)
         {
