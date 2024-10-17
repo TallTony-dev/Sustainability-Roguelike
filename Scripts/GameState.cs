@@ -20,8 +20,17 @@ namespace Monogame_Cross_Platform.Scripts
         public static Menu inGameMenu = new Menu(Menu.MenuType.inGameUi);
         public static Menu mainMenu = new Menu(Menu.MenuType.opening);
         public static Menu pauseMenu = new Menu(Menu.MenuType.pauseMenu);
+        public static Menu winMenu = new Menu(Menu.MenuType.win);
 
         private static double timeWhenPaused = 0;
+
+        public static void WinGame()
+        {
+            isInGame = false;
+            isPaused = true;
+            winMenu.EnableMenu();
+        }
+
         public static void Update(Player player)
         {
             if (isInGame)
@@ -74,17 +83,27 @@ namespace Monogame_Cross_Platform.Scripts
                 {
                     inGameMenu.DisableMenu();
                 }
-                if (!mainMenu.isActive)
-                    mainMenu.EnableMenu();
+                if (!winMenu.isActive)
+                {
+                    if (!mainMenu.isActive)
+                        mainMenu.EnableMenu();
 
-                if (mainMenu.IsButtonPressed(0))
-                {
-                    isInGame = true;
-                    ResumeGame(player);
+                    if (mainMenu.IsButtonPressed(0))
+                    {
+                        isInGame = true;
+                        ResumeGame(player);
+                    }
+                    if (mainMenu.IsButtonPressed(1))
+                    {
+                        Game1.ExitGame();
+                    }
                 }
-                if (mainMenu.IsButtonPressed(1))
+                else
                 {
-                    Game1.ExitGame();
+                    if (winMenu.IsButtonPressed(0))
+                    {
+                        winMenu.DisableMenu();
+                    }
                 }
             }
             MiniMap miniMap = (MiniMap)inGameMenu.elements[0];
@@ -112,7 +131,7 @@ namespace Monogame_Cross_Platform.Scripts
         {
             //run animation for player here
             //have background be something temporary
-            Game1.player.position = new Vector2(4768, 4768);
+            Game1.player.position = new Vector2(5664, 5664);
 
             for (int i = Game1.currentGameObjects.Count - 1; i >= 0; i--)
             {

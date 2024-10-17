@@ -13,7 +13,7 @@ namespace Monogame_Cross_Platform.Scripts.HUD
     internal class UiElement
     {
         public Hitboxes.Hitbox hitBox; //says where entity is centered for drawing origin
-        public ushort textureIndex { get; private set; }
+        public ushort textureIndex { get; internal set; }
         public bool isEnabled { get; set; } = false; // will be false eventually
         internal float xOffset;
         internal float yOffset;
@@ -55,7 +55,7 @@ namespace Monogame_Cross_Platform.Scripts.HUD
         /// <summary>
         /// Run after graphics changes
         /// </summary>
-        public void Update()
+        public virtual void Update()
         {
             if ( (xOffsetToTravelTo != absxOffset || yOffsetToTravelTo != yOffset) && !(Game1.gameTime.TotalGameTime.TotalSeconds > timeWhenBeganTravel + animLength) && animSpeed != 0)
             {

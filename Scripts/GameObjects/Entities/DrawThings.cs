@@ -61,8 +61,16 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                     {
                         if (!(element is Meter || element is MiniMap || element is Inventory) && element.isEnabled)
                         {
-                            (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(element.textureIndex);
-                            uiSpriteBatch.Draw(texture, new Vector2(element.xOffset, element.yOffset), rectangle, Color.White, 0f, new Vector2(0,0), new Vector2(Settings.uiScaleX * element.scale, Settings.uiScaleY * element.scale), SpriteEffects.None, 0f);
+                            if (menu.menuType != Menu.MenuType.levelEditor)
+                            {
+                                (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedOtherTexture(element.textureIndex);
+                                uiSpriteBatch.Draw(texture, new Vector2(element.xOffset, element.yOffset), rectangle, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * element.scale, Settings.uiScaleY * element.scale), SpriteEffects.None, 0f);
+                            }
+                            else
+                            {
+                                (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(element.textureIndex);
+                                uiSpriteBatch.Draw(texture, new Vector2(element.xOffset, element.yOffset), rectangle, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * element.scale, Settings.uiScaleY * element.scale), SpriteEffects.None, 0f);
+                            }
                         }
                         else if (element is Meter && element.isEnabled)
                         {

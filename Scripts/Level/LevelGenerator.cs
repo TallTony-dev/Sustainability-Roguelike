@@ -13,10 +13,16 @@ namespace Monogame_Cross_Platform.Scripts.Level
         public static Room[,] rooms = new Room[11,11]; //must be square (odd preferred)
         static short sqrtRoomsLength = 11;
         static ushort levelNumber = 0;
+        static ushort maxLevel = 2;
 
         public static void GenerateNextLevel()
         {
-            GenerateLevel((ushort)(levelNumber + 1), 12);
+            if (levelNumber + 1 <= 2)
+            {
+                GenerateLevel((ushort)(levelNumber + 1), 7);
+            }
+            else
+                GameState.WinGame();
         }
 
 

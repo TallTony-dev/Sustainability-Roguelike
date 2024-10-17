@@ -59,9 +59,9 @@ namespace Monogame_Cross_Platform.Scripts
             // TODO: Add your initialization logic here
             contentLoader = new ContentLoader(this);
 
-            LevelGenerator.GenerateLevel(1, 120); //TEMP
+            LevelGenerator.GenerateLevel(1, 7); //TEMP
             audioPlayer = new AudioPlayer(ContentLoader.audioLoaded);
-            player = new Player(100, 250, new Vector2(177, 177), new Hitboxes.Hitbox(0, 0, 31, 31), 0); //Put this in a better spot inside of an initialize level function within update or smth
+            player = new Player(10000, 250, new Vector2(177, 177), new Hitboxes.Hitbox(0, 0, 31, 31), 0); //Put this in a better spot inside of an initialize level function within update or smth
             
 
             Settings.ApplySettingsToFile(); //TEMP

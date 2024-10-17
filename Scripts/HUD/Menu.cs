@@ -45,19 +45,23 @@ namespace Monogame_Cross_Platform.Scripts.HUD
             if (menuType == MenuType.inGameUi)
             {
                 elements.Add(new MiniMap(1, 0, 0, new Rectangle(0, 0, 32, 32)));
-                elements.Add(new Meter(16, 32, 120, 20, new Rectangle(0, 0, 32, 32), false, 1, 0));
+                elements.Add(new Meter(16, 32, 120, 20, new Rectangle(0, 0, 32, 32), false, 10000, 0));
                 elements.Add(new Inventory(2, 178, 241, new Rectangle(0, 0, 128, 32), 8, 1, 14, 8, 33));
 
             }
             if (menuType == MenuType.opening)
             {
-                elements.Add(new Button(1, 200, 100, new Rectangle(0, 0, 32, 32)));
-                elements.Add(new Button(32, 100, 100, new Rectangle(0, 0, 32, 32)));
+                elements.Add(new Button(7, 34, 34, new Rectangle(0, 0, 146, 60)));
+                elements.Add(new Button(3, 34, 176, new Rectangle(0, 0, 146, 60)));
             }
             if (menuType == MenuType.pauseMenu)
             {
-                elements.Add(new Button(32, 250, 100, new Rectangle(0, 0, 32, 32)));
-                elements.Add(new Button(16, 300, 100, new Rectangle(0, 0, 32, 32)));
+                elements.Add(new Button(15, 34, 100, new Rectangle(0, 0, 146, 60)));
+                elements.Add(new Button(11, 300, 100, new Rectangle(0, 0, 146, 60)));
+            }
+            if (menuType == MenuType.win)
+            {
+                elements.Add(new Button(15, 300, 100, new Rectangle(0, 0, 146, 60)));
             }
             Game1.menus.Add(this);
         }
@@ -112,6 +116,6 @@ namespace Monogame_Cross_Platform.Scripts.HUD
             }
         }
 
-        public enum MenuType { pauseMenu, levelEditor, settings, inGameUi, opening }
+        public enum MenuType { pauseMenu, levelEditor, settings, inGameUi, opening, win }
     }
 }
