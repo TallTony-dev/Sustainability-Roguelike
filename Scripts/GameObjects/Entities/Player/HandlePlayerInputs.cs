@@ -52,8 +52,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
         }
         public bool IsShooting()
         {
-            var mstate = Mouse.GetState();
-            if (mstate.LeftButton == ButtonState.Pressed)
+            if (StaticMouse.isContinuouslyPressed)
             {
                 return true;
             }

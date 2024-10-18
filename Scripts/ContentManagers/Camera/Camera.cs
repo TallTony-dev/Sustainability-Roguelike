@@ -57,8 +57,8 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers.Camera
 
             var position = Matrix.CreateTranslation(xToMove, yToMove, 0);
             var offset = Matrix.CreateTranslation(
-                (Settings.resolutionWidth / 2 / Settings.zoomLevel),
-                (Settings.resolutionHeight / 2 / Settings.zoomLevel),
+                (Game1._graphics.PreferredBackBufferWidth / 2 / Settings.zoomLevel),
+                (Game1._graphics.PreferredBackBufferHeight / 2 / Settings.zoomLevel),
                 0);
             var zoom = Matrix.CreateScale(Settings.zoomLevel);
 
@@ -81,8 +81,8 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers.Camera
 
             var position = Matrix.CreateTranslation(xToMove, yToMove, 0);
             var offset = Matrix.CreateTranslation(
-                (Settings.resolutionWidth / 2 / Settings.zoomLevel),
-                (Settings.resolutionHeight / 2 / Settings.zoomLevel),
+                (Game1._graphics.PreferredBackBufferWidth / 2 / Settings.zoomLevel),
+                (Game1._graphics.PreferredBackBufferHeight / 2 / Settings.zoomLevel),
                 0);
             var zoom = Matrix.CreateScale(Settings.zoomLevel);
 

@@ -61,7 +61,7 @@ namespace Monogame_Cross_Platform.Scripts
 
             LevelGenerator.GenerateLevel(1, 7); //TEMP
             audioPlayer = new AudioPlayer(ContentLoader.audioLoaded);
-            player = new Player(10000, 250, new Vector2(177, 177), new Hitboxes.Hitbox(0, 0, 31, 31), 0); //Put this in a better spot inside of an initialize level function within update or smth
+            player = new Player(5000, 250, new Vector2(177, 177), new Hitboxes.Hitbox(0, 0, 31, 31), 0); //Put this in a better spot inside of an initialize level function within update or smth
             
 
             Settings.ApplySettingsToFile(); //TEMP
@@ -91,9 +91,14 @@ namespace Monogame_Cross_Platform.Scripts
             // TODO: Add your update logic here
             audioPlayer.Update();
             camera.Update();
+            if (IsActive)
+            {
+                StaticMouse.Update();
 
-            UpdateThings.UpdateAlwaysUpdateThings();
-            GameState.Update(player);
+                UpdateThings.UpdateAlwaysUpdateThings();
+                GameState.Update(player);
+            }
+            
 
             debugText = player.health.ToString(); //TEMP
 
@@ -129,7 +134,7 @@ namespace Monogame_Cross_Platform.Scripts
 
             // Drawing the render target to the screen here
             drawEntities.BeginBuffer();
-            drawEntities.spriteBatch.Draw(renderTarget, new Rectangle(0,0,Settings.resolutionWidth,Settings.resolutionHeight), Color.White);
+            drawEntities.spriteBatch.Draw(renderTarget, new Rectangle(0,0, Game1._graphics.PreferredBackBufferWidth, Game1._graphics.PreferredBackBufferHeight), Color.White);
             drawEntities.spriteBatch.DrawString(font, debugText, new Vector2(400, 400), Color.DarkBlue); //draws debug text
             drawEntities.DrawBuffer();
 

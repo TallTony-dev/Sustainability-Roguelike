@@ -38,7 +38,7 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
             else if (contentListToLoad == "OtherTextures")
                 foreach ((string, Rectangle, ushort) texture in contentList.GetOtherTextures())
                 {
-                    otherTexturesLoaded[texture.Item3] = (game.Content.Load<Texture2D>("C:/Users/User/source/repos/Monogame Cross Platform/bin/Debug/net6.0/Content/Graphics/" + texture.Item1), texture.Item2);
+                    otherTexturesLoaded[texture.Item3] = (game.Content.Load<Texture2D>("C:/Users/User/source/repos/Monogame Cross Platform/bin/Debug/net6.0/Content/Other/" + texture.Item1), texture.Item2);
                 }
             else if (contentListToLoad == "CityTextures")
                 foreach ((string, Rectangle, ushort) texture in contentList.GetCityTextures())

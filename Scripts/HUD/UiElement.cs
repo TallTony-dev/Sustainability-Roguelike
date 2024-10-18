@@ -48,7 +48,11 @@ namespace Monogame_Cross_Platform.Scripts.HUD
             throw new AggregateException(); //this is checking if a non button uielement is pressed
             return false; //This isnt pressable
         }
-
+        public virtual bool IsHovered()
+        {
+            throw new AggregateException(); //this is checking if a non button uielement is pressed
+            return false; //This isnt pressable
+        }
 
 
         public static float InCubic(float t) => (t / 1.9f) * (2/(t + 0.5f));

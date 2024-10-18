@@ -33,7 +33,7 @@ namespace Monogame_Cross_Platform.Scripts
 
         public static void Update(Player player)
         {
-            if (isInGame)
+            if (isInGame && !Settings.settingsMenu.isActive)
             {
                 if (!inGameMenu.isActive)
                 {
@@ -49,7 +49,8 @@ namespace Monogame_Cross_Platform.Scripts
                         PauseGame(player);
                         timeWhenPaused = Game1.gameTime.TotalGameTime.TotalSeconds;
                     }
-
+                    UpdateThings.UpdateLevel(Game1.levelEditor, player);
+                    UpdateThings.UpdateEntities(player);
                 }
 
                 if (isPaused)
@@ -64,20 +65,23 @@ namespace Monogame_Cross_Platform.Scripts
                     }
                     if (pauseMenu.IsButtonPressed(0))
                     {
-                        isInGame = false;
+                        ResumeGame(player);
                         pauseMenu.DisableMenu();
                     }
                     if (pauseMenu.IsButtonPressed(1))
                     {
-                        ResumeGame(player);
+                        pauseMenu.DisableMenu();
+                        Settings.settingsMenu.EnableMenu();
+                    }
+                    if (pauseMenu.IsButtonPressed(2))
+                    {
+                        isInGame = false;
                         pauseMenu.DisableMenu();
                     }
                 }
 
-                UpdateThings.UpdateLevel(Game1.levelEditor, player);
-                UpdateThings.UpdateEntities(player);
             }
-            else if (!isInGame)
+            else if (!isInGame && !Settings.settingsMenu.isActive)
             {
                 if (inGameMenu.isActive)
                 {
@@ -85,7 +89,7 @@ namespace Monogame_Cross_Platform.Scripts
                 }
                 if (!winMenu.isActive)
                 {
-                    if (!mainMenu.isActive)
+                    if (!mainMenu.isActive && !Settings.settingsMenu.isActive)
                         mainMenu.EnableMenu();
 
                     if (mainMenu.IsButtonPressed(0))
@@ -97,6 +101,11 @@ namespace Monogame_Cross_Platform.Scripts
                     {
                         Game1.ExitGame();
                     }
+                    if (mainMenu.IsButtonPressed(2))
+                    {
+                        mainMenu.DisableMenu();
+                        Settings.settingsMenu.EnableMenu();
+                    }
                 }
                 else
                 {
@@ -106,6 +115,17 @@ namespace Monogame_Cross_Platform.Scripts
                     }
                 }
             }
+            else
+            {
+                //Settings menu is open if here
+                if (Keyboard.GetState().IsKeyDown(Keys.Escape) && Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenPaused > 0.5)
+                {
+                    timeWhenPaused = Game1.gameTime.TotalGameTime.TotalSeconds;
+                    Settings.settingsMenu.DisableMenu();
+                }
+            }
+
+
             MiniMap miniMap = (MiniMap)inGameMenu.elements[0];
             miniMap.UpdateMiniMap(player);
 
@@ -144,6 +164,8 @@ namespace Monogame_Cross_Platform.Scripts
                         weapon.Destroy();
                 }
             }
+            MiniMap miniMap = (MiniMap)inGameMenu.elements[0];
+            miniMap.ClearMiniMap();
 
             LevelGenerator.GenerateNextLevel();
         }

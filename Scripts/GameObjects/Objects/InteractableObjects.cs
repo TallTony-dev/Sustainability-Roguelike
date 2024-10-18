@@ -16,6 +16,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Objects
         public Exit(ushort animIndex, Vector2 startingTile, Vector2 hitboxSize) : base(animIndex, startingTile, hitboxSize, false)
         {
             isEnabled = true;
+            textureIndex = 1; //temp
         }
     }
     

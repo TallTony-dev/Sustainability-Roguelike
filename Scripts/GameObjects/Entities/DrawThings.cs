@@ -64,7 +64,10 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                             if (menu.menuType != Menu.MenuType.levelEditor)
                             {
                                 (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedOtherTexture(element.textureIndex);
-                                uiSpriteBatch.Draw(texture, new Vector2(element.xOffset, element.yOffset), rectangle, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * element.scale, Settings.uiScaleY * element.scale), SpriteEffects.None, 0f);
+                                if (rectangle != Rectangle.Empty)
+                                    uiSpriteBatch.Draw(texture, new Vector2(element.xOffset, element.yOffset), rectangle, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * element.scale, Settings.uiScaleY * element.scale), SpriteEffects.None, 0f);
+                                else
+                                    uiSpriteBatch.Draw(texture, new Vector2(element.xOffset, element.yOffset), null, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * element.scale, Settings.uiScaleY * element.scale), SpriteEffects.None, 0f);
                             }
                             else
                             {

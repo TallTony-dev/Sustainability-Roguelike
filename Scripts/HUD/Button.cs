@@ -8,22 +8,18 @@ using Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player;
 
 namespace Monogame_Cross_Platform.Scripts.HUD
 {
-    internal class Button : UiElement
+    internal class AnimButton : Button
     {
-        public Button(ushort textureIndex, int xOffset, int yOffset, Rectangle hitBox) : base(textureIndex, xOffset, yOffset, hitBox)
+        public AnimButton(ushort textureIndex, int xOffset, int yOffset, Rectangle hitBox) : base(textureIndex, xOffset, yOffset, hitBox)
         {
-            startingTextureIndex = textureIndex;
         }
-        ushort startingTextureIndex;
-
-        private double timeSincePressed;
         private double timeSinceUpdatedTexture = 0;
         public override bool IsPressed()
         {
             if (isEnabled)
             {
                 MouseState mstate = Mouse.GetState();
-                if (mstate.Y < hitBox.bottom && mstate.Y > hitBox.top && mstate.X < hitBox.right && mstate.X > hitBox.left)
+                if (IsHovered())
                 {
                     if (textureIndex < startingTextureIndex + 3)
                     {
@@ -35,9 +31,10 @@ namespace Monogame_Cross_Platform.Scripts.HUD
                     }
 
 
-                    if ((Game1.gameTime.TotalGameTime.TotalSeconds - timeSincePressed) > 1 && mstate.LeftButton == ButtonState.Pressed)
+                    if (StaticMouse.isClicked)
                     {
                         timeSincePressed = Game1.gameTime.TotalGameTime.TotalSeconds;
+                        StaticMouse.InterruptClick();
                         return true;
                     }
                 }
@@ -56,6 +53,41 @@ namespace Monogame_Cross_Platform.Scripts.HUD
             return false;
 
         }
-       
+    }
+    internal class Button : UiElement
+    {
+        public Button(ushort textureIndex, int xOffset, int yOffset, Rectangle hitBox) : base(textureIndex, xOffset, yOffset, hitBox)
+        {
+            startingTextureIndex = textureIndex;
+        }
+        public ushort startingTextureIndex;
+        internal double timeSincePressed;
+        public override bool IsPressed()
+        {
+            MouseState mstate = Mouse.GetState();
+            if (IsHovered())
+            {
+                if (StaticMouse.isClicked)
+                {
+                    timeSincePressed = Game1.gameTime.TotalGameTime.TotalSeconds;
+                    StaticMouse.InterruptClick();
+                    return true;
+                }
+            }
+            return false;
+
+        }
+        public override bool IsHovered()
+        {
+            if (isEnabled)
+            {
+                MouseState mstate = Mouse.GetState();
+                if (mstate.Y < hitBox.bottom && mstate.Y > hitBox.top && mstate.X < hitBox.right && mstate.X > hitBox.left)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

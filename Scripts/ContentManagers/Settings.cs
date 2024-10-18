@@ -17,29 +17,101 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
 
         public static Menu settingsMenu = new Menu(Menu.MenuType.settings);
 
+
+        static int activeResolutionButton;
+
         public static void Update()
         {
             if (Keyboard.GetState().IsKeyDown(Keys.F1))
                 settingsMenu.EnableMenu();
             if (Keyboard.GetState().IsKeyDown(Keys.F2))
                 settingsMenu.DisableMenu();
-
-            if (settingsMenu.IsButtonPressed(0))
+            if (settingsMenu.isActive)
             {
-                ApplySettingsToFile();
-                InitializeSettings();
-            }
-            if (settingsMenu.IsButtonPressed(1))
-            {
-                isFullScreen = true;
-            }
-            if (settingsMenu.IsButtonPressed(2))
-            {
-                isFullScreen = false;
-            }
-            if (settingsMenu.IsButtonPressed(3))
-            {
-                settingsMenu.elements[3].MoveTo(1824, 500, 3, 10, UiElement.MovementType.bounce);
+                for (int i = 0; i < 10; i++)
+                {
+                    Button button = (Button)settingsMenu.elements[1 + i];
+                    if (button.IsHovered() || 1 + i == activeResolutionButton)
+                    {
+                        button.textureIndex = (ushort)(10 + button.startingTextureIndex);
+                    }
+                    else
+                    {
+                        button.textureIndex = button.startingTextureIndex;
+                    }
+                }
+                if (settingsMenu.IsButtonPressed(1))
+                {
+                    resolutionHeight = 2160;
+                    resolutionWidth = 3840;
+                    activeResolutionButton = 1;
+                }
+                else if (settingsMenu.IsButtonPressed(2))
+                {
+                    resolutionHeight = 1080;
+                    resolutionWidth = 1920;
+                    activeResolutionButton = 2;
+                }
+                else if (settingsMenu.IsButtonPressed(3))
+                {
+                    resolutionHeight = 1440;
+                    resolutionWidth = 3440;
+                    activeResolutionButton = 3;
+                }
+                else if (settingsMenu.IsButtonPressed(4))
+                {
+                    resolutionHeight = 900;
+                    resolutionWidth = 1600;
+                    activeResolutionButton = 4;
+                }
+                else if (settingsMenu.IsButtonPressed(5))
+                {
+                    resolutionHeight = 1600;
+                    resolutionWidth = 2560;
+                    activeResolutionButton = 5;
+                }
+                else if (settingsMenu.IsButtonPressed(6))
+                {
+                    resolutionHeight = 900;
+                    resolutionWidth = 1440;
+                    activeResolutionButton = 6;
+                }
+                else if (settingsMenu.IsButtonPressed(7))
+                {
+                    resolutionHeight = 1440;
+                    resolutionWidth = 2560;
+                    activeResolutionButton = 7;
+                }
+                else if (settingsMenu.IsButtonPressed(8))
+                {
+                    resolutionHeight = 768;
+                    resolutionWidth = 1366;
+                    activeResolutionButton = 8;
+                }
+                else if (settingsMenu.IsButtonPressed(9))
+                {
+                    resolutionHeight = 1080;
+                    resolutionWidth = 2560;
+                    activeResolutionButton = 9;
+                }
+                else if (settingsMenu.IsButtonPressed(10))
+                {
+                    resolutionHeight = 768;
+                    resolutionWidth = 1360;
+                    activeResolutionButton = 10;
+                }
+                if (settingsMenu.IsButtonPressed(11))
+                {
+                    ApplySettingsToFile();
+                    InitializeSettings();
+                }
+                if (settingsMenu.IsButtonPressed(12))
+                {
+                    Game1._graphics.ToggleFullScreen();
+                    //isFullScreen = !isFullScreen;
+                    //ApplySettingsToFile();
+                    //InitializeSettings();
+                }
             }
         }
         public static void ApplySettingsToFile()
