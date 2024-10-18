@@ -15,26 +15,25 @@ namespace Monogame_Cross_Platform.Scripts.HUD
             this.maxVal = maxVal;
             this.minVal = minVal;
             value = maxVal;
+
+            Update(maxVal);
         }
         public ushort frontTextureIndex;
         public int minVal;
         public int maxVal;
         public int value;
         public bool isVertical;
-        public float xScale = 4; //use these instead of normal scale from gameobject
+        public float xScale = 1; //use these instead of normal scale from gameobject
         public float yScale = 1;
         public Rectangle drawingMask { get; private set; }
         public void Update(int newValue)
         {
-            if (value != newValue)
-            {
-                value = newValue;
-                float proportion = (float)value / (maxVal - minVal);
-                if (!isVertical)
-                    drawingMask = new Rectangle(0, 0, (int)Math.Round(absHitBoxWidth * proportion), (int)absHitBoxHeight);
-                else
-                    drawingMask = new Rectangle(0, 0, (int)absHitBoxWidth, (int)Math.Round(absHitBoxHeight * proportion));
-            }
+            value = newValue;
+            float proportion = (float)value / (maxVal - minVal);
+            if (!isVertical)
+                drawingMask = new Rectangle(0, 0, (int)Math.Round(absHitBoxWidth * proportion), (int)absHitBoxHeight);
+            else
+                drawingMask = new Rectangle(0, 0, (int)absHitBoxWidth, (int)Math.Round(absHitBoxHeight * proportion));
             Update();
         }
 

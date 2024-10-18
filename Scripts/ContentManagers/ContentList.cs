@@ -20,7 +20,7 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
         private (string textureName, ushort startingIndex, byte textureType)[] AlwaysLoadedTextures = { ("cobblestone", 0, 0), ("cobblestone wall testing", 30, 0), ("cobblestoneRecolor", 60, 0), ("electricWeapon", 90, 2) };
         private (string textureName, ushort startingIndex, byte textureType)[] OtherTextures = { ("minimapBG", 1, 1), ("minimapBG", 1, 1), ("hotBar", 2, 1), ("quitButton", 3, 3), ("startButton", 7, 3), ("resumeButton", 11, 3), ("menuButton", 15, 3), ("settingsButton", 19, 3)
                                                                                                 ,("resolutionBG", 23, 1), ("activeResolutions", 24, 4), ("inactiveResolutions", 34, 4), ("applyButton", 44, 3), ("fullscreenButton", 48, 3), ("minimapIcons", 52, 5)
-                                                                                                 };
+                                                                                                ,("weaponMeterFront", 58, 1), ("weaponMeterBack", 59, 1)};
         private (string textureName, ushort startingIndex, byte textureType)[] CityTextures = { };
         private List<(string textureName, ushort index)> Audio = new List<(string textureName, ushort index)>() { ("Laser_Shoot", 0), ("Explosion", 1) };
 

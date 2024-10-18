@@ -17,6 +17,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
         private ushort projectileAnimIndex;
         public int attackRange { get; set; }
         public float fireRate;
+        public int maxDurability;
         public int durability;
 
         public float projectileSpeed { get; set; }
@@ -198,7 +199,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
             fireRate = Convert.ToSingle(tokens[8]);
             projectileAnimIndex = Convert.ToUInt16(tokens[9]);
             animationHandler.SetTextureAnimationData(Convert.ToUInt16(tokens[10]));
-
+            maxDurability = durability;
             isEnabled = true;
         }
     }
