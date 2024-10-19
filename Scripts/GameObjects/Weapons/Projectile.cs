@@ -79,7 +79,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Weapons
                             Entity entity = (Entity)gameObject;
                             if (isPlayerProjectile && !destroyed && entity.isEnabled && hitBox.Intersects(entity.hitBox) && !(entity is Player))
                             {
-                                entity.health -= damage;
+                                entity.Damage(damage);
                                 destroyed = true;
                             }
                             if (!isPlayerProjectile && !destroyed && entity is Player && entity.isEnabled && hitBox.Intersects(entity.hitBox))

@@ -31,7 +31,9 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         internal EntityMovement.AIType aiType;
 
         internal ParticleEmitter sweatParticles;
+        internal ParticleEmitter bloodParticles;
 
+        double timeToDisableBlood = 0;
         public Entity(float entitySpeed, Vector2 startingTile, ushort animationIndex, Hitbox hitBox, EntityMovement.AIType aiType, int health) : base(animationIndex, startingTile)
         {
             this.entitySpeed = entitySpeed;
@@ -41,6 +43,19 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             this.health = health;
             maxHealth = health;
             sweatParticles = new ParticleEmitter(Vector2.One, 40, 180, 0.5f, 100, 0.4f, 0.2f, float.PositiveInfinity, 90, 0, 80, 0, true);
+            bloodParticles = new ParticleEmitter(Vector2.One, 40, 180, 0.5f, 100, 0.4f, 0.2f, float.PositiveInfinity, 90, 0, 80, 0, true);
+        }
+        public void Heal(int amount)
+        {
+            health += amount;
+            if (health > maxHealth)
+                health = maxHealth;
+        }
+        public void Damage(int amount)
+        {
+            health -= amount;
+            bloodParticles.isEnabled = true;
+            timeToDisableBlood = Game1.gameTime.TotalGameTime.TotalSeconds + 0.5;
         }
         public override void Destroy()
         {
@@ -52,8 +67,9 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             Level.LevelGenerator.PosToRoom(position).gameObjects.Remove(this);
             if (activeWeapon != null)
                 activeWeapon.Drop(position);
-            Game1.currentGameObjects.Remove(this);
             sweatParticles.Destroy();
+            bloodParticles.Destroy();
+            base.Destroy();
         }
         public virtual void Update(Player.Player player)
         {
@@ -61,6 +77,8 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             {
                 Destroy();
             }
+            if (timeToDisableBlood < Game1.gameTime.TotalGameTime.TotalSeconds)
+                bloodParticles.isEnabled = false;
             if (isEnabled)
             {
                 TakeAction(player);
@@ -119,7 +137,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                     isFlipped = true;
                 else
                     isFlipped = false;
-                
+                bloodParticles.position = position;
                 sweatParticles.position = position;
                 sweatParticles.particleAngle += (entityNewPos - position).X * (float)Game1.gameTime.ElapsedGameTime.TotalSeconds * 1000;
                 if (isScared)
