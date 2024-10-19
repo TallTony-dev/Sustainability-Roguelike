@@ -111,16 +111,33 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
                 {
                     Game1._graphics.ToggleFullScreen();
                 }
+
+                if (settingsMenu.IsButtonHovered(14))
+                    settingsMenu.elements[14].textureIndex = 64;
+                else
+                    settingsMenu.elements[14].textureIndex = 65;
+                if (settingsMenu.IsButtonHovered(15))
+                    settingsMenu.elements[15].textureIndex = 62;
+                else
+                    settingsMenu.elements[15].textureIndex = 63;
+
+
                 for (int i = 0; i < 7; i++)
                 {
                     Button button = (Button)settingsMenu.elements[16 + i];
+                    if (button.IsPressed())
+                    {
+                        currentVolume = i + 1;
+                    }
+                    
+                    
                     if (i < currentVolume || button.IsHovered())
                     {
-                        button.textureIndex = 64;
+                        button.textureIndex = (ushort)(button.startingTextureIndex - 1);
                     }
                     else
                     {
-                        button.textureIndex = 65;
+                        button.textureIndex = button.startingTextureIndex;
                     }
                 }
                 if (settingsMenu.IsButtonPressed(14))
@@ -139,6 +156,7 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
                         Game1.audioPlayer.volume = currentVolume / 7f;
                     }
                 }
+
             }
         }
         public static void ApplySettingsToFile()

@@ -49,16 +49,16 @@ namespace Monogame_Cross_Platform.Scripts.HUD
                 elements.Add(new Button(33, 80, 104, new Rectangle(0, 0, 36, 7), 0f));
                 elements.Add(new AnimButton(44, 300, 196, new Rectangle(0, 0, 146, 60), 0f)); //apply button
                 elements.Add(new AnimButton(48, 300, 28, new Rectangle(0, 0, 146, 60), 0f)); //fullscreen button
-                elements.Add(new UiElement(66, 128, 28, new Rectangle(0, 0, 99, 98), 0.01f)); //Volume BG
-                elements.Add(new Button(63, 138, 68, new Rectangle(0,0,12,12), 0f)); //minus button
-                elements.Add(new Button(62, 206, 68, new Rectangle(0, 0, 12, 12), 0f)); //plus button
-                elements.Add(new Button(65, 148 + 2, 66, Rectangle.Empty, 0f)); //volume tick
-                elements.Add(new Button(65, 156 + 2, 66, Rectangle.Empty, 0f)); //volume tick
-                elements.Add(new Button(65, 164 + 2, 66, Rectangle.Empty, 0f)); //volume tick
-                elements.Add(new Button(65, 172 + 2, 66, Rectangle.Empty, 0f)); //volume tick
-                elements.Add(new Button(65, 180 + 2, 66, Rectangle.Empty, 0f)); //volume tick
-                elements.Add(new Button(65, 188 + 2, 66, Rectangle.Empty, 0f)); //volume tick
-                elements.Add(new Button(65, 196 + 2, 66, Rectangle.Empty, 0f)); //volume tick
+                elements.Add(new UiElement(68, 128, 28, new Rectangle(0, 0, 99, 98), 0.01f)); //Volume BG
+                elements.Add(new Button(65, 138, 68, new Rectangle(0,0,12,12), 0f)); //minus button
+                elements.Add(new Button(63, 206, 68, new Rectangle(0, 0, 12, 12), 0f)); //plus button
+                elements.Add(new Button(67, 150, 66, new Rectangle(0, 0, 8, 16), 0f)); //volume tick
+                elements.Add(new Button(67, 158, 66, new Rectangle(0, 0, 8, 16), 0f)); //volume tick
+                elements.Add(new Button(67, 166, 66, new Rectangle(0, 0, 8, 16), 0f)); //volume tick
+                elements.Add(new Button(67, 174, 66, new Rectangle(0, 0, 8, 16), 0f)); //volume tick
+                elements.Add(new Button(67, 182, 66, new Rectangle(0, 0, 8, 16), 0f)); //volume tick
+                elements.Add(new Button(67, 190, 66, new Rectangle(0, 0, 8, 16), 0f)); //volume tick
+                elements.Add(new Button(67, 198, 66, new Rectangle(0, 0, 8, 16), 0f)); //volume tick
             }
             if (menuType == MenuType.inGameUi)
             {

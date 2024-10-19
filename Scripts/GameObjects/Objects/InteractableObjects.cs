@@ -21,6 +21,29 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Objects
         }
     }
     
+    internal class Potion : InteractableObject
+    {
+        int health;
+        public override void Interact()
+        {
+            Player player = (Player)Game1.currentGameObjects.Find(x => x is Player);
+            player.health += health;
+            if (player.health > player.maxHealth)
+                player.health = player.maxHealth;
+            Destroy();
+        }
+        public Potion(ushort animIndex, Vector2 startingTile, Vector2 hitboxSize, int health) : base(animIndex, startingTile, hitboxSize, false)
+        {
+            isEnabled = true;
+            this.health = health;
+            textureIndex = 69;
+        }
+    }
+
+
+
+
+
     //Partly implemented, not tested
     internal class Chest : InteractableObject
     {
@@ -48,13 +71,14 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Objects
     {
         double timeWhenInteracted = 0;
         public abstract void Interact();
-        public void Update(Hitbox playerHitbox)
+        public bool DoesCollide(Hitbox hitbox)
         {
-            if (isEnabled && hitBox.Intersects(playerHitbox) && (Keyboard.GetState().IsKeyDown(Keys.E) || GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.A)) && Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenInteracted > 0.3)
+            if (isEnabled && hitBox.Intersects(hitbox)/*&& Game1.gameTime.TotalGameTime.TotalSeconds - timeWhenInteracted > 0.3*/)
             {
-                Interact();
-                timeWhenInteracted = Game1.gameTime.TotalGameTime.TotalSeconds;
+                return true;
+                //timeWhenInteracted = Game1.gameTime.TotalGameTime.TotalSeconds;
             }
+            else return false;
         }
         public InteractableObject(ushort animIndex, Vector2 startingTile, Vector2 hitboxSize, bool isBarrier) : base(animIndex, startingTile, hitboxSize, isBarrier)
         {

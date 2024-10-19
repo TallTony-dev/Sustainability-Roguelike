@@ -135,7 +135,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                         else
                             AddToDrawBuffer(gameObject, SpriteEffects.None);
                     }
-                    else if (gameObject is Objects.Exit)
+                    else if (gameObject is Objects.Potion)
                     {
                         (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedOtherTexture(gameObject.textureIndex);
                         if (rectangle != Rectangle.Empty)

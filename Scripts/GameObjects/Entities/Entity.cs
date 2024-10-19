@@ -69,6 +69,16 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                 activeWeapon.Drop(position);
             sweatParticles.Destroy();
             bloodParticles.Destroy();
+            if (!(this is Player.Player))
+            {
+                Random rand = new Random();
+                int randInt = rand.Next(0, 100);
+                if (randInt > 65)
+                {
+                    Objects.Potion potion = new Objects.Potion(7, TileMap.PosToTileMapPos(position), new Vector2(16, 16), 400);
+                    Level.LevelGenerator.PosToRoom(position).gameObjects.Add(potion);
+                }
+            }
             base.Destroy();
         }
         public virtual void Update(Player.Player player)

@@ -42,14 +42,26 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
             for (int i = 0; i < room.gameObjects.Count; i++)
             {
                 GameObject gameObject = room.gameObjects[i];
-                if (gameObject is InteractableObject)
+                
+                if ((kstate.IsKeyDown(Keys.E) || gstate.IsButtonDown(Buttons.B)) && !hasInteracted && Game1.gameTime.TotalGameTime.TotalSeconds - timeWheninteracted > 0.2)
                 {
-                    InteractableObject interactableObject = (InteractableObject)gameObject;
-                    interactableObject.Update(hitBox);
-                }
-                else if ((kstate.IsKeyDown(Keys.E) || gstate.IsButtonDown(Buttons.B)) && !hasInteracted && Game1.gameTime.TotalGameTime.TotalSeconds - timeWheninteracted > 0.2)
-                {
-                    if (weapons.Count < maxWeapons && gameObject is Weapon)
+                    if (gameObject is InteractableObject)
+                    {
+                        InteractableObject interactableObject = (InteractableObject)gameObject;
+                        for (int x = -1; x < 2; x++)
+                        {
+                            for (int y = -1; y < 2; y++)
+                            {
+                                if (interactableObject.DoesCollide(TileMap.ForceGetTileBounds(playerTileX - x, playerTileY + y)))
+                                {
+                                    interactableObject.Interact();
+                                    hasInteracted = true;
+                                    timeWheninteracted = Game1.gameTime.TotalGameTime.TotalSeconds;
+                                }
+                            }
+                        }
+                    }
+                    else if (weapons.Count < maxWeapons && gameObject is Weapon)
                     {
                         Weapon weapon = (Weapon)gameObject;
                         (int weaponTileX, int weaponTileY) = TileMap.PosToAbsTileMapPos(weapon.position);

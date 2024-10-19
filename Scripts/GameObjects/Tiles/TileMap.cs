@@ -255,6 +255,13 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Tiles
             else
                 return (false, new Hitboxes.Hitbox(0, 0, 0, 0));
         }
+        /// <summary>
+        /// Returns no matter if the tile is barrier or not
+        /// </summary>
+        public static Hitboxes.Hitbox ForceGetTileBounds(int tileX, int tileY)
+        {
+            return new Hitboxes.Hitbox(tileX * 32 - 16, tileY * 32 - 16, 32, 32);
+        }
 
         public enum adjTiles1 { none, right, left, rightleft, bottom, bottomright, bottomleft, bottomrightleft, top, topright, topleft, toprightleft, topbottom, topbottomright, topbottomleft, topbottomrightleft, bottomrightcorner, bottomleftcorner, toprightcorner, topleftcorner }
     }

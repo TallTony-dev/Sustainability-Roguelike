@@ -12,3 +12,5 @@
 5 ^exit anim
 10000-1-2, 200-5-1
 6 ^breakableobject test, the second one describes the index of the texture after broken
+150-4-69
+7 ^potion anim

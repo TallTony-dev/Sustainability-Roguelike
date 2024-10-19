@@ -64,7 +64,7 @@ namespace Monogame_Cross_Platform.Scripts
             player = new Player(5000, 250, new Vector2(177, 177), new Hitboxes.Hitbox(0, 0, 31, 31), 0); //Put this in a better spot inside of an initialize level function within update or smth
             
 
-            Settings.ApplySettingsToFile(); //TEMP
+            //Settings.ApplySettingsToFile(); //TEMP
             Settings.InitializeSettings();
             base.Initialize();
         }

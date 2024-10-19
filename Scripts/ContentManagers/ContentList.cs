@@ -20,8 +20,8 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
         private (string textureName, ushort startingIndex, byte textureType)[] AlwaysLoadedTextures = { ("cobblestone", 0, 0), ("cobblestone wall testing", 30, 0), ("cobblestoneRecolor", 60, 0), ("electricWeapon", 90, 2) };
         private (string textureName, ushort startingIndex, byte textureType)[] OtherTextures = { ("minimapBG", 1, 1), ("minimapBG", 1, 1), ("hotBar", 2, 1), ("quitButton", 3, 3), ("startButton", 7, 3), ("resumeButton", 11, 3), ("menuButton", 15, 3), ("settingsButton", 19, 3)
                                                                                                 ,("resolutionBG", 23, 1), ("activeResolutions", 24, 4), ("inactiveResolutions", 34, 4), ("applyButton", 44, 3), ("fullscreenButton", 48, 3), ("minimapIcons", 52, 5)
-                                                                                                ,("weaponMeterFront", 58, 1), ("weaponMeterBack", 59, 1), ("healthBarFront", 60, 1), ("healthBarBack", 61, 1), ("plusButton", 62, 1), ("minusButton", 63, 1), ("volumeActive", 64, 1), ("volumeInactive", 65, 1)
-                                                                                                ,("VolumeBG", 66, 1)};
+                                                                                                ,("weaponMeterFront", 58, 1), ("weaponMeterBack", 59, 1), ("healthBarFront", 60, 1), ("healthBarBack", 61, 1), ("plusButtonActive", 62, 1), ("plusButtonInactive", 63, 1), ("minusButtonActive", 64, 1), ("minusButtonInactive", 65, 1),("volumeActive", 66, 1), ("volumeInactive", 67, 1)
+                                                                                                ,("VolumeBG", 68, 1), ("potion", 69, 6) };
         private (string textureName, ushort startingIndex, byte textureType)[] CityTextures = { };
         private List<(string textureName, ushort index)> Audio = new List<(string textureName, ushort index)>() { ("Laser_Shoot", 0), ("Explosion", 1) };
 
@@ -107,6 +107,13 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
                         {
                             TextureListToLoad.Add((textureName, new(x * 20, y * 20, 20, 20), (ushort)(startingIndex + (y * 3) + x)));
                         }
+                    }
+                }
+                else if (textureType == 6)
+                {
+                    for (int x = 0; x < 4; x++)
+                    {
+                        TextureListToLoad.Add((textureName, new(x * 24, 0, 24, 24), (ushort)(startingIndex + x)));
                     }
                 }
             }
