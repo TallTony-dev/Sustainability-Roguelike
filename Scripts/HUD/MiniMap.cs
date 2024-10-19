@@ -8,7 +8,7 @@ namespace Monogame_Cross_Platform.Scripts.HUD
 {
     internal class MiniMap : UiElement
     {
-        public MiniMap(ushort backgroundTextureIndex, int xOffset, int yOffset, Rectangle hitBox) : base(backgroundTextureIndex, xOffset, yOffset, hitBox)
+        public MiniMap(ushort backgroundTextureIndex, int xOffset, int yOffset, Rectangle hitBox) : base(backgroundTextureIndex, xOffset, yOffset, hitBox, 0f)
         {
             scale = 0.7f;
             mapIconScale = 1f;

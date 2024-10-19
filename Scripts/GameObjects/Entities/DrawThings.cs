@@ -65,23 +65,32 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                             {
                                 (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedOtherTexture(element.textureIndex);
                                 if (rectangle != Rectangle.Empty)
-                                    uiSpriteBatch.Draw(texture, new Vector2(element.xOffset, element.yOffset), rectangle, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * element.scale, Settings.uiScaleY * element.scale), SpriteEffects.None, 0f);
+                                    uiSpriteBatch.Draw(texture, new Vector2(element.xOffset, element.yOffset), rectangle, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * element.scale, Settings.uiScaleY * element.scale), SpriteEffects.None, element.drawOrder);
                                 else
-                                    uiSpriteBatch.Draw(texture, new Vector2(element.xOffset, element.yOffset), null, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * element.scale, Settings.uiScaleY * element.scale), SpriteEffects.None, 0f);
+                                    uiSpriteBatch.Draw(texture, new Vector2(element.xOffset, element.yOffset), null, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * element.scale, Settings.uiScaleY * element.scale), SpriteEffects.None, element.drawOrder);
                             }
                             else
                             {
-                                (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(element.textureIndex);
-                                uiSpriteBatch.Draw(texture, new Vector2(element.xOffset, element.yOffset), rectangle, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * element.scale, Settings.uiScaleY * element.scale), SpriteEffects.None, 0f);
+                                if (element is Button)
+                                {
+                                    (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(element.textureIndex);
+                                    uiSpriteBatch.Draw(texture, new Vector2(element.xOffset, element.yOffset), rectangle, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * element.scale, Settings.uiScaleY * element.scale), SpriteEffects.None, element.drawOrder);
+                                }
+                                else
+                                {
+                                    (Texture2D texture, Rectangle rectangle) = ContentLoader.GetLoadedTileTexture(element.textureIndex);
+                                    uiSpriteBatch.Draw(texture, new Vector2(element.xOffset, element.yOffset), rectangle, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * element.scale, Settings.uiScaleY * element.scale), SpriteEffects.None, element.drawOrder);
+                                }
+                               
                             }
                         }
                         else if (element is Meter && element.isEnabled)
                         {
                             Meter meter = (Meter)element;
-                            (Texture2D backTexture, Rectangle backRectangle) = ContentLoader.GetLoadedTileTexture(element.textureIndex);
-                            (Texture2D frontTexture, Rectangle frontRectangle) = ContentLoader.GetLoadedTileTexture(meter.frontTextureIndex);
-                            uiSpriteBatch.Draw(backTexture, new Vector2(element.xOffset, element.yOffset), backRectangle, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * meter.xScale, Settings.uiScaleY * meter.yScale), SpriteEffects.None, 0.1f);
-                            uiSpriteBatch.Draw(frontTexture, new Vector2(element.xOffset, element.yOffset), meter.drawingMask, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * meter.xScale, Settings.uiScaleY * meter.yScale), SpriteEffects.None, 0f);
+                            (Texture2D backTexture, Rectangle backRectangle) = ContentLoader.GetLoadedOtherTexture(element.textureIndex);
+                            (Texture2D frontTexture, Rectangle frontRectangle) = ContentLoader.GetLoadedOtherTexture(meter.frontTextureIndex);
+                            uiSpriteBatch.Draw(backTexture, new Vector2(element.xOffset, element.yOffset), null, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * meter.xScale, Settings.uiScaleY * meter.yScale), SpriteEffects.None, 0.1f);
+                            uiSpriteBatch.Draw(frontTexture, new Vector2(element.xOffset + meter.xMeterOffset * Settings.uiScaleX, element.yOffset + meter.yMeterOffset * Settings.uiScaleY), meter.drawingMask, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * meter.xScale, Settings.uiScaleY * meter.yScale), SpriteEffects.None, 0f);
                         }
                         else if (element is MiniMap && element.isEnabled)
                         {

@@ -32,8 +32,10 @@ namespace Monogame_Cross_Platform.Scripts.HUD
         private float animScaleSpeed;
         private float animLength;
         private double timeWhenBeganTravel = 0;
-        public UiElement(ushort textureIndex, int xOffset, int yOffset, Rectangle hitBox)
+        public float drawOrder;
+        public UiElement(ushort textureIndex, int xOffset, int yOffset, Rectangle hitBox, float drawOrder)
         {
+            this.drawOrder = drawOrder;
             this.textureIndex = textureIndex;
             absxOffset = xOffset;
             absyOffset = yOffset;
@@ -50,7 +52,7 @@ namespace Monogame_Cross_Platform.Scripts.HUD
         }
         public virtual bool IsHovered()
         {
-            throw new AggregateException(); //this is checking if a non button uielement is pressed
+            throw new AggregateException(); //this is checking if a non button uielement is hovered
             return false; //This isnt pressable
         }
 

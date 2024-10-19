@@ -8,16 +8,21 @@ namespace Monogame_Cross_Platform.Scripts.HUD
 {
     internal class Meter : UiElement
     {
-        public Meter(ushort frontTextureIndex, ushort backTextureIndex, int xOffset, int yOffset, Rectangle meterSize, bool isVertical, int maxVal, int minVal) : base(backTextureIndex, xOffset, yOffset, meterSize)
+        public Meter(ushort frontTextureIndex, ushort backTextureIndex, int xOffset, int yOffset, Rectangle meterSize, bool isVertical, int maxVal, int minVal) : base(backTextureIndex, xOffset, yOffset, meterSize, 0f)
         {
             this.frontTextureIndex = frontTextureIndex;
             this.isVertical = isVertical;
             this.maxVal = maxVal;
             this.minVal = minVal;
+            xMeterOffset = meterSize.X;
+            yMeterOffset = meterSize.Y;
             value = maxVal;
 
             Update(maxVal);
         }
+        public int xMeterOffset;
+        public int yMeterOffset;
+
         public ushort frontTextureIndex;
         public int minVal;
         public int maxVal;
@@ -31,9 +36,9 @@ namespace Monogame_Cross_Platform.Scripts.HUD
             value = newValue;
             float proportion = (float)value / (maxVal - minVal);
             if (!isVertical)
-                drawingMask = new Rectangle(0, 0, (int)Math.Round(absHitBoxWidth * proportion), (int)absHitBoxHeight);
+                drawingMask = new Rectangle(xMeterOffset, yMeterOffset, (int)Math.Round(absHitBoxWidth * proportion), (int)absHitBoxHeight);
             else
-                drawingMask = new Rectangle(0, 0, (int)absHitBoxWidth, (int)Math.Round(absHitBoxHeight * proportion));
+                drawingMask = new Rectangle(xMeterOffset, yMeterOffset, (int)absHitBoxWidth, (int)Math.Round(absHitBoxHeight * proportion));
             Update();
         }
 

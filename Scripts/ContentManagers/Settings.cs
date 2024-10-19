@@ -13,6 +13,8 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
         public static float uiScaleY = 1f;
         public static float zoomLevel = 2.3f;
 
+        private static int currentVolume = 7;
+
         static MouseState mstate;
 
         public static Menu settingsMenu = new Menu(Menu.MenuType.settings);
@@ -108,9 +110,34 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
                 if (settingsMenu.IsButtonPressed(12))
                 {
                     Game1._graphics.ToggleFullScreen();
-                    //isFullScreen = !isFullScreen;
-                    //ApplySettingsToFile();
-                    //InitializeSettings();
+                }
+                for (int i = 0; i < 7; i++)
+                {
+                    Button button = (Button)settingsMenu.elements[16 + i];
+                    if (i < currentVolume || button.IsHovered())
+                    {
+                        button.textureIndex = 64;
+                    }
+                    else
+                    {
+                        button.textureIndex = 65;
+                    }
+                }
+                if (settingsMenu.IsButtonPressed(14))
+                {
+                    if (currentVolume > 0)
+                    {
+                        currentVolume -= 1;
+                        Game1.audioPlayer.volume = currentVolume / 7f;
+                    }
+                }
+                if (settingsMenu.IsButtonPressed(15))
+                {
+                    if (currentVolume <= 7)
+                    {
+                        currentVolume += 1;
+                        Game1.audioPlayer.volume = currentVolume / 7f;
+                    }
                 }
             }
         }

@@ -11,6 +11,7 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
         private SoundEffect[] soundEffects;
         Vector2 listenerPos;
         Vector2 listenerVelocity;
+        public float volume = 1;
         internal static List<(SoundEffectInstance instance, Vector2 emitterPos)> activeSoundEffectInstances = new List<(SoundEffectInstance, Vector2)>();
 
         public AudioPlayer(SoundEffect[] soundEffects)
@@ -35,14 +36,21 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
                     return;
                 }
 
-                var instance = Apply3DTransform(activeSoundEffectInstances[i].emitterPos, activeSoundEffectInstances[i].instance, null);
-                activeSoundEffectInstances[i] = (instance, activeSoundEffectInstances[i].emitterPos);
+                if (activeSoundEffectInstances[i].emitterPos != Vector2.One)
+                {
+                    var instance = Apply3DTransform(activeSoundEffectInstances[i].emitterPos, activeSoundEffectInstances[i].instance, null);
+                    activeSoundEffectInstances[i] = (instance, activeSoundEffectInstances[i].emitterPos);
+                }
+               
             }
 
         }
         public void PlaySoundEffect(ushort index)
         {
-            soundEffects[index].Play();
+            SoundEffectInstance instance = soundEffects[index].CreateInstance();
+            instance.Volume = volume;
+            instance.Play();
+            activeSoundEffectInstances.Add((instance, Vector2.One));
         }
         public void PlaySoundEffect2D(ushort index, Vector2 emitterPos, Vector2 emitterNewPos)
         {
@@ -64,8 +72,9 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
         public SoundEffectInstance Apply3DTransform(Vector2 emitterPos, SoundEffectInstance instance, Vector2? emitterNewPos)
         {
             float distance = Vector2.Distance(emitterPos, listenerPos);
+            instance.Volume = volume;
             if (distance < 1000)
-                instance.Volume = 1 - distance / 1000;
+                instance.Volume = instance.Volume * (1 - distance / 1000);
             else
                 instance.Volume = 0;
             float deltaX = listenerPos.X - emitterPos.X;

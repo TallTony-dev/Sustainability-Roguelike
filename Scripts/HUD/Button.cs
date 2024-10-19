@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Monogame_Cross_Platform.Scripts.GameObjects.Entities;
 using Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player;
 
@@ -10,7 +11,7 @@ namespace Monogame_Cross_Platform.Scripts.HUD
 {
     internal class AnimButton : Button
     {
-        public AnimButton(ushort textureIndex, int xOffset, int yOffset, Rectangle hitBox) : base(textureIndex, xOffset, yOffset, hitBox)
+        public AnimButton(ushort textureIndex, int xOffset, int yOffset, Rectangle hitBox, float drawOrder) : base(textureIndex, xOffset, yOffset, hitBox, drawOrder)
         {
         }
         private double timeSinceUpdatedTexture = 0;
@@ -56,7 +57,7 @@ namespace Monogame_Cross_Platform.Scripts.HUD
     }
     internal class Button : UiElement
     {
-        public Button(ushort textureIndex, int xOffset, int yOffset, Rectangle hitBox) : base(textureIndex, xOffset, yOffset, hitBox)
+        public Button(ushort textureIndex, int xOffset, int yOffset, Rectangle hitBox, float drawOrder) : base(textureIndex, xOffset, yOffset, hitBox, drawOrder)
         {
             startingTextureIndex = textureIndex;
         }
