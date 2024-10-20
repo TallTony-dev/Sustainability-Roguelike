@@ -98,6 +98,18 @@
 /processorParam:TextureFormat=Color
 /build:Other/activeResolutions.png
 
+#begin Other/activeResolutions.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/activeResolutions.png
+
 #begin Other/applyButton.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -109,6 +121,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Other/applyButton.png
+
+#begin Other/applyButton.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/applyButton.png
+
+#begin Other/fullscreenButton.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/fullscreenButton.png
 
 #begin Other/fullscreenButton.png
 /importer:TextureImporter
@@ -134,6 +170,18 @@
 /processorParam:TextureFormat=Color
 /build:Other/healthBarBack.png
 
+#begin Other/healthBarBack.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/healthBarBack.png
+
 #begin Other/healthBarFront.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -145,6 +193,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Other/healthBarFront.png
+
+#begin Other/healthBarFront.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/healthBarFront.png
+
+#begin Other/hotBar.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/hotBar.png
 
 #begin Other/hotBar.png
 /importer:TextureImporter
@@ -170,6 +242,18 @@
 /processorParam:TextureFormat=Color
 /build:Other/inactiveResolutions.png
 
+#begin Other/inactiveResolutions.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/inactiveResolutions.png
+
 #begin Other/menuButton.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -181,6 +265,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Other/menuButton.png
+
+#begin Other/menuButton.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/menuButton.png
+
+#begin Other/minimapBG.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/minimapBG.png
 
 #begin Other/minimapBG.png
 /importer:TextureImporter
@@ -206,6 +314,18 @@
 /processorParam:TextureFormat=Color
 /build:Other/minimapIcons.png
 
+#begin Other/minimapIcons.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/minimapIcons.png
+
 #begin Other/minusButtonActive.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -217,6 +337,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Other/minusButtonActive.png
+
+#begin Other/minusButtonActive.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/minusButtonActive.png
+
+#begin Other/minusButtonInactive.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/minusButtonInactive.png
 
 #begin Other/minusButtonInactive.png
 /importer:TextureImporter
@@ -242,6 +386,18 @@
 /processorParam:TextureFormat=Color
 /build:Other/plusButtonActive.png
 
+#begin Other/plusButtonActive.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/plusButtonActive.png
+
 #begin Other/plusButtonInactive.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -253,6 +409,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Other/plusButtonInactive.png
+
+#begin Other/plusButtonInactive.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/plusButtonInactive.png
+
+#begin Other/potion.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/potion.png
 
 #begin Other/potion.png
 /importer:TextureImporter
@@ -278,6 +458,18 @@
 /processorParam:TextureFormat=Color
 /build:Other/quitButton.png
 
+#begin Other/quitButton.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/quitButton.png
+
 #begin Other/resolutionBG.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -289,6 +481,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Other/resolutionBG.png
+
+#begin Other/resolutionBG.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/resolutionBG.png
+
+#begin Other/resumeButton.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/resumeButton.png
 
 #begin Other/resumeButton.png
 /importer:TextureImporter
@@ -314,6 +530,18 @@
 /processorParam:TextureFormat=Color
 /build:Other/settingsButton.png
 
+#begin Other/settingsButton.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/settingsButton.png
+
 #begin Other/startButton.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -325,6 +553,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Other/startButton.png
+
+#begin Other/startButton.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/startButton.png
+
+#begin Other/volumeActive.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/volumeActive.png
 
 #begin Other/volumeActive.png
 /importer:TextureImporter
@@ -350,6 +602,30 @@
 /processorParam:TextureFormat=Color
 /build:Other/VolumeBG.png
 
+#begin Other/VolumeBG.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/VolumeBG.png
+
+#begin Other/volumeInactive.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/volumeInactive.png
+
 #begin Other/volumeInactive.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -374,6 +650,18 @@
 /processorParam:TextureFormat=Color
 /build:Other/weaponMeterBack.png
 
+#begin Other/weaponMeterBack.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/weaponMeterBack.png
+
 #begin Other/weaponMeterFront.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -385,6 +673,42 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Other/weaponMeterFront.png
+
+#begin Other/weaponMeterFront.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/weaponMeterFront.png
+
+#begin Other/youLose.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/youLose.png
+
+#begin Other/youWin.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Other/youWin.png
 
 #begin RoomData.txt
 /copy:RoomData.txt

@@ -11,7 +11,7 @@ namespace Monogame_Cross_Platform.Scripts.HUD
         public MiniMap(ushort backgroundTextureIndex, int xOffset, int yOffset, Rectangle hitBox) : base(backgroundTextureIndex, xOffset, yOffset, hitBox, 0f)
         {
             scale = 0.7f;
-            mapIconScale = 1f;
+            mapIconScale = 0.8f;
         }
         public ushort entranceTextureIndex = 52;
         public ushort enemyRoomTextureIndex = 53;

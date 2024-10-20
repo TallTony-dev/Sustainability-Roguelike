@@ -59,7 +59,6 @@ namespace Monogame_Cross_Platform.Scripts
             // TODO: Add your initialization logic here
             contentLoader = new ContentLoader(this);
 
-            LevelGenerator.GenerateLevel(1, 7); //TEMP
             audioPlayer = new AudioPlayer(ContentLoader.audioLoaded);
             player = new Player(5000, 250, new Vector2(177, 177), new Hitboxes.Hitbox(0, 0, 31, 31), 0); //Put this in a better spot inside of an initialize level function within update or smth
             
@@ -100,7 +99,7 @@ namespace Monogame_Cross_Platform.Scripts
             }
             
 
-            debugText = player.health.ToString(); //TEMP
+            //debugText = player.health.ToString(); //TEMP
 
             
             Settings.UpdateZoom();
@@ -142,8 +141,9 @@ namespace Monogame_Cross_Platform.Scripts
 
             // Drawing the render target to the screen here
             drawEntities.BeginBuffer();
-            drawEntities.spriteBatch.Draw(renderTarget, new Rectangle(0,0, Game1._graphics.PreferredBackBufferWidth, Game1._graphics.PreferredBackBufferHeight), Color.White);
-            drawEntities.spriteBatch.DrawString(font, debugText, new Vector2(400, 400), Color.DarkBlue); //draws debug text
+
+            drawEntities.spriteBatch.Draw(renderTarget, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
+            //drawEntities.spriteBatch.DrawString(font, debugText, new Vector2(400, 400), Color.DarkBlue); //draws debug text
             drawEntities.DrawBuffer();
 
             drawEntities.BeginUiBuffer();

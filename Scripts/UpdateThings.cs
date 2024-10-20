@@ -69,12 +69,16 @@ namespace Monogame_Cross_Platform.Scripts
             {
                 for (int x = Game1.currentGameObjects.Count - 1; x > -1; x--)
                 {
-                    Game1.currentGameObjects[x].UpdateAnimation();
-                    if (Game1.currentGameObjects[x] is Entity)
+                    if (x < Game1.currentGameObjects.Count)
                     {
-                        Entity entity = (Entity)Game1.currentGameObjects[x];
-                        entity.Update(player);
+                        Game1.currentGameObjects[x].UpdateAnimation();
+                        if (Game1.currentGameObjects[x] is Entity)
+                        {
+                            Entity entity = (Entity)Game1.currentGameObjects[x];
+                            entity.Update(player);
+                        }
                     }
+                    
                 }
             }
         }

@@ -73,9 +73,9 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             {
                 Random rand = new Random();
                 int randInt = rand.Next(0, 100);
-                if (randInt > 65)
+                if (randInt > 95)
                 {
-                    Objects.Potion potion = new Objects.Potion(7, TileMap.PosToTileMapPos(position), new Vector2(16, 16), 400);
+                    Objects.Potion potion = new Objects.Potion(7, TileMap.PosToTileMapPos(position), new Vector2(16, 16), 750);
                     Level.LevelGenerator.PosToRoom(position).gameObjects.Add(potion);
                 }
             }

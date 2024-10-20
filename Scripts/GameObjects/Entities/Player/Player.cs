@@ -52,7 +52,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
                         {
                             for (int y = -1; y < 2; y++)
                             {
-                                if (interactableObject.DoesCollide(TileMap.ForceGetTileBounds(playerTileX - x, playerTileY + y)))
+                                if (interactableObject.DoesCollide(TileMap.ForceGetTileBounds(playerTileX - x, playerTileY + y)) && !hasInteracted)
                                 {
                                     interactableObject.Interact();
                                     hasInteracted = true;
@@ -135,6 +135,11 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
             {
                 CheckRoom();
                 TakeAction(player);
+
+                if (health < 0 && !GameState.loseMenu.isActive)
+                {
+                    GameState.LoseGame();
+                }
 
                 activeWeaponIndex = inputHandler.GetWeaponIndex(activeWeaponIndex, weapons.Count);
                 activeWeapon = weapons[activeWeaponIndex];

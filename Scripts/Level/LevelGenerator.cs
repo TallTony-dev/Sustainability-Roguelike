@@ -12,24 +12,27 @@ namespace Monogame_Cross_Platform.Scripts.Level
     {
         public static Room[,] rooms = new Room[11,11]; //must be square (odd preferred)
         static short sqrtRoomsLength = 11;
-        static ushort levelNumber = 0;
+        static ushort levelNumber = 1;
         static ushort maxLevel = 2;
-
         public static void GenerateNextLevel()
         {
-            if (levelNumber + 1 <= 2)
+            levelNumber++;
+            if (levelNumber <= 2)
             {
-                GenerateLevel((ushort)(levelNumber + 1), 7);
+                GenerateLevel((ushort)(levelNumber), 7);
             }
-            else
+            else if (!GameState.winMenu.isActive)
                 GameState.WinGame();
         }
-
+        public static void GenerateCurrentLevel()
+        {
+            GenerateLevel(levelNumber, 7);
+        }
 
         /// <summary>
         /// Edits the static class tilemap to fit the current level selected by param levelNumber
         /// </summary>
-        public static void GenerateLevel(ushort levelType, int levelLength)
+        private static void GenerateLevel(ushort levelType, int levelLength)
         {
             short sqrtRoomsLength = (short)Math.Sqrt(rooms.Length);
             (int index, ushort distance)[,] roomIndices = new (int, ushort)[sqrtRoomsLength,sqrtRoomsLength];
@@ -297,7 +300,6 @@ namespace Monogame_Cross_Platform.Scripts.Level
             
             SetTileMapToRooms();
             TileMap.SettleTileMap();
-            levelNumber = levelType;
         }
 
         public static void SetTileMapToRooms()

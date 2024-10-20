@@ -81,7 +81,13 @@ namespace Monogame_Cross_Platform.Scripts.HUD
             }
             if (menuType == MenuType.win)
             {
-                elements.Add(new AnimButton(15, 300, 100, new Rectangle(0, 0, 146, 60), 0f)); //menu button
+                elements.Add(new AnimButton(15, 18, 100, new Rectangle(0, 0, 146, 60), 0f)); //menu button
+                elements.Add(new UiElement(74, 215, 48, new Rectangle(0, 0, 99, 98), 0.01f)); //youWin
+            }
+            if (menuType == MenuType.lose)
+            {
+                elements.Add(new AnimButton(15, 18, 100, new Rectangle(0, 0, 146, 60), 0f)); //menu button
+                elements.Add(new UiElement(73, 215, 48, new Rectangle(0, 0, 99, 98), 0.01f)); //youLose
             }
             Game1.menus.Add(this);
         }
@@ -144,6 +150,6 @@ namespace Monogame_Cross_Platform.Scripts.HUD
             }
         }
 
-        public enum MenuType { pauseMenu, levelEditor, settings, inGameUi, opening, win }
+        public enum MenuType { pauseMenu, levelEditor, settings, inGameUi, opening, win, lose }
     }
 }
