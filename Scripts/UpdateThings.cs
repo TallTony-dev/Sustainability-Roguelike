@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player;
 using Monogame_Cross_Platform.Scripts.GameObjects.Entities;
 using Monogame_Cross_Platform.Scripts.Level;
+using Monogame_Cross_Platform.Scripts.ContentManagers.Camera;
 
 namespace Monogame_Cross_Platform.Scripts
 {
@@ -14,9 +15,9 @@ namespace Monogame_Cross_Platform.Scripts
     /// </summary>
     internal static class UpdateThings
     {
-        public static void UpdateAlwaysUpdateThings()
+        public static void UpdateAlwaysUpdateThings(Camera camera)
         {
-            Settings.Update();
+            Settings.Update(camera);
             foreach (Menu menu in Game1.menus)
             {
                 menu.UpdateElements();

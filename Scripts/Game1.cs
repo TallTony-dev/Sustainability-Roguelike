@@ -24,7 +24,7 @@ namespace Monogame_Cross_Platform.Scripts
         
         public static ContentLoader contentLoader;
         DrawThings drawEntities;
-        RenderTarget2D renderTarget;
+        public static RenderTarget2D renderTarget;
         internal static ContentManagers.Camera.Camera camera = new ContentManagers.Camera.Camera();
         public static AudioPlayer audioPlayer;
         public static LevelEditor levelEditor;
@@ -95,7 +95,7 @@ namespace Monogame_Cross_Platform.Scripts
             {
                 StaticMouse.Update();
 
-                UpdateThings.UpdateAlwaysUpdateThings();
+                UpdateThings.UpdateAlwaysUpdateThings(camera);
                 GameState.Update(player);
             }
             
@@ -107,10 +107,18 @@ namespace Monogame_Cross_Platform.Scripts
 
             base.Update(gameTime);
         }
-           
+
+
+        private static bool resetRenderTarget = false;
         protected override void Draw(GameTime gameTime)
         {
             // Drawing everything to render target here
+            if (resetRenderTarget)
+            {
+                Game1.renderTarget = new RenderTarget2D(GraphicsDevice, Game1._graphics.PreferredBackBufferWidth, Game1._graphics.PreferredBackBufferHeight);
+                resetRenderTarget = false;
+            }
+
             GraphicsDevice.SetRenderTarget(renderTarget);
             GraphicsDevice.Clear(Color.Black);
             drawEntities.BeginBuffer(camera);
@@ -147,6 +155,11 @@ namespace Monogame_Cross_Platform.Scripts
         public static void ExitGame()
         {
             toExit = true;
+        }
+
+        public static void ResetRenderTarget()
+        {
+            resetRenderTarget = true;
         }
     }
 }

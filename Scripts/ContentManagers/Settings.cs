@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace Monogame_Cross_Platform.Scripts.ContentManagers
@@ -22,7 +23,7 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
 
         static int activeResolutionButton;
 
-        public static void Update()
+        public static void Update(Camera.Camera camera)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.F1))
                 settingsMenu.EnableMenu();
@@ -106,6 +107,8 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
                 {
                     ApplySettingsToFile();
                     InitializeSettings();
+                    Game1.camera = new Camera.Camera();
+                    Game1.ResetRenderTarget();
                 }
                 if (settingsMenu.IsButtonPressed(12))
                 {

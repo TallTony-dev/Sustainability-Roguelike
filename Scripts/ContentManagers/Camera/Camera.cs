@@ -43,6 +43,14 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers.Camera
                 timeWhenCameraLocked = Game1.gameTime.TotalGameTime.TotalSeconds;
             }
         }
+        public void ResetCamera()
+        {
+            isFirstPass = true;
+            Transform = new Matrix();
+            IsLocked = true;
+        }
+
+
         public void Follow(Entity target)
         {
             if (isFirstPass)
