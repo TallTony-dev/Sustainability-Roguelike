@@ -109,12 +109,25 @@ namespace Monogame_Cross_Platform.Scripts.Level
                 }
                 if (editorMenu.IsButtonPressed(1))
                 {
-                    selectedTextureIndex = 0;
+                    if (selectedTextureIndex > 0)
+                    {
+                        selectedTextureIndex -= 30;
+                        editorMenu.elements[2].textureIndex -= 30;
+                        if (selectedTextureIndex > 0)
+                            editorMenu.elements[1].textureIndex = (ushort)(selectedTextureIndex - 30);
+                    }
+                    else
+                    {
+                        selectedTextureIndex = 0;
+                        editorMenu.elements[1].textureIndex = 0;
+                        editorMenu.elements[2].textureIndex = 30;
+                    }
                 }
                 if (editorMenu.IsButtonPressed(2))
                 {
-                    selectedTextureIndex = 16;
-                    selectedDecoIndex = 1;
+                    selectedTextureIndex += 30;
+                    editorMenu.elements[2].textureIndex = (ushort)(selectedTextureIndex + 30);
+                    editorMenu.elements[1].textureIndex = (ushort)(selectedTextureIndex - 30);
                 }
                 if (editorMenu.IsButtonPressed(3))
                 {

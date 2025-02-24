@@ -17,7 +17,10 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
         private List<(string textureName, Rectangle sourceRect, ushort index)> CityTexturesToLoad = new List<(string, Rectangle, ushort)>() { };
 
         //Arrays of all textures to load, texturetype indicates how the texture should be loaded, 0 loads as a tileset (currently 4x4 like cooblestone texture, TODO: make type 1 load a spritesheet (figure out how)
-        private (string textureName, ushort startingIndex, byte textureType)[] AlwaysLoadedTextures = { ("cobblestone", 0, 0), ("cobblestone wall testing", 30, 0), ("cobblestoneRecolor", 60, 0), ("electricWeapon", 90, 2) };
+
+        static ushort tileTextureCount = 119;
+        private (string textureName, ushort startingIndex, byte textureType)[] AlwaysLoadedTextures = { ("cobblestone", 0, 0), ("cobblestone wall testing", 30, 0), ("ice floor", 60, 0), ("ice wall", 90, 0), ("electricWeapon", (ushort)(tileTextureCount + 1), 2) };
+
         private (string textureName, ushort startingIndex, byte textureType)[] OtherTextures = { ("minimapBG", 1, 1), ("minimapBG", 1, 1), ("hotBar", 2, 1), ("quitButton", 3, 3), ("startButton", 7, 3), ("resumeButton", 11, 3), ("menuButton", 15, 3), ("settingsButton", 19, 3)
                                                                                                 ,("resolutionBG", 23, 1), ("activeResolutions", 24, 4), ("inactiveResolutions", 34, 4), ("applyButton", 44, 3), ("fullscreenButton", 48, 3), ("minimapIcons", 52, 5)
                                                                                                 ,("weaponMeterFront", 58, 1), ("weaponMeterBack", 59, 1), ("healthBarFront", 60, 1), ("healthBarBack", 61, 1), ("plusButtonActive", 62, 1), ("plusButtonInactive", 63, 1), ("minusButtonActive", 64, 1), ("minusButtonInactive", 65, 1),("volumeActive", 66, 1), ("volumeInactive", 67, 1)

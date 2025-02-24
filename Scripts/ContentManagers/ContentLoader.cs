@@ -13,7 +13,7 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
     /// </summary>
     public class ContentLoader
     {
-        private static (Texture2D, Rectangle)[] tileTexturesLoaded = new (Texture2D, Rectangle)[120]; //Change this array size to the max number of tile textures and allocate different ranges for different textures
+        private static (Texture2D, Rectangle)[] tileTexturesLoaded = new (Texture2D, Rectangle)[150]; //Change this array size to the max number of tile textures and allocate different ranges for different textures
         private static (Texture2D, Rectangle)[] otherTexturesLoaded = new (Texture2D, Rectangle)[120];
         public static SoundEffect[] audioLoaded { get; private set; } = new SoundEffect[2];
         ContentList contentList = new ContentList();
