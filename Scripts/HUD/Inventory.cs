@@ -64,7 +64,7 @@ namespace Monogame_Cross_Platform.Scripts.HUD
 
         public void Draw(SpriteBatch uiSpriteBatch)
         {
-            (Texture2D backTexture, Rectangle backRectangle) = ContentLoader.GetLoadedOtherTexture(textureIndex); //TEMP scaling below
+            (Texture2D backTexture, Rectangle backRectangle, _) = ContentLoader.GetLoadedOtherTexture(textureIndex); //TEMP scaling below
             uiSpriteBatch.Draw(backTexture, new Vector2(xOffset, yOffset), null, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * scale, Settings.uiScaleY * scale), SpriteEffects.None, 0.11f);
             for (int x = 0; x < inventorySizeX; x++)
             {
@@ -76,18 +76,18 @@ namespace Monogame_Cross_Platform.Scripts.HUD
                         Vector2 position = new Vector2(xOffset + xborderSizePx * scale * Settings.uiScaleX + x * itemSpacingPx * scale * Settings.uiScaleX, yOffset + yborderSizePx * scale * Settings.uiScaleX + y * itemSpacingPx * scale * Settings.uiScaleY);
                         if (y * inventorySizeX + x != 0)
                         {
-                            (Texture2D backMeterTexture, Rectangle backMeterRectangle) = ContentLoader.GetLoadedOtherTexture(meter.textureIndex);
-                            (Texture2D frontTexture, Rectangle frontRectangle) = ContentLoader.GetLoadedOtherTexture(meter.frontTextureIndex);
+                            (Texture2D backMeterTexture, Rectangle backMeterRectangle, _) = ContentLoader.GetLoadedOtherTexture(meter.textureIndex);
+                            (Texture2D frontTexture, Rectangle frontRectangle, _) = ContentLoader.GetLoadedOtherTexture(meter.frontTextureIndex);
 
                             uiSpriteBatch.Draw(backMeterTexture, new Vector2(position.X + 2 * Settings.uiScaleX * scale, position.Y + 27 * Settings.uiScaleY * scale), null, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * scale, Settings.uiScaleY * scale), SpriteEffects.None, 0.1f);
                             uiSpriteBatch.Draw(frontTexture, new Vector2(position.X + 2 * Settings.uiScaleX * scale, position.Y + 27 * Settings.uiScaleY * scale), meter.drawingMask, Color.White, 0f, new Vector2(0, 0), new Vector2(Settings.uiScaleX * scale, Settings.uiScaleY * scale), SpriteEffects.None, 0f);
                         }
-                        (Texture2D itemTexture, Rectangle itemRectangle) = ContentLoader.GetLoadedTileTexture(itemTextureIndex);
+                        (Texture2D itemTexture, Rectangle itemRectangle, _) = ContentLoader.GetLoadedTileTexture(itemTextureIndex);
                         
                         uiSpriteBatch.Draw(itemTexture, position, itemRectangle, Color.White, 0f, Vector2.Zero, new Vector2(Settings.uiScaleX * scale, Settings.uiScaleY * scale), SpriteEffects.None, 0f);
                         if (y * inventorySizeX + x == highlightedWeapon)
                         {
-                            (Texture2D borderTexture, Rectangle borderRectangle) = ContentLoader.GetLoadedTileTexture(99);
+                            (Texture2D borderTexture, Rectangle borderRectangle, _) = ContentLoader.GetLoadedTileTexture(99);
                             uiSpriteBatch.Draw(borderTexture, position, borderRectangle, Color.White, 0f, Vector2.Zero, new Vector2(Settings.uiScaleX * scale, Settings.uiScaleY * scale), SpriteEffects.None, 0f);
                         }
                     }

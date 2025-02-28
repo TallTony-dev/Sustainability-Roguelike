@@ -42,6 +42,8 @@ namespace Monogame_Cross_Platform.Scripts
         internal static List<Particle> activeParticles = new List<Particle>();
         internal static List<ParticleEmitter> activeParticleEmitters = new List<ParticleEmitter>();
 
+        private Effect effect;
+
         static bool toExit = false;
         public Game1()
         {
@@ -61,7 +63,8 @@ namespace Monogame_Cross_Platform.Scripts
 
             audioPlayer = new AudioPlayer(ContentLoader.audioLoaded);
             player = new Player(5000, 250, new Vector2(177, 177), new Hitboxes.Hitbox(0, 0, 31, 31), 0); //Put this in a better spot inside of an initialize level function within update or smth
-            
+
+            effect = Content.Load<Effect>("C:/Users/User/source/repos/Monogame Cross Platform/bin/Debug/net6.0/Content/Shader");
 
             //Settings.ApplySettingsToFile(); //TEMP
             Settings.InitializeSettings();
@@ -108,6 +111,7 @@ namespace Monogame_Cross_Platform.Scripts
         }
 
 
+
         private static bool resetRenderTarget = false;
         protected override void Draw(GameTime gameTime)
         {
@@ -136,11 +140,16 @@ namespace Monogame_Cross_Platform.Scripts
                 drawEntities.AddToDrawBuffer(currentGameObjects);
                 drawEntities.AddToDrawBuffer(activeParticles);
             }
+
+            effect.CurrentTechnique.Passes[0].Apply();
+
             drawEntities.DrawBuffer();
             GraphicsDevice.SetRenderTarget(null);
 
             // Drawing the render target to the screen here
             drawEntities.BeginBuffer();
+
+            effect.CurrentTechnique.Passes[0].Apply();
 
             drawEntities.spriteBatch.Draw(renderTarget, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
             //drawEntities.spriteBatch.DrawString(font, debugText, new Vector2(400, 400), Color.DarkBlue); //draws debug text

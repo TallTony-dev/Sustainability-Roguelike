@@ -50,18 +50,6 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/cobblestone wall testing.png
 
-#begin Graphics/cobblestone wall testing.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Graphics/cobblestone wall testing.png
-
 #begin Graphics/cobblestone.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -73,30 +61,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Graphics/cobblestone.png
-
-#begin Graphics/cobblestone.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Graphics/cobblestone.png
-
-#begin Graphics/electricWeapon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Graphics/electricWeapon.png
 
 #begin Graphics/electricWeapon.png
 /importer:TextureImporter
@@ -133,6 +97,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Graphics/ice wall.png
+
+#begin NormalMaps/cobblestone_normal.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:NormalMaps/cobblestone_normal.png
 
 #begin Other/activeResolutions.png
 /importer:TextureImporter
@@ -460,6 +436,12 @@
 
 #begin RoomData.txt
 /copy:RoomData.txt
+
+#begin Shader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Shader.fx
 
 #begin WeaponData.txt
 /copy:WeaponData.txt
