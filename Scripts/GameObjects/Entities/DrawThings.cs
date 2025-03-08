@@ -16,11 +16,14 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         public SpriteBatch spriteBatch { get; }
         public SpriteBatch uiSpriteBatch { get; }
         GraphicsDeviceManager graphics;
-        public DrawThings()
+
+        Effect effect;
+        public DrawThings(Effect effect)
         {
             graphics = Game1._graphics;
             spriteBatch = new SpriteBatch(Game1._graphics.GraphicsDevice);
             uiSpriteBatch = new SpriteBatch(Game1._graphics.GraphicsDevice);
+            this.effect = effect;
         }
         /// <summary>
         /// Adds something to the draw buffer which is drawn after DrawBuffer is called. This overload includes a sourceRectangle for spritesheets.
@@ -164,7 +167,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         public void BeginUiBuffer() => uiSpriteBatch.Begin(SpriteSortMode.BackToFront, null, SamplerState.PointClamp);
         public void DrawUiBuffer() => uiSpriteBatch.End();
         public void DrawBuffer() => spriteBatch.End(); //Draws what is in the buffer
-        public void BeginBuffer(ContentManagers.Camera.Camera camera) => spriteBatch.Begin(SpriteSortMode.Immediate,null,SamplerState.PointClamp,transformMatrix: camera.Transform); //Begins the buffer with a matrix transform
+        public void BeginBuffer(ContentManagers.Camera.Camera camera) => spriteBatch.Begin(SpriteSortMode.Immediate,null,SamplerState.PointClamp,transformMatrix: camera.Transform, effect: effect); //Begins the buffer with a matrix transform
         public void BeginBuffer() => spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp); //Begins the buffer without camera matrix
     }
 }

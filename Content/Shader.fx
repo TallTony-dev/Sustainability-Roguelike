@@ -7,40 +7,41 @@
 	#define PS_SHADERMODEL ps_4_0_level_9_1
 #endif
 
-matrix WorldViewProjection;
+matrix CameraMatrix;
+float3 AmbientColor = 0.5;
 
-struct VertexShaderInput
+float3 lightWorldPosition = (0, 0, 0); //needs to be set externally
+
+Texture2D SpriteTexture;
+
+sampler2D SpriteTextureSampler = sampler_state
 {
-	float4 Position : POSITION0;
-	float4 Color : COLOR0;
+    Texture = <SpriteTexture>;
 };
 
 struct VertexShaderOutput
 {
 	float4 Position : SV_POSITION;
 	float4 Color : COLOR0;
+    float2 TextureCoordinates : TEXCOORD0;
 };
-
-VertexShaderOutput MainVS(in VertexShaderInput input)
-{
-	VertexShaderOutput output = (VertexShaderOutput)0;
-
-	output.Position = mul(input.Position, WorldViewProjection);
-	output.Color = input.Color;
-
-	return output;
-}
 
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
-	return input.Color;
+    float4 pixelWorldPos = mul(input.Position, CameraMatrix);
+	
+    float3 lightDirection = normalize((float3)pixelWorldPos - lightWorldPosition);
+	
+    float4 texColor = tex2D(SpriteTextureSampler, input.TextureCoordinates);
+    input.Color.rgb += AmbientColor;
+
+    return texColor * input.Color;
 }
 
 technique BasicColorDrawing
 {
 	pass P0
 	{
-		VertexShader = compile VS_SHADERMODEL MainVS();
 		PixelShader = compile PS_SHADERMODEL MainPS();
 	}
 };

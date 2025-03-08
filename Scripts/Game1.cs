@@ -74,7 +74,8 @@ namespace Monogame_Cross_Platform.Scripts
         protected override void LoadContent() 
         {
             // TODO: use this.Content to load your game content here
-            drawEntities = new DrawThings();
+            Effect effect = Content.Load<Effect>("Shader");
+            drawEntities = new DrawThings(effect);
             contentLoader.LoadTextures("AlwaysLoaded");
             contentLoader.LoadTextures("Audio");
             contentLoader.LoadTextures("OtherTextures");
@@ -143,13 +144,20 @@ namespace Monogame_Cross_Platform.Scripts
 
             effect.CurrentTechnique.Passes[0].Apply();
 
+
+
+            //if (camera.Transform != new Matrix())
+            //    effect.Parameters["CameraMatrix"].SetValue(camera.Transform);
+
+
+
             drawEntities.DrawBuffer();
             GraphicsDevice.SetRenderTarget(null);
 
             // Drawing the render target to the screen here
             drawEntities.BeginBuffer();
 
-            effect.CurrentTechnique.Passes[0].Apply();
+
 
             drawEntities.spriteBatch.Draw(renderTarget, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
             //drawEntities.spriteBatch.DrawString(font, debugText, new Vector2(400, 400), Color.DarkBlue); //draws debug text
