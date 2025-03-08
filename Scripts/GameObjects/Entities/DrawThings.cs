@@ -42,8 +42,17 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
             {
                 rot = tile.rotation * 1.57079f;
             }
-            
+
+            effect.Parameters["SpriteTexture"].SetValue(texture);
+
+            if (normalMap != null)
+            {
+                effect.Parameters["NormalTexture"].SetValue(normalMap);
+            }
+
+
             spriteBatch.Draw(texture, new Vector2(tileMapX * 32, tileMapY * 32), rectangle, Color.White, rot, new Vector2(rectangle.Width / 2, rectangle.Height / 2), Vector2.One, SpriteEffects.None, 0.04f);
+
             if (tile.decorationIndex != 0)
             {
                 (Texture2D decoTexture, Rectangle decoRectangle, Texture2D decoNormalMap /*TODO IMPLEMENT THIS*/) = ContentLoader.GetLoadedOtherTexture(tile.decorationIndex);
