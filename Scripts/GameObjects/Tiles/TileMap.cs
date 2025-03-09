@@ -34,8 +34,8 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Tiles
                 for (int x = 0; x < 512; x++)
                 {
                     tileMap[x, y] = tile;
-                    byte rand = (byte)random.Next(0, 4);
-                    tileMap[x, y].rotation = rand;
+                    //byte rand = (byte)random.Next(0, 4);
+                    //tileMap[x, y].rotation = rand;
                 }
             }
         }

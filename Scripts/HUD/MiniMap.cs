@@ -35,13 +35,13 @@ namespace Monogame_Cross_Platform.Scripts.HUD
 
         public void DrawMiniMap(SpriteBatch uiSpriteBatch)
         {
-            (Texture2D backTexture, Rectangle backRectangle) = ContentLoader.GetLoadedOtherTexture(textureIndex);
-            (Texture2D entranceTexture, Rectangle entranceRectangle) = ContentLoader.GetLoadedOtherTexture(entranceTextureIndex);
-            (Texture2D enemyRoomTexture, Rectangle enemyRoomRectangle) = ContentLoader.GetLoadedOtherTexture(enemyRoomTextureIndex);
-            (Texture2D otherRoomTexture, Rectangle otherRoomRectangle) = ContentLoader.GetLoadedOtherTexture(otherRoomTextureIndex);
-            (Texture2D treasureRoomTexture, Rectangle treasureRoomRectangle) = ContentLoader.GetLoadedOtherTexture(treasureRoomTextureIndex);
-            (Texture2D bossRoomTexture, Rectangle bossRoomRectangle) = ContentLoader.GetLoadedOtherTexture(bossRoomTextureIndex);
-            (Texture2D exitTexture, Rectangle exitRectangle) = ContentLoader.GetLoadedOtherTexture(exitTextureIndex);
+            (Texture2D backTexture, Rectangle backRectangle, _) = ContentLoader.GetLoadedOtherTexture(textureIndex);
+            (Texture2D entranceTexture, Rectangle entranceRectangle, _) = ContentLoader.GetLoadedOtherTexture(entranceTextureIndex);
+            (Texture2D enemyRoomTexture, Rectangle enemyRoomRectangle, _) = ContentLoader.GetLoadedOtherTexture(enemyRoomTextureIndex);
+            (Texture2D otherRoomTexture, Rectangle otherRoomRectangle, _) = ContentLoader.GetLoadedOtherTexture(otherRoomTextureIndex);
+            (Texture2D treasureRoomTexture, Rectangle treasureRoomRectangle, _) = ContentLoader.GetLoadedOtherTexture(treasureRoomTextureIndex);
+            (Texture2D bossRoomTexture, Rectangle bossRoomRectangle, _) = ContentLoader.GetLoadedOtherTexture(bossRoomTextureIndex);
+            (Texture2D exitTexture, Rectangle exitRectangle, _) = ContentLoader.GetLoadedOtherTexture(exitTextureIndex);
             //(Texture2D bridgeTexture, Rectangle bridgeRectangle) = ContentLoader.GetLoadedTileTexture(bridgeTextureIndex);
 
             backRectangle = new Rectangle(0,0, backTexture.Width, backTexture.Height);
