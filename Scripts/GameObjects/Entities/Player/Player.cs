@@ -14,7 +14,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities.Player
     /// </summary>
     internal class Player : Entity
     {
-        HandlePlayerInputs inputHandler = new HandlePlayerInputs();
+        public HandlePlayerInputs inputHandler = new HandlePlayerInputs();
         public bool isInLevelEditorMode = false;
         public List<Weapon> weapons = new List<Weapon>();
         public short activeWeaponIndex = 0;

@@ -36,7 +36,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
         }
         public void AddToDrawBuffer(Tile tile, int tileMapX, int tileMapY)
         {
-            (Texture2D texture, Rectangle rectangle, Texture2D normalMap /*TODO IMPLEMENT THIS*/) = ContentLoader.GetLoadedTileTexture(tile.textureIndex);
+            (Texture2D texture, Rectangle rectangle, Texture2D normalMap) = ContentLoader.GetLoadedTileTexture(tile.textureIndex);
             float rot = 0f;
             if ((tile.textureIndex + 20) % 30 == 0)
             {

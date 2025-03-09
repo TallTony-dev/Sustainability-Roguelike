@@ -13,7 +13,8 @@ matrix ProjectionMatrix;
 float AmbientColor;
 
 float3 lightPosition; // Needs to be set externally
-float3 lightColor = 1.0;
+float3 lightColor;
+float3 playerLightDirection;
 
 Texture2D SpriteTexture;
 Texture2D NormalTexture;
@@ -62,15 +63,16 @@ VertexShaderOutput MainVS(VertexShaderInput input)
 
 float4 MainPS(VertexShaderOutput input) : SV_Target
 {
-    float3 lightDirection = normalize(input.WorldPosition.xyz - lightPosition);
+    
+    float3 lightDirection = normalize(lightPosition - input.WorldPosition);
 
     float4 texColor = tex2D(SpriteTextureSampler, input.TexCoord);
     
     float3 normal = normalize((2 * tex2D(NormalTextureSampler, input.TexCoord)) - 1);
 
-    float lightAmount = saturate(dot(normal, -lightDirection));
+    float lightAmount = max(0, (300 / (length(input.WorldPosition - lightPosition) * 0.4 + 100))) * saturate(max(0, dot(normal, -lightDirection)));
     
-    texColor.rgb *= AmbientColor + 0.000001 * (lightAmount * lightColor);
+    texColor.rgb *= AmbientColor + (lightAmount * lightColor);
 
     return texColor;
 }

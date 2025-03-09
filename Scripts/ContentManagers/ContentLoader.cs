@@ -34,29 +34,34 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers
             if (contentListToLoad == "AlwaysLoaded")
                 foreach ((string, Rectangle, ushort) texture in contentList.GetAlwaysLoadedTextures())
                 {
-                    tileTexturesLoaded[texture.Item3] = (alwaysLoadedcontentManager.Load<Texture2D>("C:/Users/User/source/repos/Monogame Cross Platform/bin/Debug/net6.0/Content/Graphics/" + texture.Item1), texture.Item2, null);
-                    if (File.Exists("C:/Users/User/source/repos/Monogame Cross Platform/bin/Debug/net6.0/Content/NormalMaps/" + texture.Item1 + "_normal"))
+                    tileTexturesLoaded[texture.Item3] = (alwaysLoadedcontentManager.Load<Texture2D>("Content/Graphics/" + texture.Item1), texture.Item2, null);
+                    if (Exists("NormalMaps/" + texture.Item1 + "_normal"))
                     {
-                        tileTexturesLoaded[texture.Item3].normalMap = alwaysLoadedcontentManager.Load<Texture2D>("C:/Users/User/source/repos/Monogame Cross Platform/bin/Debug/net6.0/Content/NormalMaps/" + texture.Item1 + "_normal");
+                        tileTexturesLoaded[texture.Item3].normalMap = alwaysLoadedcontentManager.Load<Texture2D>("Content/NormalMaps/" + texture.Item1 + "_normal");
                     }
                 }
             else if (contentListToLoad == "OtherTextures")
                 foreach ((string, Rectangle, ushort) texture in contentList.GetOtherTextures())
                 {
-                    otherTexturesLoaded[texture.Item3] = (game.Content.Load<Texture2D>("C:/Users/User/source/repos/Monogame Cross Platform/bin/Debug/net6.0/Content/Other/" + texture.Item1), texture.Item2, null);
-                    if (File.Exists("C:/Users/User/source/repos/Monogame Cross Platform/bin/Debug/net6.0/Content/NormalMaps/" + texture.Item1 + "_normal"))
+                    otherTexturesLoaded[texture.Item3] = (game.Content.Load<Texture2D>("Other/" + texture.Item1), texture.Item2, null);
+                    if (Exists("NormalMaps/" + texture.Item1 + "_normal"))
                     {
-                        otherTexturesLoaded[texture.Item3].normalMap = alwaysLoadedcontentManager.Load<Texture2D>("C:/Users/User/source/repos/Monogame Cross Platform/bin/Debug/net6.0/Content/NormalMaps/" + texture.Item1 + "_normal");
+                        otherTexturesLoaded[texture.Item3].normalMap = alwaysLoadedcontentManager.Load<Texture2D>("Content/NormalMaps/" + texture.Item1 + "_normal");
                     }
                 }
             else if (contentListToLoad == "Audio")
             {
                 foreach ((string, ushort) audio in contentList.GetAudio())
                 {
-                    audioLoaded[audio.Item2] = game.Content.Load<SoundEffect>("C:/Users/User/source/repos/Monogame Cross Platform/bin/Debug/net6.0/Content/Audio/" + audio.Item1);
+                    audioLoaded[audio.Item2] = game.Content.Load<SoundEffect>("Audio/" + audio.Item1);
                 }
             }
             else Console.WriteLine("Invalid string loaded check where you call LoadTextures as you are loading a non existant ContentList");
+        }
+
+        public static bool Exists(string path)
+        {
+            return File.Exists($@"Content\{path}.xnb");
         }
 
         public void UnloadTextures()
