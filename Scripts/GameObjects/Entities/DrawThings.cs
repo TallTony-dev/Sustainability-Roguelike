@@ -43,7 +43,7 @@ namespace Monogame_Cross_Platform.Scripts.GameObjects.Entities
                 rot = tile.rotation * 1.57079f;
             }
 
-            effect.Parameters["SpriteTexture"].SetValue(texture);
+            //effect.Parameters["SpriteTexture"].SetValue(texture);
 
             if (normalMap != null)
             {

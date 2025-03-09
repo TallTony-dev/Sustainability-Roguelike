@@ -74,7 +74,7 @@ namespace Monogame_Cross_Platform.Scripts
         protected override void LoadContent() 
         {
             // TODO: use this.Content to load your game content here
-            Effect effect = Content.Load<Effect>("Shader");
+
             drawEntities = new DrawThings(effect);
             contentLoader.LoadTextures("AlwaysLoaded");
             contentLoader.LoadTextures("Audio");
@@ -84,6 +84,7 @@ namespace Monogame_Cross_Platform.Scripts
             font = Content.Load<SpriteFont>("Arial"); //Temp font
 
 
+            effect.Parameters["AmbientColor"].SetValue(2f);
         }
 
         protected override void Update(GameTime _gameTime)
@@ -101,11 +102,15 @@ namespace Monogame_Cross_Platform.Scripts
                 UpdateThings.UpdateAlwaysUpdateThings(camera);
                 GameState.Update(player);
             }
-            
+
+
+            //if (camera.Transform != new Matrix())
+            //    effect.Parameters["lightPosition"].SetValue(Vector3.Transform(new Vector3(player.position, 0), camera.Transform));
+
 
             //debugText = player.health.ToString(); //TEMP
 
-            
+
             Settings.UpdateZoom();
 
             base.Update(gameTime);
@@ -124,7 +129,8 @@ namespace Monogame_Cross_Platform.Scripts
             }
 
             GraphicsDevice.SetRenderTarget(renderTarget);
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+
             drawEntities.BeginBuffer(camera);
 
             //Draws Tiles onto map rendering only the area visible to player
@@ -142,16 +148,20 @@ namespace Monogame_Cross_Platform.Scripts
                 drawEntities.AddToDrawBuffer(activeParticles);
             }
 
+            effect.Parameters["AmbientColor"].SetValue(0.7f); //this passes to the shader when no vertex atleast
+
+            if (camera.Transform != new Matrix())
+                effect.Parameters["MatrixTransform"].SetValue(camera.Transform);
+
+            camera.UpdateProjectionMatrix();
+            effect.Parameters["ProjectionMatrix"].SetValue(camera.Projection);
+
+
             effect.CurrentTechnique.Passes[0].Apply();
 
-
-
-            //if (camera.Transform != new Matrix())
-            //    effect.Parameters["CameraMatrix"].SetValue(camera.Transform);
-
-
-
             drawEntities.DrawBuffer();
+
+
             GraphicsDevice.SetRenderTarget(null);
 
             // Drawing the render target to the screen here

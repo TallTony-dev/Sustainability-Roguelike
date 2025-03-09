@@ -8,6 +8,10 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers.Camera
     internal class Camera
     {
         public Matrix Transform { get; private set; }
+        public Matrix Projection;
+        private Viewport _lastViewport;
+
+
         float xToMove = 0;
         float yToMove = 0;
         float rotationToMove = 0;
@@ -98,6 +102,27 @@ namespace Monogame_Cross_Platform.Scripts.ContentManagers.Camera
             Transform = position * offset * zoom * rotation;
 
         }
+
+        public void UpdateProjectionMatrix()
+        {
+            var vp = Game1._graphics.GraphicsDevice.Viewport;
+            if ((vp.Width != _lastViewport.Width) || (vp.Height != _lastViewport.Height))
+            {
+                // Normal 3D cameras look into the -z direction (z = 1 is in front of z = 0). The
+                // sprite batch layer depth is the opposite (z = 0 is in front of z = 1).
+                // --> We get the correct matrix with near plane 0 and far plane -1.
+                Matrix.CreateOrthographicOffCenter(0, vp.Width, vp.Height, 0, 0, -1, out Projection);
+
+                if (Game1._graphics.GraphicsDevice.UseHalfPixelOffset)
+                {
+                    Projection.M41 += -0.5f * Projection.M11;
+                    Projection.M42 += -0.5f * Projection.M22;
+                }
+
+                _lastViewport = vp;
+            }
+        }
+
     }
 }
 
